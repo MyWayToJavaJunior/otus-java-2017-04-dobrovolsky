@@ -37,9 +37,7 @@ public class SizeOf {
 
         for (int i = 0; i < instance.getCount(); i++) {
             Object object = null;
-
             object = supplier.get();
-
             objs[i] = object;
         }
 
@@ -53,10 +51,7 @@ public class SizeOf {
 
                 getClass() + " size " + size + " bytes");
 
-        for (
-                int i = 0; i < instance.getCount(); i++)
-
-        {
+        for (int i = 0; i < instance.getCount(); i++) {
             objs[i] = null;
         }
 
