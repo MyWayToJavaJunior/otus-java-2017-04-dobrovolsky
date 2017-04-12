@@ -32,30 +32,34 @@ public class SizeOf {
         Object[] objs = new Object[instance.getCount()];
 
         long memBefore = 0;
-        for (int i = -1; i < instance.getCount(); i++) {
+        runGC();
+        memBefore = usedMemory();
+
+        for (int i = 0; i < instance.getCount(); i++) {
             Object object = null;
 
             object = supplier.get();
 
-            if (i >= 0) {
-                objs[i] = object;
-            } else {
-                object = null;
-                runGC();
-                memBefore = usedMemory();
-            }
+            objs[i] = object;
         }
 
         runGC();
+
         long memAfter = usedMemory();
 
         final int size = Math.round(((float) (memAfter - memBefore)) / instance.getCount());
 
-        System.out.println("object of " + objs[0].getClass() + " size " + size + " bytes");
+        System.out.println("object of " + objs[0].
 
-        for (int i = 0; i < instance.getCount(); i++) {
+                getClass() + " size " + size + " bytes");
+
+        for (
+                int i = 0; i < instance.getCount(); i++)
+
+        {
             objs[i] = null;
         }
+
         objs = null;
     }
 
