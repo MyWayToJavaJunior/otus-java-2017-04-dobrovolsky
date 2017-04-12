@@ -9,6 +9,7 @@ import java.util.function.Supplier;
  */
 public class SizeOf {
     private final int count = 100000;
+    private static final Runtime runtime = Runtime.getRuntime();
 
     private static SizeOf instance = new SizeOf();
 
@@ -22,8 +23,6 @@ public class SizeOf {
     private int getCount() {
         return count;
     }
-
-    private static final Runtime runtime = Runtime.getRuntime();
 
     public <T> void calcMem(Supplier<T> supplier) throws Exception {
 
@@ -42,17 +41,13 @@ public class SizeOf {
         }
 
         runGC();
-
         long memAfter = usedMemory();
-
         final int size = Math.round(((float) (memAfter - memBefore)) / instance.getCount());
-
         System.out.println("object of " + objs[0].getClass() + " size " + size + " bytes");
 
         for (int i = 0; i < instance.getCount(); i++) {
             objs[i] = null;
         }
-
         objs = null;
     }
 
