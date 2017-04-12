@@ -50,7 +50,9 @@ public class SizeOf {
         long memAfter = usedMemory();
 
         final int size = Math.round(((float) (memAfter - memBefore)) / instance.getCount());
+
         System.out.println("object of " + objs[0].getClass() + " size " + size + " bytes");
+
         for (int i = 0; i < instance.getCount(); i++) {
             objs[i] = null;
         }
