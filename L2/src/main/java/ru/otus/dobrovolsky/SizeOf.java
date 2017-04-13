@@ -25,9 +25,7 @@ public class SizeOf {
     }
 
     public <T> void calcMem(Supplier<T> supplier) throws Exception {
-
         runGC();
-        usedMemory();
         Object[] objs = new Object[instance.getCount()];
 
         long memBefore = 0;
@@ -64,7 +62,6 @@ public class SizeOf {
         for (int i = 0; (usedMem1 < usedMem2) && (i < instance.getCount()); i++) {
             runtime.runFinalization();
             runtime.gc();
-            Thread.yield();
 
             usedMem2 = usedMem1;
             usedMem1 = usedMemory();
