@@ -126,12 +126,7 @@ public class MyArrayList<T> implements List<T> {
     public boolean addAll(Collection<? extends T> c) {
         Object[] objects = c.toArray();
         int objLength = objects.length;
-        if (data.length <= ((size + objLength) + 1)) {
-            this.grow(data.length + objLength);
-        }
-        if ((data.length - objLength - size) <= 0) {
-            this.grow(data.length + objLength);
-        }
+        this.grow(data.length + objLength);
         for (int i = size; i < data.length; i++) {
             data[i] = objects[data.length - objLength - 1];
         }

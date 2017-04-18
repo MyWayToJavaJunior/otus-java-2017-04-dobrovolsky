@@ -16,8 +16,6 @@ public class Main {
 
         Util.start(myArrayList);
         Util.start(standardArrayList);
-
-//        Util.doCalculations("myArrayList");
     }
 
 
