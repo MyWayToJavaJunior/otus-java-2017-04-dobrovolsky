@@ -10,16 +10,14 @@ import java.util.*;
 public class MyArrayList<T> implements List<T> {
     private final int DEF_SIZE = 10;
     private int size = 0;
-    private Object[] data = (T[]) new Object[DEF_SIZE];
+    private Object[] data = new Object[DEF_SIZE];
 
     public MyArrayList() {
     }
 
     public MyArrayList(int initSize) {
         if (initSize > 0) {
-            data = (T[]) new Object[initSize];
-        } else if (initSize == 0) {
-            //
+            data = new Object[initSize];
         } else {
             throw new IllegalArgumentException("Incorrect argument");
         }
@@ -33,6 +31,7 @@ public class MyArrayList<T> implements List<T> {
         return (size == 0);
     }
 
+    @SuppressWarnings("unchecked")
     public void sort(Comparator<? super T> c) {
         Arrays.sort((T[]) data, 0, size, c);
     }
@@ -47,16 +46,17 @@ public class MyArrayList<T> implements List<T> {
     }
 
     public Iterator<T> iterator() {
-        return new MyIterator<T>();
+        return new MyIterator();
     }
 
-    private class MyIterator<T> implements Iterator<T> {
+    private class MyIterator implements Iterator<T> {
         private int cursor = 0;
 
         public boolean hasNext() {
             return size - cursor > 0;
         }
 
+        @SuppressWarnings("unchecked")
         public T next() {
             if (this.hasNext()) {
                 T current = (T) data[cursor];
@@ -80,8 +80,10 @@ public class MyArrayList<T> implements List<T> {
         return this.stream().toArray();
     }
 
+    @SuppressWarnings("unchecked")
     public <T1> T1[] toArray(T1[] a) {
-        return (T1[]) this.toArray();
+        a = (T1[]) data.clone();
+        return a;
     }
 
     @SuppressWarnings("unchecked")
@@ -91,11 +93,11 @@ public class MyArrayList<T> implements List<T> {
         if (newSize < tmpSize) {
             newSize = tmpSize;
         }
-        Object[] tmpArr = (T[]) new Object[newSize];
+        Object[] tmpArr = new Object[newSize];
         for (int i = 0; i < oldSize; i++) {
             tmpArr[i] = data[i];
         }
-        data = (T[]) new Object[newSize];
+        data = new Object[newSize];
         for (int i = 0; i < oldSize; i++) {
             data[i] = tmpArr[i];
         }
@@ -139,14 +141,14 @@ public class MyArrayList<T> implements List<T> {
         }
         Object[] objects = c.toArray();
         int objLength = objects.length;
-        Object[] newArr = (T[]) new Object[size + objLength];
+        Object[] newArr = new Object[size + objLength];
         int cursor = 0;
         for (int i = 0; i < index; i++) {
             newArr[i] = data[i];
             cursor++;
         }
-        for (int i = 0; i < objLength; i++) {
-            newArr[cursor] = objects[i];
+        for (Object object : objects) {
+            newArr[cursor] = object;
             cursor++;
             size++;
         }
@@ -154,7 +156,7 @@ public class MyArrayList<T> implements List<T> {
             newArr[cursor] = data[i];
             cursor++;
         }
-        data = (T[]) new Object[newArr.length];
+        data = new Object[newArr.length];
         data = newArr.clone();
         return true;
     }
@@ -179,15 +181,17 @@ public class MyArrayList<T> implements List<T> {
     }
 
     public void clear() {
-        this.stream().forEach(t -> t = null);
-        data = (T[]) new Object[DEF_SIZE];
+        this.forEach(t -> t = null);
+        data = new Object[DEF_SIZE];
         size = 0;
     }
 
+    @SuppressWarnings("unchecked")
     public T get(int index) {
         return (T) data[index];
     }
 
+    @SuppressWarnings("unchecked")
     public T set(int index, T element) {
         T tmp = (T) data[index];
         data[index] = element;
@@ -199,7 +203,7 @@ public class MyArrayList<T> implements List<T> {
         if ((index > size) || index < 0) {
             throw new IllegalArgumentException("Index can't be less than 0 or current MyArrayList instance size.");
         }
-        Object[] tmpArr = (T[]) new Object[size + 1];
+        Object[] tmpArr = new Object[size + 1];
         int cursor = 0;
         for (int i = 0; i < index; i++) {
             tmpArr[i] = data[i];
@@ -212,7 +216,7 @@ public class MyArrayList<T> implements List<T> {
             tmpArr[cursor] = data[i];
             cursor++;
         }
-        data = (T[]) new Object[tmpArr.length];
+        data = new Object[tmpArr.length];
         data = tmpArr.clone();
     }
 
@@ -221,6 +225,7 @@ public class MyArrayList<T> implements List<T> {
             throw new IndexOutOfBoundsException();
         }
 
+        @SuppressWarnings("unchecked")
         T removedElement = (T) data[index];
         for (int i = index; i < size - 1; i++) {
             data[i] = data[i + 1];
@@ -265,6 +270,8 @@ public class MyArrayList<T> implements List<T> {
                 if (index >= size) {
                     throw new NoSuchElementException();
                 }
+
+                @SuppressWarnings("unchecked")
                 T element = (T) data[index];
                 lastReturn = index;
                 index++;
@@ -281,6 +288,8 @@ public class MyArrayList<T> implements List<T> {
                 if (index < 0) {
                     throw new NoSuchElementException();
                 }
+
+                @SuppressWarnings("unchecked")
                 T element = (T) data[index];
                 lastReturn = index;
                 index--;
@@ -326,16 +335,17 @@ public class MyArrayList<T> implements List<T> {
         throw new MethodNotImplementedException();
     }
 
-    public void trunk() {
+    @SuppressWarnings("unchecked")
+    private void trunk() {
         if (size < data.length) {
             if (size == 0) {
-                data = (T[]) new Object[DEF_SIZE];
+                data = new Object[DEF_SIZE];
             } else {
                 T[] tmpArr = (T[]) new Object[size];
                 for (int i = 0; i < size; i++) {
                     tmpArr[i] = (T) data[i];
                 }
-                data = (T[]) new Object[size];
+                data = new Object[size];
                 data = tmpArr.clone();
             }
         }
