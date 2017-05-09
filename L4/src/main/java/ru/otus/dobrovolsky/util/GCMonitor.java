@@ -14,7 +14,7 @@ import java.util.List;
 /**
  * Created by ketaetc on 27.04.17.
  */
-public class Util {
+public class GCMonitor {
     private static int youngGenCollNum = 0;
     private static int oldGenCollNum = 0;
 
@@ -25,20 +25,6 @@ public class Util {
 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd HH:mm:ss");
     LocalDateTime startTime;
-
-    private static Util instance = new Util();
-
-    private Util() {
-    }
-
-    /**
-     * return instance of an Util
-     *
-     * @return instance of an Util
-     */
-    public static Util getInstance() {
-        return instance;
-    }
 
     /**
      * creates ArrayList instance and stats GC monitoring
