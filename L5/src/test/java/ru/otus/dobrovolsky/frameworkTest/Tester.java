@@ -12,7 +12,7 @@ public class Tester {
 
     @Test
     public void testWithArrayOfClassesAsAParameter() throws IllegalAccessException, InvocationTargetException, InstantiationException {
-        ReflectionHelper.doReflectionWithArrayOfClasses(new Class<?>[] {TestClassFirst.class, TestClassSecond.class}, annotatedMethodsCounter);
+        ReflectionHelper.doReflectionWithArrayOfClasses(new Class<?>[]{TestClassFirst.class, TestClassSecond.class}, annotatedMethodsCounter);
 
         int beforeListSize = annotatedMethodsCounter.get("beforeListSize");
         int testListSize = annotatedMethodsCounter.get("testListSize");

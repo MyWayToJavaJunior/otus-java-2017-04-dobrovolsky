@@ -160,6 +160,6 @@ public class ReflectionHelper {
     }
 
     private static void printMethodInvocationInfo(Class<?> clazz, Method method) {
-        System.out.println("====>   " + clazz.getCanonicalName() + "    :   " + ((method != null) ? method.getName(): "class was instantiated") + "<====");
+        System.out.println("====>   " + clazz.getCanonicalName() + "    :   " + ((method != null) ? method.getName() : "class was instantiated") + "<====");
     }
 }
