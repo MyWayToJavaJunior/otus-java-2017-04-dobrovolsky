@@ -11,6 +11,7 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 
 @SuppressWarnings("SameParameterValue")
@@ -29,11 +30,7 @@ public class ReflectionHelper {
         return annotatedMethods;
     }
 
-    private static int beforeListSize = 0;
-    private static int testListSize = 0;
-    private static int afterListSize = 0;
-
-    public static void doReflectionWithArrayOfClasses(Class<?>[] classes) throws IllegalAccessException, InstantiationException, InvocationTargetException {
+    public static void doReflectionWithArrayOfClasses(Class<?>[] classes, HashMap<String, Integer> annotatedMethodsCounter) throws IllegalAccessException, InstantiationException, InvocationTargetException {
         System.out.println("===========================================================");
         System.out.println("Starting using reflections on array of classes:");
         System.out.println(Arrays.toString(classes));
@@ -43,12 +40,17 @@ public class ReflectionHelper {
         List<Method> testList;
         List<Method> afterList;
 
+        int beforeListSize = 0;
+        int testListSize = 0;
+        int afterListSize = 0;
+
         for (Class<?> clazz : classes) {
             beforeList = getAnnotatedMethods(clazz, Before.class);
             testList = getAnnotatedMethods(clazz, Test.class);
             afterList = getAnnotatedMethods(clazz, After.class);
 
             Object object = clazz.newInstance();
+            printMethodInvocationInfo(clazz, null);
             for (Method testMethod : testList) {
                 for (Method beforeMethod : beforeList) {
                     beforeMethod.invoke(object);
@@ -66,13 +68,17 @@ public class ReflectionHelper {
             beforeListSize += beforeList.size();
             testListSize += testList.size();
             afterListSize += afterList.size();
+
+            annotatedMethodsCounter.put("beforeListSize", beforeListSize);
+            annotatedMethodsCounter.put("testListSize", testListSize);
+            annotatedMethodsCounter.put("afterListSize", afterListSize);
         }
         System.out.println("-----------------------------------------------------------");
         System.out.println("All methods with annotations were invoked successfully");
         System.out.println("===========================================================");
     }
 
-    public static void doReflectionWithPackage(String packageName) throws IllegalAccessException, InstantiationException, InvocationTargetException {
+    public static void doReflectionWithPackage(String packageName, HashMap<String, Integer> annotatedMethodsCounter) throws IllegalAccessException, InstantiationException, InvocationTargetException {
         System.out.println("===========================================================");
         System.out.println("Starting using reflections on package " + packageName + ":");
         System.out.println("-----------------------------------------------------------");
@@ -83,12 +89,17 @@ public class ReflectionHelper {
         List<Method> testList;
         List<Method> afterList;
 
+        int beforeListSize = 0;
+        int testListSize = 0;
+        int afterListSize = 0;
+
         for (Class<?> clazz : classes) {
             beforeList = getAnnotatedMethods(clazz, Before.class);
             testList = getAnnotatedMethods(clazz, Test.class);
             afterList = getAnnotatedMethods(clazz, After.class);
 
             Object object = clazz.newInstance();
+            printMethodInvocationInfo(clazz, null);
             for (Method testMethod : testList) {
                 for (Method beforeMethod : beforeList) {
                     beforeMethod.invoke(object);
@@ -103,22 +114,17 @@ public class ReflectionHelper {
                     printMethodInvocationInfo(clazz, afterMethod);
                 }
             }
+            beforeListSize += beforeList.size();
+            testListSize += testList.size();
+            afterListSize += afterList.size();
+
+            annotatedMethodsCounter.put("beforeListSize", beforeListSize);
+            annotatedMethodsCounter.put("testListSize", testListSize);
+            annotatedMethodsCounter.put("afterListSize", afterListSize);
         }
         System.out.println("-----------------------------------------------------------");
         System.out.println("All methods with annotations were invoked successfully");
         System.out.println("===========================================================");
-    }
-
-    public static int getListAnnotatedWith(Class<? extends Annotation> annotation) {
-        if (annotation.getName().toUpperCase().contains("BEFORE")) {
-            return beforeListSize;
-        } else if (annotation.getName().toUpperCase().contains("TEST")) {
-            return testListSize;
-        } else if (annotation.getName().toUpperCase().contains("AFTER")) {
-            return afterListSize;
-        }
-
-        return 0;
     }
 
     private static List<Class<?>> getAllClassesFromPackage(String packageName) {
@@ -154,6 +160,6 @@ public class ReflectionHelper {
     }
 
     private static void printMethodInvocationInfo(Class<?> clazz, Method method) {
-        System.out.println("====>   " + clazz.getCanonicalName() + "    :   " + method.getName() + "<====");
+        System.out.println("====>   " + clazz.getCanonicalName() + "    :   " + ((method != null) ? method.getName(): "class was instantiated") + "<====");
     }
 }
