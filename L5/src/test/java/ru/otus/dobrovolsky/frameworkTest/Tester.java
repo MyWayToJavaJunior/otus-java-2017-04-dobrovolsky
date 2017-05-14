@@ -1,41 +1,46 @@
 package ru.otus.dobrovolsky.frameworkTest;
 
 import org.junit.Test;
-import ru.otus.dobrovolsky.framework.ReflectionHelper;
+import ru.otus.dobrovolsky.framework.helpers.AnnotationHelper;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.HashMap;
+import java.util.Arrays;
+
+import static ru.otus.dobrovolsky.framework.Assert.assertTrue;
+import static ru.otus.dobrovolsky.framework.helpers.AnnotationHelper.getAnnotatedMethodsCount;
 
 public class Tester {
 
-    HashMap<String, Integer> annotatedMethodsCounter = new HashMap<>(3);
-
     @Test
     public void testWithArrayOfClassesAsAParameter() throws IllegalAccessException, InvocationTargetException, InstantiationException {
-        ReflectionHelper.doReflectionWithArrayOfClasses(new Class<?>[]{TestClassFirst.class, TestClassSecond.class}, annotatedMethodsCounter);
+        Class<?>[] arrayOfClasses = new Class<?>[]{TestClassFirst.class, TestClassSecond.class};
 
-        int beforeListSize = annotatedMethodsCounter.get("beforeListSize");
-        int testListSize = annotatedMethodsCounter.get("testListSize");
-        int afterListSize = annotatedMethodsCounter.get("afterListSize");
+        System.out.println("===========================================================");
+        System.out.println("Starting using reflections on array of classes:");
+        System.out.println(Arrays.toString(arrayOfClasses));
+        System.out.println("-----------------------------------------------------------");
 
-        ru.otus.dobrovolsky.framework.Assert.assertTrue("The correct number of @Before annotated methods: 6", beforeListSize == 6);
-        ru.otus.dobrovolsky.framework.Assert.assertTrue("The correct number of @Test annotated methods: 6", testListSize == 6);
-        ru.otus.dobrovolsky.framework.Assert.assertTrue("The correct number of @After annotated methods: 6", afterListSize == 6);
+        AnnotationHelper.doAnnotationHelp(arrayOfClasses);
+
+        assertTrue("The correct number of @Before annotated methods: 6", getAnnotatedMethodsCount(arrayOfClasses).get("Before") == 6);
+        assertTrue("The correct number of @Test annotated methods: 6", getAnnotatedMethodsCount(arrayOfClasses).get("Test") == 6);
+        assertTrue("The correct number of @After annotated methods: 6", getAnnotatedMethodsCount(arrayOfClasses).get("After") == 6);
     }
 
     @Test
     public void testWithPackageNameAsAParameter() throws IllegalAccessException, InvocationTargetException, InstantiationException {
         String packageName = "ru.otus.dobrovolsky.frameworkTest";
+        Character[] pcgNameArr = packageName.chars().mapToObj(c -> (char) c).toArray(Character[]::new);
 
-        ReflectionHelper.doReflectionWithPackage(packageName, annotatedMethodsCounter);
+        System.out.println("===========================================================");
+        System.out.println("Starting using reflections on package " + packageName + ":");
+        System.out.println("-----------------------------------------------------------");
 
-        int beforeListSize = annotatedMethodsCounter.get("beforeListSize");
-        int testListSize = annotatedMethodsCounter.get("testListSize");
-        int afterListSize = annotatedMethodsCounter.get("afterListSize");
+        AnnotationHelper.doAnnotationHelp(pcgNameArr);
 
-        ru.otus.dobrovolsky.framework.Assert.assertTrue("The correct number of @Before annotated methods: 6", beforeListSize == 6);
-        ru.otus.dobrovolsky.framework.Assert.assertTrue("The correct number of @Test annotated methods: 6", testListSize == 6);
-        ru.otus.dobrovolsky.framework.Assert.assertTrue("The correct number of @After annotated methods: 6", afterListSize == 6);
+        assertTrue("The correct number of @Before annotated methods: 6", getAnnotatedMethodsCount(pcgNameArr).get("Before") == 6);
+        assertTrue("The correct number of @Test annotated methods: 6", getAnnotatedMethodsCount(pcgNameArr).get("Test") == 6);
+        assertTrue("The correct number of @After annotated methods: 6", getAnnotatedMethodsCount(pcgNameArr).get("After") == 6);
+        assertTrue("The correct number of org.junit.@Test annotated methods: 2", getAnnotatedMethodsCount(pcgNameArr).get("jUnit.Test") == 2);
     }
-
 }

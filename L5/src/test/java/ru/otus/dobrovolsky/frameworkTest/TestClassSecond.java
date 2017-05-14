@@ -1,54 +1,57 @@
 package ru.otus.dobrovolsky.frameworkTest;
 
+import org.junit.FixMethodOrder;
+import org.junit.runners.MethodSorters;
 import ru.otus.dobrovolsky.framework.annotation.After;
 import ru.otus.dobrovolsky.framework.annotation.Before;
 import ru.otus.dobrovolsky.framework.annotation.Test;
 
 @SuppressWarnings("unused")
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class TestClassSecond {
 
     @Before
-    public static void beforeAnnotationTestMethodFirst() {
+    public static void aBeforeAnnotationTestMethodFirst() {
         System.out.println("Method executed while testing ru.otus.dobrovolsky.framework.annotation.Before annotation: first method");
     }
 
     @Before
-    public static void beforeAnnotationTestMethodSecond() {
+    public static void bBeforeAnnotationTestMethodSecond() {
         System.out.println("Method executed while testing ru.otus.dobrovolsky.framework.annotation.Before annotation: second method");
     }
 
     @Before
-    public static void beforeAnnotationTestMethodThird() {
+    public static void cBeforeAnnotationTestMethodThird() {
         System.out.println("Method executed while testing ru.otus.dobrovolsky.framework.annotation.Before annotation: third method");
     }
 
     @Test
-    public static void testAnnotationTestMethodFirst() {
+    public static void dTestAnnotationTestMethodFirst() {
         System.out.println("Method executed while testing ru.otus.dobrovolsky.framework.annotation.Test annotation: first method");
     }
 
     @Test
-    public static void testAnnotationTestMethodSecond() {
+    public static void eTestAnnotationTestMethodSecond() {
         System.out.println("Method executed while testing ru.otus.dobrovolsky.framework.annotation.Test annotation: second method");
     }
 
     @Test
-    public static void testAnnotationTestMethodThird() {
+    public static void fTestAnnotationTestMethodThird() {
         System.out.println("Method executed while testing ru.otus.dobrovolsky.framework.annotation.Test annotation: third method");
     }
 
     @After
-    public static void afterAnnotationTestMethodFirst() {
+    public static void gAfterAnnotationTestMethodFirst() {
         System.out.println("Method executed while testing ru.otus.dobrovolsky.framework.annotation.After annotation: first method");
     }
 
     @After
-    public static void afterAnnotationTestMethodSecond() {
+    public static void hAfterAnnotationTestMethodSecond() {
         System.out.println("Method executed while testing ru.otus.dobrovolsky.framework.annotation.After annotation: second method");
     }
 
     @After
-    public static void afterAnnotationTestMethodThird() {
+    public static void iAfterAnnotationTestMethodThird() {
         System.out.println("Method executed while testing ru.otus.dobrovolsky.framework.annotation.After annotation: third method");
     }
 }

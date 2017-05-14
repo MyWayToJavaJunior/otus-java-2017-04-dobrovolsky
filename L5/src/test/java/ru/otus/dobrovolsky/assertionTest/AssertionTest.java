@@ -1,61 +1,55 @@
 package ru.otus.dobrovolsky.assertionTest;
 
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
 import ru.otus.dobrovolsky.framework.Assert;
 import ru.otus.dobrovolsky.framework.exception.MyAssertionError;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class AssertionTest {
-    /**
-     * fails
-     */
     @Test(expected = MyAssertionError.class)
-    public void failTest() {
+    public void afailTest() {
         Assert.fail();
     }
 
-    /**
-     * fails
-     */
     @Test(expected = MyAssertionError.class)
-    public void failTestWMessage() {
+    public void bfailTestWMessage() {
         Assert.fail("Fails while testing ru.otus.dobrovolsky.framework.Assert.fail realisation");
     }
 
     @Test
-    public void assertTrueTest() {
+    public void cAssertTrueTest() {
         Assert.assertTrue(true);
     }
 
     @Test(expected = MyAssertionError.class)
-    public void assertTrueTestWrong() {
+    public void dAssertTrueTestWrong() {
         Assert.assertTrue(false);
     }
 
     @Test
-    public void assertTrueTestWMessage() {
+    public void fAssertTrueTestWMessage() {
         Assert.assertTrue("1 == 1", true);
     }
 
     @Test(expected = MyAssertionError.class)
-    public void assertTrueTestWMessageWrong() {
+    public void gAssertTrueTestWMessageWrong() {
         Assert.assertTrue("1 == 0", false);
     }
 
     @Test
-    public void assertNotNullTest() {
+    public void hAssertNotNullTest() {
         Assert.assertNotNull(0);
     }
 
     @Test
-    public void assertNotNullTestWMessage() {
+    public void iAssertNotNullTestWMessage() {
         Assert.assertNotNull("with new Object", new Object());
     }
 
-    /**
-     * fails with null ref
-     */
     @Test(expected = MyAssertionError.class)
-    public void assertNotNullTestWMessageWrong() {
+    public void jAssertNotNullTestWMessageWrong() {
         Assert.assertNotNull("with null ref", null);
     }
 }
