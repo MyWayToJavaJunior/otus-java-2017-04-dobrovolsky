@@ -60,10 +60,6 @@ class ReflectionHelper {
         return classes;
     }
 
-    static void printMethodInvocationInfo(Class<?> clazz, Method method) {
-        System.out.println(clazz.getCanonicalName() + "    :   " + ((method != null) ? method.getName() : "class was instantiated"));
-    }
-
     static <T> Class<?>[] prepareInputData(T[] inputData) throws IllegalAccessException, InvocationTargetException, InstantiationException {
         StringBuilder packageName = new StringBuilder();
         Class<?>[] classes;

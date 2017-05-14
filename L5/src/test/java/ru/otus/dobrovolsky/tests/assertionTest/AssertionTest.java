@@ -1,4 +1,4 @@
-package ru.otus.dobrovolsky.assertionTest;
+package ru.otus.dobrovolsky.tests.assertionTest;
 
 import org.junit.FixMethodOrder;
 import org.junit.Test;

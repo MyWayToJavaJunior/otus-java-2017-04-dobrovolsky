@@ -21,42 +21,6 @@ public class AnnotationHelper {
     private AnnotationHelper() {
     }
 
-    public static <T> void doAnnotationHelp(T[] inputData) throws IllegalAccessException, InstantiationException, InvocationTargetException {
-
-        Class<?>[] classes = prepareInputData(inputData);
-
-        List<Method> beforeList;
-        List<Method> testList;
-        List<Method> afterList;
-
-        for (Class<?> clazz : classes) {
-            beforeList = getAnnotatedMethods(clazz, Before.class);
-            testList = getAnnotatedMethods(clazz, Test.class);
-            afterList = getAnnotatedMethods(clazz, After.class);
-
-            Object object = clazz.newInstance();
-            printMethodInvocationInfo(clazz, null);
-            for (Method testMethod : testList) {
-                for (Method beforeMethod : beforeList) {
-                    beforeMethod.invoke(object);
-                    printMethodInvocationInfo(clazz, beforeMethod);
-                }
-
-                testMethod.invoke(object);
-                printMethodInvocationInfo(clazz, testMethod);
-
-                for (Method afterMethod : afterList) {
-                    afterMethod.invoke(object);
-                    printMethodInvocationInfo(clazz, afterMethod);
-                }
-            }
-        }
-
-        System.out.println("-----------------------------------------------------------------------------------------");
-        System.out.println("All methods with annotations were invoked successfully");
-        System.out.println("=========================================================================================");
-    }
-
     static <T> int calcAnnotatedMethodByName(T[] inputData, Class<? extends Annotation> annotationClass) throws IllegalAccessException, InstantiationException, InvocationTargetException {
         Class<?>[] classes = prepareInputData(inputData);
 
@@ -69,7 +33,7 @@ public class AnnotationHelper {
         return counter;
     }
 
-    public static <T> Map<String, Integer> getAnnotatedMethodsCount(T[] inputData) throws IllegalAccessException, InvocationTargetException, InstantiationException {
+    public static <T> Map<String, Integer> getAnnotatedMethodsMap(T[] inputData) throws IllegalAccessException, InvocationTargetException, InstantiationException {
         Class<?>[] classes = prepareInputData(inputData);
 
         Map<String, Integer> annotationSizeList = new HashMap<>(4);
@@ -81,5 +45,4 @@ public class AnnotationHelper {
 
         return annotationSizeList;
     }
-
 }

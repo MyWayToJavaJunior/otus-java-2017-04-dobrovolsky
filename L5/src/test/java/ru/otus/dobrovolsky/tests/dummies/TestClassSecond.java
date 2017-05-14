@@ -1,4 +1,4 @@
-package ru.otus.dobrovolsky.frameworkTest;
+package ru.otus.dobrovolsky.tests.dummies;
 
 import org.junit.FixMethodOrder;
 import org.junit.runners.MethodSorters;
