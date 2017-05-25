@@ -8,6 +8,7 @@ import ru.otus.ketaetc.atmFramework.atm.CashDispenserATM;
 import ru.otus.ketaetc.atmFramework.atm.CashInATM;
 import ru.otus.ketaetc.atmFramework.atm.State;
 import ru.otus.ketaetc.atmFramework.atm.cashOutAlgorithm.CashOutAlgorithm;
+import ru.otus.ketaetc.atmFramework.atm.cashOutAlgorithm.MostlyEvenlyCashOutAlgorithm;
 import ru.otus.ketaetc.atmFramework.atm.cashOutAlgorithm.SimpleCashOutAlgorithm;
 import ru.otus.ketaetc.atmFramework.exception.*;
 import ru.otus.ketaetc.atmFramework.itDepartment.Department;
@@ -86,14 +87,15 @@ public class DepartmentTest {
         Department department = Department.getDepartment();
         CashDispenserATM atm1 = (CashDispenserATM) department.buildATM("ru.otus.ketaetc.atmFramework.atm.CashDispenserATM");
         department.register(atm1);
+        department.setAlgorithm(atm1, MostlyEvenlyCashOutAlgorithm.getAlgorithm());
 
 
         department.setATMWork(atm1);
         double balanceBefore = atm1.getATMBalance();
-        atm1.cashOut(55000);
+        atm1.cashOut(59850);
         double balanceAfter = atm1.getATMBalance();
         double delta = balanceBefore - balanceAfter;
-        Assert.assertTrue("ATM delta is RUB 55000", delta == 55000d);
+        Assert.assertTrue("ATM delta is RUB 59850", delta == 59850d);
     }
 
     @Test
