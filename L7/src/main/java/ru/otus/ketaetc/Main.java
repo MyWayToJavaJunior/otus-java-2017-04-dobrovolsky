@@ -9,25 +9,25 @@ import ru.otus.ketaetc.atmFramework.atm.cassette.CashInCassette;
 import ru.otus.ketaetc.atmFramework.atm.cassette.Cassette;
 import ru.otus.ketaetc.atmFramework.atm.cassette.Nominal;
 import ru.otus.ketaetc.atmFramework.exception.*;
-import ru.otus.ketaetc.atmFramework.itDepartment.Department;
+import ru.otus.ketaetc.atmFramework.itDepartment.ITDepartment;
 
 public class Main {
     public static void main(String[] args) throws NoCassettesFoundException, NotSuchNominalException, NotEnoughMoneyException, NotSuchAlgorithmException, ATMStateException, IllegalAccessException, InstantiationException, ClassNotFoundException {
         CashDispenserATM cashDispenserATM1 = new CashDispenserATM();
         CashDispenserATM cashDispenserATM2 = new CashDispenserATM("111");
 
-        Department department = Department.getDepartment();
-        department.register(cashDispenserATM1);
-        department.register(cashDispenserATM2);
+        ITDepartment itDepartment = ITDepartment.getITDepartment();
+        itDepartment.register(cashDispenserATM1);
+        itDepartment.register(cashDispenserATM2);
 
-        department.setAlgorithm(cashDispenserATM1, SimpleCashOutAlgorithm.getAlgorithm());
-        department.setAlgorithm(cashDispenserATM2, MostlyEvenlyCashOutAlgorithm.getAlgorithm());
+        itDepartment.setAlgorithm(cashDispenserATM1, SimpleCashOutAlgorithm.getAlgorithm());
+        itDepartment.setAlgorithm(cashDispenserATM2, MostlyEvenlyCashOutAlgorithm.getAlgorithm());
 
-        department.saveATMsStatus();
-        department.restartAllATMS();
-        department.register(cashDispenserATM1);
-        department.register(cashDispenserATM2);
-        department.setToServiceModeAllATMS();
+        itDepartment.saveATMsStatus();
+        itDepartment.restartAllATMS();
+        itDepartment.register(cashDispenserATM1);
+        itDepartment.register(cashDispenserATM2);
+        itDepartment.setToServiceModeAllATMS();
 
         Cassette cas1 = new CashDispenserCassette(Nominal.ONE_HUNDRED, 750);
         Cassette cas2 = new CashDispenserCassette(Nominal.FIVE_THOUSAND, 50);
@@ -38,12 +38,12 @@ public class Main {
         cashDispenserATM1.setCassette(cas2);
         cashDispenserATM1.setCassette(cas3);
 
-        department.restoreATMsStatus();
+        itDepartment.restoreATMsStatus();
 
         cashDispenserATM2.setCassette(cas4);
         cashDispenserATM2.setCassette(cas5);
 
-        department.setToServiceModeAllATMS();
+        itDepartment.setToServiceModeAllATMS();
         cashDispenserATM2.setCassette(cas4);
         cashDispenserATM2.setCassette(cas5);
 
@@ -71,7 +71,7 @@ public class Main {
         cashDispenserATM1.getCassettesLoadInfo();
         cashDispenserATM2.getCassettesLoadInfo();
 
-        System.out.println("Department balance: " + department.getTotalDepartmentBalance() + "\n");
+        System.out.println("ITDepartment balance: " + itDepartment.getTotalDepartmentBalance() + "\n");
 
         System.out.println(cashDispenserATM1.toString() + "\nbefore cashin out: " + cashDispenserATM1.getATMBalance());
         System.out.println("trying to cash out: " + 1950);
@@ -81,32 +81,32 @@ public class Main {
 
         System.out.println("Ejecting cassettes from cash dispensers:");
         System.out.println("We need to set ATMs to maintenance:");
-        department.setToServiceModeAllATMS();
-        department.ejectCassetesFromATMS();
+        itDepartment.setToServiceModeAllATMS();
+        itDepartment.ejectCassetesFromATMS();
 
         CashInATM cashInATM1 = new CashInATM();
-        department.register(cashInATM1);
-        department.saveATMStatus(cashInATM1);
-        department.restartATM(cashInATM1);
-        department.setToServiceModeATM(cashInATM1);
+        itDepartment.register(cashInATM1);
+        itDepartment.saveATMStatus(cashInATM1);
+        itDepartment.restartATM(cashInATM1);
+        itDepartment.setToServiceModeATM(cashInATM1);
 
         Cassette casIn1 = new CashInCassette();
 
         cashInATM1.setCassette(casIn1);
 
-        department.setATMSWork();
+        itDepartment.setATMSWork();
         System.out.println(cashInATM1.toString() + "\nbefore cash in: " + cashInATM1.getATMBalance());
         cashInATM1.cashIn(105, 125_000);
         cashInATM1.cashIn(105, 125_000);
         System.out.println("after: " + cashInATM1.getATMBalance() + "\n" + "count:  " + cashInATM1.getCount());
         System.out.println(cashInATM1.getATMMiniStatement());
         cashInATM1.getCassettesLoadInfo();
-        department.restoreATMStatus(cashInATM1);
+        itDepartment.restoreATMStatus(cashInATM1);
 
         System.out.println("================================================");
-        System.out.println("creating ATM via builder method in Department class:");
-        CashDispenserATM atmCashDispenser = (CashDispenserATM) department.buildATM("ru.otus.ketaetc.atmFramework.atm.CashDispenserATM");
-        CashInATM atmCashIn = (CashInATM) department.buildATM("ru.otus.ketaetc.atmFramework.atm.CashInATM");
+        System.out.println("creating ATM via builder method in ITDepartment class:");
+        CashDispenserATM atmCashDispenser = (CashDispenserATM) itDepartment.buildATM("ru.otus.ketaetc.atmFramework.atm.CashDispenserATM");
+        CashInATM atmCashIn = (CashInATM) itDepartment.buildATM("ru.otus.ketaetc.atmFramework.atm.CashInATM");
 
         atmCashDispenser.cashOut(10500);
         atmCashDispenser.cashOut(350);

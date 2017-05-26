@@ -1,14 +1,12 @@
 package ru.otus.ketaetc.atmFramework.atm.cassette;
 
-import ru.otus.ketaetc.atmFramework.atm.statement.ATMStatement;
-
 import java.util.Iterator;
 
 public class CashDispenserCassette implements Cassette, Comparable<CashDispenserCassette>, Iterable<CashDispenserCassette> {
 
     private final Nominal nominal;
     private final int MAX_CAPACITY = 1500;
-    private final ATMStatement atmStatement = ATMStatement.getAtmStatement();
+//    private final ATMStatement atmStatement = ATMStatement.getAtmStatement();
     private int count;
     private CashDispenserCassette next;
 
@@ -54,9 +52,8 @@ public class CashDispenserCassette implements Cassette, Comparable<CashDispenser
         };
     }
 
-    public boolean cashOut(int cash) {
+    public void cashOut(int cash) {
         count -= cash / getNominal();
-        return true;
     }
 
     @Override

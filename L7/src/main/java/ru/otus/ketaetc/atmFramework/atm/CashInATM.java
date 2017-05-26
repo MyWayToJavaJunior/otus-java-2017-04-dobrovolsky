@@ -1,5 +1,6 @@
 package ru.otus.ketaetc.atmFramework.atm;
 
+import ru.otus.ketaetc.atmFramework.atm.cashOutAlgorithm.CashOutAlgorithm;
 import ru.otus.ketaetc.atmFramework.atm.cassette.CashInCassette;
 import ru.otus.ketaetc.atmFramework.atm.cassette.Cassette;
 import ru.otus.ketaetc.atmFramework.atm.cassette.Nominal;
@@ -125,10 +126,14 @@ public class CashInATM implements ATM {
         System.out.println(stringBuilder.toString() + "\n");
     }
 
-
-    private void checkState() throws ATMStateException {
+    @Override
+    public void checkState() {
         if (state != State.IDLE) {
-            throw new ATMStateException("ATM can not handle request right now.");
+            try {
+                throw new ATMStateException("ATM can not handle request right now.");
+            } catch (ATMStateException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -156,5 +161,13 @@ public class CashInATM implements ATM {
         memento = new Memento(this.state);
         System.out.println("Saving " + this.state + " to Memento.");
         return memento;
+    }
+
+    public void setCashOutAlgorithm(CashOutAlgorithm algorithm) {
+        try {
+            throw new Exception("For CashDispenserATMs only");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

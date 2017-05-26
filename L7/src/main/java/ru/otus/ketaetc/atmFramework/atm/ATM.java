@@ -1,5 +1,6 @@
 package ru.otus.ketaetc.atmFramework.atm;
 
+import ru.otus.ketaetc.atmFramework.atm.cashOutAlgorithm.CashOutAlgorithm;
 import ru.otus.ketaetc.atmFramework.atm.cassette.Cassette;
 import ru.otus.ketaetc.atmFramework.atm.memento.Memento;
 
@@ -31,4 +32,8 @@ public interface ATM {
     void getSavedState();
 
     void loadATM();
+
+    void setCashOutAlgorithm(CashOutAlgorithm algorithm);
+
+    void checkState();
 }

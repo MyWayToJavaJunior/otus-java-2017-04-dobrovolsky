@@ -11,70 +11,70 @@ import ru.otus.ketaetc.atmFramework.atm.cashOutAlgorithm.CashOutAlgorithm;
 import ru.otus.ketaetc.atmFramework.atm.cashOutAlgorithm.MostlyEvenlyCashOutAlgorithm;
 import ru.otus.ketaetc.atmFramework.atm.cashOutAlgorithm.SimpleCashOutAlgorithm;
 import ru.otus.ketaetc.atmFramework.exception.*;
-import ru.otus.ketaetc.atmFramework.itDepartment.Department;
+import ru.otus.ketaetc.atmFramework.itDepartment.ITDepartment;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class DepartmentTest {
+public class ITDepartmentTest {
     @Test
     public void aTest() {
-        Department department = Department.getDepartment();
-        Assert.assertTrue("Department must be not null", department != null);
+        ITDepartment itDepartment = ITDepartment.getITDepartment();
+        Assert.assertTrue("ITDepartment must be not null", itDepartment != null);
     }
 
     @Test
     public void bTest() throws IllegalAccessException, InstantiationException, ClassNotFoundException {
-        Department department = Department.getDepartment();
-        CashDispenserATM atm = (CashDispenserATM) department.buildATM("ru.otus.ketaetc.atmFramework.atm.CashDispenserATM");
+        ITDepartment itDepartment = ITDepartment.getITDepartment();
+        CashDispenserATM atm = (CashDispenserATM) itDepartment.buildATM("ru.otus.ketaetc.atmFramework.atm.CashDispenserATM");
         double balance = atm.getATMBalance();
         Assert.assertTrue("Initial balance of newly loaded ATM = 3325000", balance == 3325000.0d);
     }
 
     @Test
     public void cTest() throws IllegalAccessException, InstantiationException, ClassNotFoundException {
-        Department department = Department.getDepartment();
-        CashDispenserATM atm = (CashDispenserATM) department.buildATM("ru.otus.ketaetc.atmFramework.atm.CashDispenserATM");
-        department.setAlgorithm(atm, SimpleCashOutAlgorithm.getAlgorithm());
+        ITDepartment itDepartment = ITDepartment.getITDepartment();
+        CashDispenserATM atm = (CashDispenserATM) itDepartment.buildATM("ru.otus.ketaetc.atmFramework.atm.CashDispenserATM");
+        itDepartment.setAlgorithm(atm, SimpleCashOutAlgorithm.getAlgorithm());
         CashOutAlgorithm cashOutAlgorithm = atm.getAlgorithm();
         Assert.assertEquals("Algorithm should be SimpleCashOutAlgorithm", cashOutAlgorithm, SimpleCashOutAlgorithm.getAlgorithm());
     }
 
     @Test
     public void dTest() throws IllegalAccessException, InstantiationException, ClassNotFoundException {
-        Department department = Department.getDepartment();
-        CashDispenserATM atm1 = (CashDispenserATM) department.buildATM("ru.otus.ketaetc.atmFramework.atm.CashDispenserATM");
-        CashDispenserATM atm2 = (CashDispenserATM) department.buildATM("ru.otus.ketaetc.atmFramework.atm.CashDispenserATM");
-        CashDispenserATM atm3 = (CashDispenserATM) department.buildATM("ru.otus.ketaetc.atmFramework.atm.CashDispenserATM");
-        CashDispenserATM atm4 = (CashDispenserATM) department.buildATM("ru.otus.ketaetc.atmFramework.atm.CashDispenserATM");
-        CashDispenserATM atm5 = (CashDispenserATM) department.buildATM("ru.otus.ketaetc.atmFramework.atm.CashDispenserATM");
-        department.register(atm1);
-        department.register(atm2);
-        department.register(atm3);
-        department.register(atm4);
-        department.register(atm5);
-        Assert.assertNotNull("There are 5 ATMs generated with builder method", department.getATMList());
+        ITDepartment itDepartment = ITDepartment.getITDepartment();
+        CashDispenserATM atm1 = (CashDispenserATM) itDepartment.buildATM("ru.otus.ketaetc.atmFramework.atm.CashDispenserATM");
+        CashDispenserATM atm2 = (CashDispenserATM) itDepartment.buildATM("ru.otus.ketaetc.atmFramework.atm.CashDispenserATM");
+        CashDispenserATM atm3 = (CashDispenserATM) itDepartment.buildATM("ru.otus.ketaetc.atmFramework.atm.CashDispenserATM");
+        CashDispenserATM atm4 = (CashDispenserATM) itDepartment.buildATM("ru.otus.ketaetc.atmFramework.atm.CashDispenserATM");
+        CashDispenserATM atm5 = (CashDispenserATM) itDepartment.buildATM("ru.otus.ketaetc.atmFramework.atm.CashDispenserATM");
+        itDepartment.register(atm1);
+        itDepartment.register(atm2);
+        itDepartment.register(atm3);
+        itDepartment.register(atm4);
+        itDepartment.register(atm5);
+        Assert.assertNotNull("There are 5 ATMs generated with builder method", itDepartment.getATMList());
     }
 
     @Test
     public void eTest() throws IllegalAccessException, InstantiationException, ClassNotFoundException {
-        Department department = Department.getDepartment();
-        CashDispenserATM atm1 = (CashDispenserATM) department.buildATM("ru.otus.ketaetc.atmFramework.atm.CashDispenserATM");
-        department.register(atm1);
+        ITDepartment itDepartment = ITDepartment.getITDepartment();
+        CashDispenserATM atm1 = (CashDispenserATM) itDepartment.buildATM("ru.otus.ketaetc.atmFramework.atm.CashDispenserATM");
+        itDepartment.register(atm1);
 
-        department.setToServiceModeATM(atm1);
+        itDepartment.setToServiceModeATM(atm1);
         Assert.assertTrue("ATM now in service mode", atm1.getState() == State.MAINTENANCE);
 
-        department.setATMWork(atm1);
+        itDepartment.setATMWork(atm1);
         Assert.assertTrue("ATM now in work mode", atm1.getState() == State.IDLE);
     }
 
     @Test
     public void fTest() throws IllegalAccessException, InstantiationException, ClassNotFoundException {
-        Department department = Department.getDepartment();
-        CashDispenserATM atm1 = (CashDispenserATM) department.buildATM("ru.otus.ketaetc.atmFramework.atm.CashDispenserATM");
-        department.register(atm1);
+        ITDepartment itDepartment = ITDepartment.getITDepartment();
+        CashDispenserATM atm1 = (CashDispenserATM) itDepartment.buildATM("ru.otus.ketaetc.atmFramework.atm.CashDispenserATM");
+        itDepartment.register(atm1);
 
 
-        department.setATMWork(atm1);
+        itDepartment.setATMWork(atm1);
         Assert.assertTrue("ATM now in work mode", atm1.getState() == State.IDLE);
         atm1.shutDown();
         Assert.assertTrue("ATM now is shutting down", atm1.getState() == State.POWER_OFF);
@@ -84,13 +84,13 @@ public class DepartmentTest {
 
     @Test
     public void gTest() throws IllegalAccessException, InstantiationException, ClassNotFoundException, NotEnoughMoneyException, NotSuchNominalException, NoCassettesFoundException, NotSuchAlgorithmException {
-        Department department = Department.getDepartment();
-        CashDispenserATM atm1 = (CashDispenserATM) department.buildATM("ru.otus.ketaetc.atmFramework.atm.CashDispenserATM");
-        department.register(atm1);
-        department.setAlgorithm(atm1, MostlyEvenlyCashOutAlgorithm.getAlgorithm());
+        ITDepartment itDepartment = ITDepartment.getITDepartment();
+        CashDispenserATM atm1 = (CashDispenserATM) itDepartment.buildATM("ru.otus.ketaetc.atmFramework.atm.CashDispenserATM");
+        itDepartment.register(atm1);
+        itDepartment.setAlgorithm(atm1, MostlyEvenlyCashOutAlgorithm.getAlgorithm());
 
 
-        department.setATMWork(atm1);
+        itDepartment.setATMWork(atm1);
         double balanceBefore = atm1.getATMBalance();
         atm1.cashOut(59850);
         double balanceAfter = atm1.getATMBalance();
@@ -100,12 +100,12 @@ public class DepartmentTest {
 
     @Test
     public void hTest() throws IllegalAccessException, InstantiationException, ClassNotFoundException, NotEnoughMoneyException, NotSuchNominalException, NoCassettesFoundException, NotSuchAlgorithmException, ATMStateException {
-        Department department = Department.getDepartment();
-        CashInATM atm1 = (CashInATM) department.buildATM("ru.otus.ketaetc.atmFramework.atm.CashInATM");
-        department.register(atm1);
+        ITDepartment itDepartment = ITDepartment.getITDepartment();
+        CashInATM atm1 = (CashInATM) itDepartment.buildATM("ru.otus.ketaetc.atmFramework.atm.CashInATM");
+        itDepartment.register(atm1);
 
 
-        department.setATMWork(atm1);
+        itDepartment.setATMWork(atm1);
         double balanceBefore = atm1.getATMBalance();
         atm1.cashIn(1000, 55000);
         double balanceAfter = atm1.getATMBalance();
@@ -115,31 +115,31 @@ public class DepartmentTest {
 
     @Test
     public void iTest() throws IllegalAccessException, InstantiationException, ClassNotFoundException, NotEnoughMoneyException, NotSuchNominalException, NoCassettesFoundException, NotSuchAlgorithmException, ATMStateException {
-        Department department = Department.getDepartment();
-        CashInATM atm1 = (CashInATM) department.buildATM("ru.otus.ketaetc.atmFramework.atm.CashInATM");
-        department.register(atm1);
+        ITDepartment itDepartment = ITDepartment.getITDepartment();
+        CashInATM atm1 = (CashInATM) itDepartment.buildATM("ru.otus.ketaetc.atmFramework.atm.CashInATM");
+        itDepartment.register(atm1);
 
-        department.setToServiceModeATM(atm1);
+        itDepartment.setToServiceModeATM(atm1);
         Assert.assertTrue("ATM status now is maintenance", atm1.getState() == State.MAINTENANCE);
-        department.saveATMsStatus();
-        department.setATMWork(atm1);
+        itDepartment.saveATMsStatus();
+        itDepartment.setATMWork(atm1);
         Assert.assertTrue("ATM status now is IDLE", atm1.getState() == State.IDLE);
-        department.restartATM(atm1);
+        itDepartment.restartATM(atm1);
         Assert.assertTrue("ATM status now is rebooting", atm1.getState() == State.REBOOTING);
-        department.restoreATMStatus(atm1);
+        itDepartment.restoreATMStatus(atm1);
         Assert.assertTrue("ATM status was restored - maintenance now", atm1.getState() == State.MAINTENANCE);
     }
 
     @Test
     public void jTest() throws IllegalAccessException, InstantiationException, ClassNotFoundException, NotEnoughMoneyException, NotSuchNominalException, NoCassettesFoundException, NotSuchAlgorithmException, ATMStateException {
-        Department department = Department.getDepartment();
-        CashInATM atm1 = (CashInATM) department.buildATM("ru.otus.ketaetc.atmFramework.atm.CashInATM");
-        department.register(atm1);
+        ITDepartment itDepartment = ITDepartment.getITDepartment();
+        CashInATM atm1 = (CashInATM) itDepartment.buildATM("ru.otus.ketaetc.atmFramework.atm.CashInATM");
+        itDepartment.register(atm1);
 
-        department.setToServiceModeATM(atm1);
+        itDepartment.setToServiceModeATM(atm1);
         Assert.assertTrue("ATM status now is maintenance", atm1.getState() == State.MAINTENANCE);
 
-        department.loadATM(atm1);
+        itDepartment.loadATM(atm1);
         Assert.assertNotNull("ATM was reloaded with cassettes, initial balance = 3325000", atm1.getATMBalance() == 3325000);
     }
 }
