@@ -13,10 +13,6 @@ public class CashInCassette implements Cassette, Comparable<CashInCassette>, Ite
         this.count = 0;
     }
 
-    public CashInCassette(Nominal nominal) {
-        this.count = 0;
-    }
-
     public int getMaxCapacity() {
         return MAX_CAPACITY;
     }

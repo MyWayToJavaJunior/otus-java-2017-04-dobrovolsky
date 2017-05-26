@@ -1,5 +1,6 @@
 package ru.otus.ketaetc;
 
+import ru.otus.ketaetc.atmFramework.atm.ATM;
 import ru.otus.ketaetc.atmFramework.atm.CashDispenserATM;
 import ru.otus.ketaetc.atmFramework.atm.CashInATM;
 import ru.otus.ketaetc.atmFramework.atm.cashOutAlgorithm.MostlyEvenlyCashOutAlgorithm;
@@ -105,8 +106,8 @@ public class Main {
 
         System.out.println("================================================");
         System.out.println("creating ATM via builder method in ITDepartment class:");
-        CashDispenserATM atmCashDispenser = (CashDispenserATM) itDepartment.buildATM("ru.otus.ketaetc.atmFramework.atm.CashDispenserATM");
-        CashInATM atmCashIn = (CashInATM) itDepartment.buildATM("ru.otus.ketaetc.atmFramework.atm.CashInATM");
+        ATM atmCashDispenser = itDepartment.buildATM("ru.otus.ketaetc.atmFramework.atm.CashDispenserATM");
+        ATM atmCashIn = itDepartment.buildATM("ru.otus.ketaetc.atmFramework.atm.CashInATM");
 
         atmCashDispenser.processCash(10500);
         atmCashDispenser.processCash(350);

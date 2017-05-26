@@ -58,7 +58,6 @@ public class CashDispenserATM implements ATM {
                 }
             }
         }
-
         return leastNominal;
     }
 
@@ -67,21 +66,13 @@ public class CashDispenserATM implements ATM {
         if ((algorithm == null) || (algorithm.getClass().getCanonicalName().contains("SimpleCashOutAlgorithm"))) {
             try {
                 cashOutSimple(cash[0]);
-            } catch (NoCassettesFoundException e) {
-                e.printStackTrace();
-            } catch (NotEnoughMoneyException e) {
-                e.printStackTrace();
-            } catch (NotSuchNominalException e) {
+            } catch (NoCassettesFoundException | NotEnoughMoneyException | NotSuchNominalException e) {
                 e.printStackTrace();
             }
         } else if (algorithm.getClass().getCanonicalName().contains("MostlyEvenlyCashOutAlgorithm")) {
             try {
                 cashOutMostlyEvenly(cash[0]);
-            } catch (NoCassettesFoundException e) {
-                e.printStackTrace();
-            } catch (NotEnoughMoneyException e) {
-                e.printStackTrace();
-            } catch (NotSuchNominalException e) {
+            } catch (NoCassettesFoundException | NotEnoughMoneyException | NotSuchNominalException e) {
                 e.printStackTrace();
             }
         } else {
@@ -93,7 +84,7 @@ public class CashDispenserATM implements ATM {
         }
     }
 
-    private boolean cashOutSimple(int cash) throws NoCassettesFoundException, NotEnoughMoneyException, NotSuchNominalException {
+    private void cashOutSimple(int cash) throws NoCassettesFoundException, NotEnoughMoneyException, NotSuchNominalException {
         double atmBalance = getATMBalance();
         if (atmBalance < cash) {
             throw new NotEnoughMoneyException("Not enough money: " + atmBalance + " for requested sum: " + cash);
@@ -129,7 +120,6 @@ public class CashDispenserATM implements ATM {
         if (cash == expectedCash) {
             atmStatement.addStatement(this, prepareStatementRow(cash) + "   " + "D");
         }
-        return true;
     }
 
     private boolean cashOutMostlyEvenly(int cash) throws NoCassettesFoundException, NotEnoughMoneyException, NotSuchNominalException {
@@ -264,10 +254,7 @@ public class CashDispenserATM implements ATM {
         return algorithm;
     }
 
-    public void setAlgorithm(CashOutAlgorithm algorithm) {
-        this.algorithm = algorithm;
-    }
-
+    @Override
     public void getCassettesLoadInfo() {
         if (getATMBalance() == 0) {
             return;

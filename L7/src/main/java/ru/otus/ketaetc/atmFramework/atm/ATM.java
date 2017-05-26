@@ -50,4 +50,6 @@ public interface ATM {
      * i[1] - count
      */
     void processCash(int... i);
+
+    void getCassettesLoadInfo();
 }

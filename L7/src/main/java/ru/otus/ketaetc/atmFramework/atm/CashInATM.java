@@ -3,7 +3,6 @@ package ru.otus.ketaetc.atmFramework.atm;
 import ru.otus.ketaetc.atmFramework.atm.cashOutAlgorithm.CashOutAlgorithm;
 import ru.otus.ketaetc.atmFramework.atm.cassette.CashInCassette;
 import ru.otus.ketaetc.atmFramework.atm.cassette.Cassette;
-import ru.otus.ketaetc.atmFramework.atm.cassette.Nominal;
 import ru.otus.ketaetc.atmFramework.atm.memento.Memento;
 import ru.otus.ketaetc.atmFramework.atm.statement.ATMStatement;
 import ru.otus.ketaetc.atmFramework.exception.ATMStateException;
@@ -76,15 +75,6 @@ public class CashInATM implements ATM {
     public State getState() {
         return this.state;
     }
-
-//    @Override
-//    public void cashOut(int i) {
-//        try {
-//            throw new Exception("For CashDispenserATMs only");
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
 
     private void setState(State state) {
         this.state = state;
@@ -182,7 +172,7 @@ public class CashInATM implements ATM {
     @Override
     public void loadATM() {
         if (state == State.MAINTENANCE) {
-            cassette = new CashInCassette(Nominal.FIVE_HUNDRED);
+            cassette = new CashInCassette();
         } else {
             try {
                 throw new ATMStateException();

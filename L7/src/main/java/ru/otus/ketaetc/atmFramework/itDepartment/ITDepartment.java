@@ -80,9 +80,7 @@ public class ITDepartment implements Department {
 
     @Override
     public void unregisterAllATMS() {
-        for (ATM atm : atmList) {
-            atmList.remove(atm);
-        }
+        atmList.removeAll(atmList);
     }
 
     @Override
@@ -95,9 +93,7 @@ public class ITDepartment implements Department {
         for (ATM atm : atmList) {
             addCommand(new ATMCommand2ATM("Trying to set atm working   " + atm.toString(), atm));
         }
-        for (ATM atm : atmList) {
-            processCommands(State.IDLE);
-        }
+        processCommands(State.IDLE);
         commandQueue.clear();
     }
 
@@ -114,9 +110,7 @@ public class ITDepartment implements Department {
         for (ATM atm : atmList) {
             addCommand(new ATMCommand2ATM("Trying to restart   " + atm.toString(), atm));
         }
-        for (ATM atm : atmList) {
-            processCommands(State.REBOOTING);
-        }
+        processCommands(State.REBOOTING);
         commandQueue.clear();
     }
 
@@ -132,9 +126,7 @@ public class ITDepartment implements Department {
         for (ATM atm : atmList) {
             addCommand(new ATMCommand2ATM("Trying to set to maintenance mode   " + atm.toString(), atm));
         }
-        for (ATM atm : atmList) {
-            processCommands(State.MAINTENANCE);
-        }
+        processCommands(State.MAINTENANCE);
         commandQueue.clear();
     }
 
@@ -196,10 +188,10 @@ public class ITDepartment implements Department {
     public ATM buildATM(String className) {
         ATM atm;
         Cassette cas1;
-        Cassette cas2;
-        Cassette cas3;
-        Cassette cas4;
-        Cassette cas5;
+        Cassette cas2 = null;
+        Cassette cas3 = null;
+        Cassette cas4 = null;
+        Cassette cas5 = null;
         Class<?> clazz = null;
         try {
             clazz = Class.forName(className);
@@ -208,10 +200,9 @@ public class ITDepartment implements Department {
         }
         Object object = null;
         try {
+            assert clazz != null;
             object = clazz.newInstance();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
+        } catch (InstantiationException | IllegalAccessException e) {
             e.printStackTrace();
         }
         if (className.contains("CashDispenserATM")) {
@@ -223,23 +214,24 @@ public class ITDepartment implements Department {
             cas5 = new CashDispenserCassette(Nominal.FIVE_THOUSAND, 500);
         } else if (className.contains("CashInATM")) {
             atm = (CashInATM) object;
-            cas1 = new CashInCassette(Nominal.FIFTY);
-            cas2 = new CashInCassette(Nominal.ONE_HUNDRED);
-            cas3 = new CashInCassette(Nominal.FIVE_HUNDRED);
-            cas4 = new CashInCassette(Nominal.ONE_THOUSAND);
-            cas5 = new CashInCassette(Nominal.FIVE_THOUSAND);
+            cas1 = new CashInCassette();
         } else {
             throw new ClassCastException();
         }
-        ITDepartment ITDepartment = getITDepartment();
-        ITDepartment.register(atm);
+        ITDepartment itDepartment = getITDepartment();
+        itDepartment.register(atm);
+        itDepartment.setToServiceModeATM(atm);
 
-        ITDepartment.setToServiceModeATM(atm);
-        atm.setCassette(cas1);
-        atm.setCassette(cas2);
-        atm.setCassette(cas3);
-        atm.setCassette(cas4);
-        atm.setCassette(cas5);
+        assert atm != null;
+        if (className.contains("CashDispenserATM")) {
+            atm.setCassette(cas1);
+            atm.setCassette(cas2);
+            atm.setCassette(cas3);
+            atm.setCassette(cas4);
+            atm.setCassette(cas5);
+        } else {
+            atm.setCassette(cas1);
+        }
 
         if (className.contains("CashDispenserATM")) {
             Random r = new Random();
@@ -247,10 +239,10 @@ public class ITDepartment implements Department {
             algorithm = r.nextInt() > 500 ? SimpleCashOutAlgorithm.getAlgorithm() : MostlyEvenlyCashOutAlgorithm.getAlgorithm();
 
             System.out.println("Setting cash out algorithm: " + algorithm.getClass().getName());
-            ITDepartment.setAlgorithm(atm, algorithm);
+            itDepartment.setAlgorithm(atm, algorithm);
         }
 
-        ITDepartment.setATMWork(atm);
+        itDepartment.setATMWork(atm);
 
         return atm;
     }
