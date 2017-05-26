@@ -23,20 +23,17 @@ public class CashDispenserATM implements ATM {
     private State state;
     private long id;
     private String address;
-    private Department department;
     private List<CashDispenserCassette> cassettes = new ArrayList<>();
     private Memento memento;
 
     public CashDispenserATM() {
         id = ID_GENERATOR.incrementAndGet();
-        department = Department.getDepartment();
         address = DEFAULT_ADDRESS;
         state = State.SELFTESTING;
     }
 
     public CashDispenserATM(String address) {
         id = ID_GENERATOR.incrementAndGet();
-        department = Department.getDepartment();
         this.address = address;
         state = State.NETWORK_PROBLEM;
     }
@@ -157,11 +154,6 @@ public class CashDispenserATM implements ATM {
             }
         }
         return false;
-    }
-
-    @Override
-    public void setDepartment(Department department) {
-        this.department = department;
     }
 
     public State getState() {

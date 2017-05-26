@@ -7,7 +7,6 @@ import ru.otus.ketaetc.atmFramework.atm.memento.Memento;
 import ru.otus.ketaetc.atmFramework.atm.statement.ATMStatement;
 import ru.otus.ketaetc.atmFramework.exception.ATMStateException;
 import ru.otus.ketaetc.atmFramework.exception.NoCassettesFoundException;
-import ru.otus.ketaetc.atmFramework.itDepartment.Department;
 
 import static ru.otus.ketaetc.atmFramework.utils.Utils.prepareStatementRow;
 
@@ -19,20 +18,17 @@ public class CashInATM implements ATM {
     private State state;
     private long id;
     private String address;
-    private Department department;
     private CashInCassette cassette;
     private Memento memento;
 
     public CashInATM() {
         id = ID_GENERATOR.incrementAndGet();
-        department = Department.getDepartment();
         address = DEFAULT_ADDRESS;
         state = State.ERROR;
     }
 
     public CashInATM(String address) {
         id = ID_GENERATOR.incrementAndGet();
-        department = Department.getDepartment();
         this.address = address;
         state = State.NO_RESPONSE;
     }
@@ -57,11 +53,6 @@ public class CashInATM implements ATM {
     @Override
     public void ejectAllCassettes() {
         ejectCassette(cassette);
-    }
-
-    @Override
-    public void setDepartment(Department department) {
-        this.department = department;
     }
 
     public State getState() {

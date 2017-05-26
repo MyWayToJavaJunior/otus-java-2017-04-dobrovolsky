@@ -195,7 +195,6 @@ public class Department {
         Department department = getDepartment();
         department.register(atm);
 
-        atm.setDepartment(department);
         department.setToServiceModeATM(atm);
         atm.setCassette(cas1);
         atm.setCassette(cas2);

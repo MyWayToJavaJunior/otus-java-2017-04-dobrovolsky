@@ -2,7 +2,6 @@ package ru.otus.ketaetc.atmFramework.atm;
 
 import ru.otus.ketaetc.atmFramework.atm.cassette.Cassette;
 import ru.otus.ketaetc.atmFramework.atm.memento.Memento;
-import ru.otus.ketaetc.atmFramework.itDepartment.Department;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -24,8 +23,6 @@ public interface ATM {
     void shutDown();
 
     void startUp();
-
-    void setDepartment(Department department);
 
     String getATMMiniStatement();
 
