@@ -48,8 +48,6 @@ public interface ATM {
     /**
      * i[0] - cash
      * i[1] - count
-     *
-     * @param i
      */
     void processCash(int... i);
 }
