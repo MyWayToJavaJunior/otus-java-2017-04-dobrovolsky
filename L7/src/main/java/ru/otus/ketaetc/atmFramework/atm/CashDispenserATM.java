@@ -37,11 +37,19 @@ public class CashDispenserATM implements ATM {
         state = State.NETWORK_PROBLEM;
     }
 
+    @Override
+    public String getAddress() {
+        return address;
+    }
+
     public void setAddress(String address) {
         this.address = address;
     }
 
     int getLeastNominal() throws NoCassettesFoundException {
+        if (cassettes.isEmpty()) {
+            throw new NoCassettesFoundException("No cassettes were loaded into ATM.");
+        }
         int leastNominal = Integer.MAX_VALUE;
         for (Cassette cassette : cassettes) {
             if (cassette.getCount() != 0) {
@@ -54,13 +62,34 @@ public class CashDispenserATM implements ATM {
         return leastNominal;
     }
 
-    public void cashOut(int cash) throws NoCassettesFoundException, NotSuchNominalException, NotEnoughMoneyException, NotSuchAlgorithmException {
+    @Override
+    public void processCash(int... cash) {
         if ((algorithm == null) || (algorithm.getClass().getCanonicalName().contains("SimpleCashOutAlgorithm"))) {
-            cashOutSimple(cash);
+            try {
+                cashOutSimple(cash[0]);
+            } catch (NoCassettesFoundException e) {
+                e.printStackTrace();
+            } catch (NotEnoughMoneyException e) {
+                e.printStackTrace();
+            } catch (NotSuchNominalException e) {
+                e.printStackTrace();
+            }
         } else if (algorithm.getClass().getCanonicalName().contains("MostlyEvenlyCashOutAlgorithm")) {
-            cashOutMostlyEvenly(cash);
+            try {
+                cashOutMostlyEvenly(cash[0]);
+            } catch (NoCassettesFoundException e) {
+                e.printStackTrace();
+            } catch (NotEnoughMoneyException e) {
+                e.printStackTrace();
+            } catch (NotSuchNominalException e) {
+                e.printStackTrace();
+            }
         } else {
-            throw new NotSuchAlgorithmException("No such algorithm for cashing out.");
+            try {
+                throw new NotSuchAlgorithmException("No such algorithm for cashing out.");
+            } catch (NotSuchAlgorithmException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -103,32 +132,6 @@ public class CashDispenserATM implements ATM {
         return true;
     }
 
-    @Override
-    public void loadATM() {
-        if (state == State.MAINTENANCE) {
-            if (cassettes.isEmpty()) {
-                cassettes.add(new CashDispenserCassette(Nominal.FIVE_THOUSAND, 1000));
-                cassettes.add(new CashDispenserCassette(Nominal.ONE_THOUSAND, 1000));
-                cassettes.add(new CashDispenserCassette(Nominal.FIVE_THOUSAND, 1000));
-                cassettes.add(new CashDispenserCassette(Nominal.ONE_THOUSAND, 1000));
-                cassettes.add(new CashDispenserCassette(Nominal.FIFTY, 1000));
-            }
-        } else {
-            try {
-                throw new ATMStateException();
-            } catch (ATMStateException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    @Override
-    public void ejectAllCassettes() {
-        for (Cassette cassette : cassettes) {
-            cassette.eject();
-        }
-    }
-
     private boolean cashOutMostlyEvenly(int cash) throws NoCassettesFoundException, NotEnoughMoneyException, NotSuchNominalException {
         double atmBalance = getATMBalance();
         if (atmBalance < cash) {
@@ -155,6 +158,33 @@ public class CashDispenserATM implements ATM {
         return false;
     }
 
+    @Override
+    public void loadATM() {
+        if (state == State.MAINTENANCE) {
+            if (cassettes.isEmpty()) {
+                cassettes.add(new CashDispenserCassette(Nominal.FIVE_THOUSAND, 1000));
+                cassettes.add(new CashDispenserCassette(Nominal.ONE_THOUSAND, 1000));
+                cassettes.add(new CashDispenserCassette(Nominal.FIVE_THOUSAND, 1000));
+                cassettes.add(new CashDispenserCassette(Nominal.ONE_THOUSAND, 1000));
+                cassettes.add(new CashDispenserCassette(Nominal.FIFTY, 1000));
+            }
+        } else {
+            try {
+                throw new ATMStateException();
+            } catch (ATMStateException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Override
+    public void ejectAllCassettes() {
+        for (Cassette cassette : cassettes) {
+            cassette.eject();
+        }
+    }
+
+    @Override
     public State getState() {
         return this.state;
     }
@@ -229,6 +259,7 @@ public class CashDispenserATM implements ATM {
         return "ATM:    " + "id:    " + id + "  address: " + address + "    ATM state:  " + state;
     }
 
+    @Override
     public CashOutAlgorithm getAlgorithm() {
         return algorithm;
     }

@@ -6,7 +6,6 @@ public class CashDispenserCassette implements Cassette, Comparable<CashDispenser
 
     private final Nominal nominal;
     private final int MAX_CAPACITY = 1500;
-//    private final ATMStatement atmStatement = ATMStatement.getAtmStatement();
     private int count;
     private CashDispenserCassette next;
 

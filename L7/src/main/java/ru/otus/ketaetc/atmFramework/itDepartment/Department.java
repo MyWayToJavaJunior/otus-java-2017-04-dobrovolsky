@@ -50,4 +50,6 @@ public interface Department {
     ATM buildATM(String className);
 
     double getTotalDepartmentBalance();
+
+    void setATMAddress(ATM atm, String address);
 }

@@ -34,6 +34,11 @@ public class CashInATM implements ATM {
         state = State.NO_RESPONSE;
     }
 
+    @Override
+    public String getAddress() {
+        return address;
+    }
+
     public void setAddress(String address) {
         this.address = address;
     }
@@ -42,13 +47,24 @@ public class CashInATM implements ATM {
         return cassette.getCount();
     }
 
-    public boolean cashIn(int count, int cash) throws NoCassettesFoundException, ATMStateException {
-        checkState();
-        if ((cassette.getCount() + count) <= cassette.getMaxCapacity()) {
-            atmStatement.addStatement(this, prepareStatementRow(cash) + "   " + "C");
-            cassette.cashIn(count, cash);
+    /**
+     * cash[0] - cash
+     * cash[1] - count
+     */
+    @Override
+    public void processCash(int... cash) {
+        if (cassette == null) {
+            try {
+                throw new NoCassettesFoundException("No cassettes were loaded into ATM.");
+            } catch (NoCassettesFoundException e) {
+                e.printStackTrace();
+            }
         }
-        return true;
+        checkState();
+        if ((cassette.getCount() + cash[1]) <= cassette.getMaxCapacity()) {
+            atmStatement.addStatement(this, prepareStatementRow(cash[0]) + "   " + "C");
+            cassette.cashIn(cash[0], cash[1]);
+        }
     }
 
     @Override
@@ -56,9 +72,19 @@ public class CashInATM implements ATM {
         ejectCassette(cassette);
     }
 
+    @Override
     public State getState() {
         return this.state;
     }
+
+//    @Override
+//    public void cashOut(int i) {
+//        try {
+//            throw new Exception("For CashDispenserATMs only");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//    }
 
     private void setState(State state) {
         this.state = state;
@@ -135,6 +161,16 @@ public class CashInATM implements ATM {
                 e.printStackTrace();
             }
         }
+    }
+
+    @Override
+    public CashOutAlgorithm getAlgorithm() {
+        try {
+            throw new Exception("For CashDispenserATMs only");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     @Override

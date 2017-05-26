@@ -48,20 +48,20 @@ public class Main {
         cashDispenserATM2.setCassette(cas5);
 
         System.out.println(cashDispenserATM1.toString() + "\nbefore cashing out: " + cashDispenserATM1.getATMBalance());
-        cashDispenserATM1.cashOut(150);
-        cashDispenserATM1.cashOut(450);
-        cashDispenserATM1.cashOut(950);
-        cashDispenserATM1.cashOut(15000);
+        cashDispenserATM1.processCash(150);
+        cashDispenserATM1.processCash(450);
+        cashDispenserATM1.processCash(950);
+        cashDispenserATM1.processCash(15000);
         System.out.println("after: " + cashDispenserATM1.getATMBalance());
 
         System.out.println(cashDispenserATM2.toString() + "\nbefore cashing out: " + cashDispenserATM2.getATMBalance());
-        cashDispenserATM2.cashOut(100);
-        cashDispenserATM2.cashOut(500);
-        cashDispenserATM2.cashOut(1000);
-        cashDispenserATM2.cashOut(1450);
-        cashDispenserATM2.cashOut(450);
-        cashDispenserATM2.cashOut(200);
-        cashDispenserATM2.cashOut(3000);
+        cashDispenserATM2.processCash(100);
+        cashDispenserATM2.processCash(500);
+        cashDispenserATM2.processCash(1000);
+        cashDispenserATM2.processCash(1450);
+        cashDispenserATM2.processCash(450);
+        cashDispenserATM2.processCash(200);
+        cashDispenserATM2.processCash(3000);
         System.out.println("after: " + cashDispenserATM2.getATMBalance());
 
 
@@ -75,7 +75,7 @@ public class Main {
 
         System.out.println(cashDispenserATM1.toString() + "\nbefore cashin out: " + cashDispenserATM1.getATMBalance());
         System.out.println("trying to cash out: " + 1950);
-        cashDispenserATM1.cashOut(1950);
+        cashDispenserATM1.processCash(1950);
         System.out.println("after: " + cashDispenserATM1.getATMBalance());
         cashDispenserATM1.getCassettesLoadInfo();
 
@@ -96,8 +96,8 @@ public class Main {
 
         itDepartment.setATMSWork();
         System.out.println(cashInATM1.toString() + "\nbefore cash in: " + cashInATM1.getATMBalance());
-        cashInATM1.cashIn(105, 125_000);
-        cashInATM1.cashIn(105, 125_000);
+        cashInATM1.processCash(125_000, 105);
+        cashInATM1.processCash(125_000, 105);
         System.out.println("after: " + cashInATM1.getATMBalance() + "\n" + "count:  " + cashInATM1.getCount());
         System.out.println(cashInATM1.getATMMiniStatement());
         cashInATM1.getCassettesLoadInfo();
@@ -108,19 +108,19 @@ public class Main {
         CashDispenserATM atmCashDispenser = (CashDispenserATM) itDepartment.buildATM("ru.otus.ketaetc.atmFramework.atm.CashDispenserATM");
         CashInATM atmCashIn = (CashInATM) itDepartment.buildATM("ru.otus.ketaetc.atmFramework.atm.CashInATM");
 
-        atmCashDispenser.cashOut(10500);
-        atmCashDispenser.cashOut(350);
-        atmCashDispenser.cashOut(15550);
-        atmCashDispenser.cashOut(5000);
-        atmCashDispenser.cashOut(23000);
-        atmCashDispenser.cashOut(50);
+        atmCashDispenser.processCash(10500);
+        atmCashDispenser.processCash(350);
+        atmCashDispenser.processCash(15550);
+        atmCashDispenser.processCash(5000);
+        atmCashDispenser.processCash(23000);
+        atmCashDispenser.processCash(50);
         System.out.println(atmCashDispenser.getATMBalance());
         System.out.println(atmCashDispenser.getATMMiniStatement());
         atmCashDispenser.getCassettesLoadInfo();
 
-        atmCashIn.cashIn(10, 19550);
-        atmCashIn.cashIn(20, 2000);
-        atmCashIn.cashIn(45, 4500);
+        atmCashIn.processCash(19550, 10);
+        atmCashIn.processCash(2000, 20);
+        atmCashIn.processCash(4500, 45);
         System.out.println(atmCashIn.getATMBalance());
         System.out.println(atmCashIn.getATMMiniStatement());
         atmCashIn.getCassettesLoadInfo();

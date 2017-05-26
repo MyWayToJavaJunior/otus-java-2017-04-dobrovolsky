@@ -188,6 +188,11 @@ public class ITDepartment implements Department {
     }
 
     @Override
+    public void setATMAddress(ATM atm, String address) {
+        atm.setAddress(address);
+    }
+
+    @Override
     public ATM buildATM(String className) {
         ATM atm;
         Cassette cas1;
@@ -238,11 +243,11 @@ public class ITDepartment implements Department {
 
         if (className.contains("CashDispenserATM")) {
             Random r = new Random();
-            CashOutAlgorithm algorithm = null;
+            CashOutAlgorithm algorithm;
             algorithm = r.nextInt() > 500 ? SimpleCashOutAlgorithm.getAlgorithm() : MostlyEvenlyCashOutAlgorithm.getAlgorithm();
 
             System.out.println("Setting cash out algorithm: " + algorithm.getClass().getName());
-            ITDepartment.setAlgorithm((CashDispenserATM) atm, algorithm);
+            ITDepartment.setAlgorithm(atm, algorithm);
         }
 
         ITDepartment.setATMWork(atm);
