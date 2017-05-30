@@ -1,48 +1,96 @@
 package ru.otus.dobrovolsky.dummy;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
-/**
- * Created by ketaetc on 29.05.17.
- */
+@SuppressWarnings("unused")
 public class Dummy {
     private int id;
     private String name;
+    private int[] intArr = new int[4];
+    private boolean[] intBoolArr = new boolean[4];
+    private Integer[] intObjArr = new Integer[4];
+    private String[] strObjArr = new String[4];
     private List<String> books = new ArrayList<>();
     private Set<String> articles = new HashSet<>();
-    private ObjectDummy objectDummy;
-    private List<ObjectDummy> someList = new ArrayList<>();
+    private SmallDummy smallDummy;
+    private List<SmallDummy> someList = new ArrayList<>();
+    private Map<Integer, String> someMap = new HashMap<>();
+    private boolean bool;
+    private char[] charArr = new char[4];
+    private char ch;
+    private double aDouble;
 
     public Dummy() {
         Random random = new Random();
         id = random.nextInt();
-        objectDummy = new ObjectDummy();
-        someList.add(new ObjectDummy());
-        someList.add(new ObjectDummy());
-        someList.add(new ObjectDummy());
-        someList.add(new ObjectDummy());
-        someList.add(new ObjectDummy());
+        setIntArr();
+        setIntBoolArr();
+        setIntObjArr();
+        setStrObjArr();
+        setObjectDummy();
+        setSomeMap();
+        bool = true;
+        setCharArr();
+        setCh();
+        setaDouble();
     }
 
-    public Dummy (String name) {
+    public Dummy(String name) {
         Random random = new Random();
         id = random.nextInt();
         this.name = name;
-        objectDummy = new ObjectDummy();
-        someList.add(new ObjectDummy());
-        someList.add(new ObjectDummy());
-        someList.add(new ObjectDummy());
-        someList.add(new ObjectDummy());
-        someList.add(new ObjectDummy());
+        setIntArr();
+        setIntBoolArr();
+        setIntObjArr();
+        setStrObjArr();
+        setObjectDummy();
+        setSomeMap();
+        bool = true;
+        setCharArr();
+        setCh();
+        setaDouble();
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public static Dummy buildDummy() {
+        Dummy dummy = new Dummy("Test Dummy");
+
+        dummy.setArticles();
+        dummy.setBooks();
+        dummy.setSomeList();
+
+        return dummy;
     }
 
-    public void setBooks(List<String> books) {
-        this.books = books;
+    public void setIntArr() {
+        Random random = new Random();
+        for (int i = 0; i < intArr.length; i++) {
+            intArr[i] = Math.abs(random.nextInt());
+        }
+    }
+
+    public void setIntBoolArr() {
+        Random random = new Random();
+        for (int i = 0; i < intBoolArr.length; i++) {
+            intBoolArr[i] = random.nextBoolean();
+        }
+    }
+
+    public void setIntObjArr() {
+        Random random = new Random();
+        for (int i = 0; i < intObjArr.length; i++) {
+            intObjArr[i] = Math.abs(random.nextInt());
+        }
+    }
+
+    public void setStrObjArr(String[] strObjArr) {
+        this.strObjArr = strObjArr;
+    }
+
+    public void setStrObjArr() {
+        Random random = new Random();
+        for (int i = 0; i < strObjArr.length; i++) {
+            strObjArr[i] = Integer.toString(random.nextInt());
+        }
     }
 
     public void setBooks() {
@@ -56,10 +104,6 @@ public class Dummy {
         books.add("The Doomed City");
     }
 
-    public void setArticles(Set<String> articles) {
-        this.articles = articles;
-    }
-
     public void setArticles() {
         articles.add("First");
         articles.add("Second");
@@ -68,20 +112,53 @@ public class Dummy {
         articles.add("Fifths");
     }
 
-    public void setObjectDummy(ObjectDummy objectDummy) {
-        this.objectDummy = objectDummy;
-    }
-
-    public void setSomeList(List<ObjectDummy> someList) {
-        this.someList = someList;
+    public void setObjectDummy() {
+        smallDummy = new SmallDummy();
+        smallDummy = new SmallDummy();
+        smallDummy = new SmallDummy();
+        smallDummy = new SmallDummy();
+        smallDummy = new SmallDummy();
+        smallDummy = new SmallDummy();
     }
 
     public void setSomeList() {
-        someList.add(new ObjectDummy());
-        someList.add(new ObjectDummy());
-        someList.add(new ObjectDummy());
-        someList.add(new ObjectDummy());
-        someList.add(new ObjectDummy());
+        someList.add(new SmallDummy());
+        someList.add(new SmallDummy());
+        someList.add(new SmallDummy());
+        someList.add(new SmallDummy());
+        someList.add(new SmallDummy());
+    }
+
+    public void setSomeMap() {
+        Random random = new Random();
+
+        someMap.put(Math.abs(random.nextInt()), Integer.toString(random.nextInt()));
+        someMap.put(Math.abs(random.nextInt()), Integer.toString(random.nextInt()));
+        someMap.put(Math.abs(random.nextInt()), Integer.toString(random.nextInt()));
+        someMap.put(Math.abs(random.nextInt()), Integer.toString(random.nextInt()));
+        someMap.put(Math.abs(random.nextInt()), Integer.toString(random.nextInt()));
+        someMap.put(Math.abs(random.nextInt()), Integer.toString(random.nextInt()));
+    }
+
+    public void setCharArr(char[] charArr) {
+        this.charArr = charArr;
+    }
+
+    public void setCharArr() {
+        Random random = new Random();
+        for (int i = 0; i < charArr.length; i++) {
+            charArr[i] = (char) (random.nextInt(26) + 'a');
+        }
+    }
+
+    public void setCh() {
+        Random random = new Random();
+        ch = (char) (random.nextInt(26) + 'a');
+    }
+
+    public void setaDouble() {
+        Random random = new Random();
+        aDouble = random.nextDouble();
     }
 
     public int getId() {
@@ -92,59 +169,101 @@ public class Dummy {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public int[] getIntArr() {
+        return intArr;
+    }
+
+    public void setIntArr(int[] intArr) {
+        this.intArr = intArr;
+    }
+
+    public boolean[] getIntBoolArr() {
+        return intBoolArr;
+    }
+
+    public void setIntBoolArr(boolean[] intBoolArr) {
+        this.intBoolArr = intBoolArr;
+    }
+
+    public Integer[] getIntObjArr() {
+        return intObjArr;
+    }
+
+    public void setIntObjArr(Integer[] intObjArr) {
+        this.intObjArr = intObjArr;
+    }
+
     public List<String> getBooks() {
         return books;
+    }
+
+    public void setBooks(List<String> books) {
+        this.books = books;
     }
 
     public Set<String> getArticles() {
         return articles;
     }
 
-    public ObjectDummy getObjectDummy() {
-        return objectDummy;
+    public void setArticles(Set<String> articles) {
+        this.articles = articles;
     }
 
-    public List<ObjectDummy> getSomeList() {
+    public SmallDummy getSmallDummy() {
+        return smallDummy;
+    }
+
+    public void setSmallDummy(SmallDummy smallDummy) {
+        this.smallDummy = smallDummy;
+    }
+
+    public List<SmallDummy> getSomeList() {
         return someList;
     }
 
-    private class ObjectDummy {
-        private String label;
-
-        private ObjectDummy() {
-            Random random = new Random();
-            label = new String(Double.toString(random.nextInt()));
-        }
-
-        @Override
-        public String toString() {
-            return "label:   " + this.label;
-        }
+    public void setSomeList(List<SmallDummy> someList) {
+        this.someList = someList;
     }
 
-    public static Dummy buildDummy() {
-        Dummy dummy = new Dummy("Test Dummy");
+    public Map<Integer, String> getSomeMap() {
+        return someMap;
+    }
 
-        dummy.setArticles();
-        dummy.setBooks();
-        dummy.setSomeList();
+    public void setSomeMap(Map<Integer, String> someMap) {
+        this.someMap = someMap;
+    }
 
-        return dummy;
+    public boolean isBool() {
+        return bool;
+    }
+
+    public void setBool(boolean bool) {
+        this.bool = bool;
+    }
+
+    public char getCh() {
+        return ch;
+    }
+
+    public void setCh(char ch) {
+        this.ch = ch;
+    }
+
+    public double getaDouble() {
+        return aDouble;
+    }
+
+    public void setaDouble(double aDouble) {
+        this.aDouble = aDouble;
     }
 
     @Override
     public boolean equals(Object obj) {
         return super.equals(obj);
     }
-
-    @Override
-    public String toString() {
-        return "Dummy:\n"
-                + "id:  " + this.id + "\n"
-                + "name:    " + this.name + "\n"
-                + "books:\n" + this.books.stream().collect(Collectors.joining(",\n")) + "\n"
-                + "articles:\n" + this.articles.stream().collect(Collectors.joining(",\n")) + "\n"
-                + "objectDummy:\n" + this.objectDummy.toString() + "\n"
-                + "someList:\n" + this.someList.stream().map(d -> d.toString()).collect(Collectors.joining(",\n"));
-    }
 }
+

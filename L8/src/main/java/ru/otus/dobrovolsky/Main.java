@@ -1,20 +1,13 @@
 package ru.otus.dobrovolsky;
 
+import ru.otus.dobrovolsky.dummy.Dummy;
 import ru.otus.dobrovolsky.gson.ObjectToGson;
-import ru.otus.dobrovolsky.jsonSimple.ObjectToJSONSimple;
+import ru.otus.dobrovolsky.myJson.MyJson;
 
-/**
- * Created by ketaetc on 29.05.17.
- */
 public class Main {
     public static void main(String[] args) {
 
-        System.out.println("+++JSON");
-
         ObjectToGson otg = new ObjectToGson();
-        ObjectToJSONSimple otjs = new ObjectToJSONSimple();
-
-        System.out.println("---JSON");
-
+        System.out.println(MyJson.toMyJsonString(Dummy.buildDummy()));
     }
 }
