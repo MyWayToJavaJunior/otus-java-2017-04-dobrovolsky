@@ -4,14 +4,18 @@ import org.json.simple.JSONObject;
 import ru.otus.dobrovolsky.dummy.Dummy;
 
 public class ObjectToJSONSimple {
+    private String jsonString;
 
     public ObjectToJSONSimple() {
-        JSONObject obj = new JSONObject();
         Dummy dummy = Dummy.buildDummy();
 
-        System.out.println("Json-simple");
+        JSONObject obj = new JSONObject();
         obj.put("dummy", dummy);
-        String json = obj.toJSONString();
-        System.out.println(json);
+
+        jsonString = obj.toJSONString();
+    }
+
+    public void println() {
+        System.out.println(jsonString);
     }
 }
