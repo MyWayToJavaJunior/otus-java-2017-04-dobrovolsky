@@ -6,11 +6,10 @@ import java.lang.reflect.Field;
 import java.util.Collection;
 import java.util.Map;
 
-public class ReflectionHelperWithStrings {
-    private ReflectionHelperWithStrings() {
-    }
+public class ReflectionHelperWithStrings implements ReflectionHelper {
 
-    public static String fieldMarshaller(Object object) {
+    @Override
+    public String fieldMarshaller(Object object) {
         Field[] fields = object.getClass().getDeclaredFields();
         StringBuilder stringBuilder = new StringBuilder();
         for (Field field : fields) {

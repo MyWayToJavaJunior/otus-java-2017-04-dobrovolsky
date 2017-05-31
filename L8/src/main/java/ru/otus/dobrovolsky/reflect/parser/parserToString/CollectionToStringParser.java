@@ -1,6 +1,6 @@
 package ru.otus.dobrovolsky.reflect.parser.parserToString;
 
-
+import ru.otus.dobrovolsky.reflect.ReflectionHelper;
 import ru.otus.dobrovolsky.reflect.ReflectionHelperWithStrings;
 import ru.otus.dobrovolsky.reflect.parser.Parser;
 
@@ -10,6 +10,7 @@ import java.util.Collection;
 @SuppressWarnings("unchecked")
 public class CollectionToStringParser implements Parser {
     private static String parseThisCollection(Object object) {
+        ReflectionHelper reflectionHelper = new ReflectionHelperWithStrings();
         StringBuilder stringBuilder = new StringBuilder();
         for (Object o : ((Collection<Object>) object)) {
             if ((o.getClass().getName().contains("String"))
@@ -18,7 +19,7 @@ public class CollectionToStringParser implements Parser {
                 stringBuilder.append("\"").append(o).append("\",");
             } else if (!((o.getClass().getName().contains("ru.otus"))
                     && (o.getClass().isPrimitive()))) {
-                stringBuilder.append("{").append(ReflectionHelperWithStrings.fieldMarshaller(o)).append("}").append(",");
+                stringBuilder.append("{").append(reflectionHelper.fieldMarshaller(o)).append("}").append(",");
             } else {
                 stringBuilder.append(o).append(",");
             }

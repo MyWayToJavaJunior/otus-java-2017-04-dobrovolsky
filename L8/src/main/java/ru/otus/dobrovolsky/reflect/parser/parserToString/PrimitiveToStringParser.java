@@ -14,28 +14,28 @@ public class PrimitiveToStringParser implements Parser {
             switch (fieldType) {
                 case "byte":
                     val = field.getByte(object);
-                    return "\"" + field.getName() + "\"" + ":" + val;
+                    return retString(field, val);
                 case "short":
                     val = field.getShort(object);
-                    return "\"" + field.getName() + "\"" + ":" + val;
+                    return retString(field, val);
                 case "int":
                     val = field.getInt(object);
-                    return "\"" + field.getName() + "\"" + ":" + val;
+                    return retString(field, val);
                 case "long":
                     val = field.getLong(object);
-                    return "\"" + field.getName() + "\"" + ":" + val;
+                    return retString(field, val);
                 case "float":
                     val = field.getFloat(object);
-                    return "\"" + field.getName() + "\"" + ":" + val;
+                    return retString(field, val);
                 case "double":
                     val = field.getDouble(object);
-                    return "\"" + field.getName() + "\"" + ":" + val;
+                    return retString(field, val);
                 case "boolean":
                     val = field.getBoolean(object);
-                    return "\"" + field.getName() + "\"" + ":" + val;
+                    return retString(field, val);
                 case "char":
                     val = field.getChar(object);
-                    return "\"" + field.getName() + "\"" + ":" + "\"" + val + "\"";
+                    return retString(field, val);
                 default:
                     break;
             }
@@ -43,5 +43,13 @@ public class PrimitiveToStringParser implements Parser {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private String retString(Field field, Object value) {
+        if (field.getType().getName().contains("char")) {
+            return "\"" + field.getName() + "\"" + ":" + "\"" + value + "\"";
+        } else {
+            return "\"" + field.getName() + "\"" + ":" + value;
+        }
     }
 }

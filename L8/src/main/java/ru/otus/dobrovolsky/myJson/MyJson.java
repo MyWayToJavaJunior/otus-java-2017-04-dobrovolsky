@@ -1,24 +1,23 @@
 package ru.otus.dobrovolsky.myJson;
 
+import ru.otus.dobrovolsky.reflect.ReflectionHelper;
 import ru.otus.dobrovolsky.reflect.ReflectionHelperWithJSON;
 import ru.otus.dobrovolsky.reflect.ReflectionHelperWithStrings;
 
 public class MyJson {
+    private static ReflectionHelper reflectionHelper;
 
     public static String toMyJsonString(Object object) {
-        String string = ReflectionHelperWithStrings.fieldMarshaller(object);
+        reflectionHelper = new ReflectionHelperWithStrings();
+        String string = reflectionHelper.fieldMarshaller(object);
         if (string != null) {
-            StringBuilder stringBuilder = new StringBuilder();
-            stringBuilder.append("{").append(string).append("}");
-
-            return stringBuilder.toString();
+            return "{" + string + "}";
         }
         return null;
     }
 
     public static String toMyJson(Object object) {
-        String string = ReflectionHelperWithJSON.fieldMarshaller(object);
-
-        return string;
+        reflectionHelper = new ReflectionHelperWithJSON();
+        return reflectionHelper.fieldMarshaller(object);
     }
 }

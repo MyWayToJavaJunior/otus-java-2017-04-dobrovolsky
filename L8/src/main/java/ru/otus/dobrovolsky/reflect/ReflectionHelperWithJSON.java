@@ -6,11 +6,10 @@ import ru.otus.dobrovolsky.reflect.parser.parserFactory.ParserFactory;
 import java.lang.reflect.Field;
 import java.util.*;
 
-public class ReflectionHelperWithJSON {
-    private ReflectionHelperWithJSON() {
-    }
+public class ReflectionHelperWithJSON implements ReflectionHelper {
 
-    public static String fieldMarshaller(Object object) {
+    @Override
+    public String fieldMarshaller(Object object) {
         Field[] fields = object.getClass().getDeclaredFields();
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append("{");
@@ -35,7 +34,6 @@ public class ReflectionHelperWithJSON {
                         temp = temp.replace("[", "{");
                         temp = temp.replace("]", "}");
                         strInner = new StringBuilder(temp);
-//                        System.out.println(strInner.toString());
                         stringBuilder.append(strInner).append(",");
                     }
                 } else {
@@ -47,7 +45,6 @@ public class ReflectionHelperWithJSON {
         }
         if (stringBuilder.toString().length() > 0) {
             stringBuilder.delete(stringBuilder.toString().length() - 1, stringBuilder.toString().length());
-//            return stringBuilder.toString();
         }
         stringBuilder.append("}");
         return stringBuilder.toString();
@@ -76,6 +73,5 @@ public class ReflectionHelperWithJSON {
                 return ParserFactory.getObjectParser().parse(object, field);
             }
         }
-//        return null;
     }
 }

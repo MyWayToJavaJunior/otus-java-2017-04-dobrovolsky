@@ -10,6 +10,7 @@ import ru.otus.dobrovolsky.reflect.parser.Parser;
 import java.lang.reflect.Array;
 import java.lang.reflect.Field;
 
+@SuppressWarnings("unchecked")
 public class ArrayParser implements Parser {
     @Override
     public JSONAware parse(Object object, Field field) {
@@ -21,6 +22,7 @@ public class ArrayParser implements Parser {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+        assert val != null;
         String componentsType = val.getClass().getComponentType().getName();
         for (int i = 0; i < Array.getLength(val); i++) {
             if (ParserUtils.checkObjectSimplicity(Array.get(val, i))) {

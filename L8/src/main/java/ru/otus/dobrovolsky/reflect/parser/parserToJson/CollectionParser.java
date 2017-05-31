@@ -23,6 +23,7 @@ public class CollectionParser implements Parser {
             e.printStackTrace();
         }
 
+        assert val != null;
         for (Object obj : (Collection) val) {
             if (ParserUtils.checkObjectSimplicity(obj)) {
                 jsonArray.add(obj);

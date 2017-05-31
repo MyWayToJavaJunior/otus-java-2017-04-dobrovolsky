@@ -5,6 +5,7 @@ import org.json.simple.JSONObject;
 import ru.otus.dobrovolsky.dummy.Dummy;
 import ru.otus.dobrovolsky.myJson.MyJson;
 
+@SuppressWarnings("unchecked")
 public class Main {
     public static void main(String[] args) {
 

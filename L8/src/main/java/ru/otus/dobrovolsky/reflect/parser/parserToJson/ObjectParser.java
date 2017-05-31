@@ -9,6 +9,7 @@ import ru.otus.dobrovolsky.reflect.parser.Parser;
 
 import java.lang.reflect.Field;
 
+@SuppressWarnings("unchecked")
 public class ObjectParser implements Parser {
     @Override
     public JSONObject parse(Object object, Field field) {
@@ -25,6 +26,7 @@ public class ObjectParser implements Parser {
         if (ParserUtils.checkObjectSimplicity(field)) {
             jsonArray.add(field);
         } else {
+            assert val != null;
             Field[] fields = val.getClass().getDeclaredFields();
             for (Field f : fields) {
                 f.setAccessible(true);

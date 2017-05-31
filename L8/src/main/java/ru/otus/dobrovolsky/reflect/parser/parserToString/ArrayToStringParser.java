@@ -1,6 +1,5 @@
 package ru.otus.dobrovolsky.reflect.parser.parserToString;
 
-
 import ru.otus.dobrovolsky.reflect.parser.Parser;
 
 import java.lang.reflect.Array;

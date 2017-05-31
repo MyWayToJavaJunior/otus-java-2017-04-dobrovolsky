@@ -21,6 +21,7 @@ public class MapParser implements Parser {
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+        assert obj != null;
         for (Object entry : ((Map) obj).entrySet()) {
             Object key = ((Map.Entry) entry).getKey();
             Object value = ((Map.Entry) entry).getValue();
