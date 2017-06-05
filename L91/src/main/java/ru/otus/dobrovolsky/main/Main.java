@@ -18,11 +18,22 @@ public class Main {
         EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("otus-dobrovolsky-JDBC");
         EntityManager em = entityManagerFactory.createEntityManager();
 
+        System.out.println("trying to insert users data to database");
         em.getTransaction().begin();
         for (User u : users) {
             em.persist(u);
         }
         em.getTransaction().commit();
+
+        System.out.println("trying to restore users data from database");
+        User restoredUser = em.find(User.class, 1L);
+        System.out.println(restoredUser.toString());
+        restoredUser = em.find(User.class, 2L);
+        System.out.println(restoredUser.toString());
+        restoredUser = em.find(User.class, 3L);
+        System.out.println(restoredUser.toString());
+
         em.close();
+        entityManagerFactory.close();
     }
 }
