@@ -1,30 +1,67 @@
 package ru.otus.dobrovolsky.test;
 
 import org.junit.Assert;
+import org.junit.FixMethodOrder;
 import org.junit.Test;
+import org.junit.runners.MethodSorters;
+import ru.otus.dobrovolsky.dbService.DBService;
 import ru.otus.dobrovolsky.users.User;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
+@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class JDBCTest {
     @Test
-    public void Test() {
-        EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("otus-dobrovolsky-JDBC");
-        EntityManager em = entityManagerFactory.createEntityManager();
+    public void aTest() {
+        DBService dbService = null;
+        try {
+            dbService = new DBService();
 
-        User user = new User("Nicholas", 28);
+            System.out.println("trying to insert users to database");
+            dbService.saveUser(new User("Nicholas", 28));
 
-        em.getTransaction().begin();
-        em.persist(user);
-        em.getTransaction().commit();
+            System.out.println("trying to select users from database");
+            User restoredUser = dbService.loadUser(1l, User.class);
+            System.out.println(restoredUser.toString());
 
-        User restoredUser = em.find(User.class, 1L);
+            Assert.assertNotNull(restoredUser);
 
-        Assert.assertNotNull(restoredUser);
+            dbService.closeConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
-        em.close();
-        entityManagerFactory.close();
+    @Test
+    public void bTest() {
+        DBService dbService = null;
+        try {
+            dbService = new DBService();
+            List<User> users = new ArrayList<>();
+            users.add(new User("Nicholas", 28));
+            users.add(new User("Katherine", 27));
+            users.add(new User("Test", 999));
+
+            System.out.println("trying to insert users to database");
+            dbService.saveUser(users);
+
+            System.out.println("trying to select users from database");
+            User restoredUser1 = dbService.loadUser(1l, User.class);
+            System.out.println(restoredUser1.toString());
+            User restoredUser2 = dbService.loadUser(2l, User.class);
+            System.out.println(restoredUser1.toString());
+            User restoredUser3 = dbService.loadUser(3l, User.class);
+            System.out.println(restoredUser1.toString());
+
+            Assert.assertNotNull(restoredUser1);
+            Assert.assertNotNull(restoredUser2);
+            Assert.assertNotNull(restoredUser3);
+
+            dbService.closeConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }
