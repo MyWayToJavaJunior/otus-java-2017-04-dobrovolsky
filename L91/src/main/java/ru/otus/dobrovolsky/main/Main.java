@@ -15,6 +15,7 @@ public class Main {
 
         System.out.println("trying to insert users data to database");
         DBService dbService = new DBService();
+
         dbService.saveUser(users);
 
         System.out.println("trying to select users from database");
@@ -33,6 +34,7 @@ public class Main {
         System.out.println(restoredUser.toString());
         restoredUser = dbService.loadUser(5L, User.class);
         System.out.println(restoredUser.toString());
+
 
         dbService.closeConnection();
     }
