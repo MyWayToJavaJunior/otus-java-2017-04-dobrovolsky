@@ -26,7 +26,6 @@ public class DBService {
     }
 
     public void saveUser(User user) throws DBException {
-        executor = new Executor(entityManager);
         try {
             executor.save(user);
         } catch (SQLException e) {
@@ -35,7 +34,6 @@ public class DBService {
     }
 
     public void saveUser(List<User> users) throws DBException {
-        Executor executor = new Executor(entityManager);
         try {
             executor.save(users);
         } catch (SQLException e) {
@@ -44,7 +42,6 @@ public class DBService {
     }
 
     public User loadUser(long id, Class<?> clazz) throws DBException {
-        Executor executor = new Executor(entityManager);
         try {
             return executor.load(id, clazz);
         } catch (SQLException e) {
