@@ -8,12 +8,13 @@ import ru.otus.dobrovolsky.dbService.DBException;
 import ru.otus.dobrovolsky.dbService.DBService;
 import ru.otus.dobrovolsky.users.User;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class JDBCTest {
     @Test
-    public void aTest() throws DBException {
+    public void aTest() throws DBException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
         DBService dbService = null;
         User user = new User("Nicholas", 28);
         User restoredUser = null;
@@ -30,7 +31,7 @@ public class JDBCTest {
     }
 
     @Test
-    public void bTest() throws DBException {
+    public void bTest() throws DBException, NoSuchMethodException, InstantiationException, IllegalAccessException, InvocationTargetException {
         DBService dbService = null;
         User userA = new User("Nicholas", 28);
         User userB = new User("Katherine", 27);

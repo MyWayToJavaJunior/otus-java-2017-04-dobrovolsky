@@ -1,8 +1,8 @@
 package ru.otus.dobrovolsky.dbService.executor;
 
-import ru.otus.dobrovolsky.dbService.DBException;
 import ru.otus.dobrovolsky.users.User;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -25,20 +25,18 @@ public class Executor {
         execUpdate("INSERT INTO users (name, age) VALUES ('" + user.getName() + "', '" + user.getAge() + "')");
     }
 
-    public User load(long id, Class<?> clazz) throws SQLException {
-        if (clazz.getName() == "ru.otus.dobrovolsky.users.User") {
-            Statement stmt = connection.createStatement();
-            stmt.execute("SELECT * FROM users WHERE id=" + id);
-            ResultSet result = stmt.getResultSet();
-            result.next();
-            User restoredUser = new User(result.getLong(1), result.getString(2), result.getInt(3));
-            result.close();
-            stmt.close();
+    public <T extends User> T load(long id, Class<T> clazz) throws SQLException, NoSuchMethodException,
+            IllegalAccessException, InvocationTargetException, InstantiationException {
+        Statement stmt = connection.createStatement();
+        stmt.execute("SELECT * FROM users WHERE id=" + id);
+        ResultSet result = stmt.getResultSet();
+        result.next();
 
-            return restoredUser;
-        } else {
-            throw new DBException("This class is not supported. Can handle only ru.otus.dobrovolsky.users.User class.");
-        }
+        T restoredUser = clazz.getConstructor(Long.class, String.class, Integer.class).newInstance(result.getLong(1), result.getString(2), result.getInt(3));
+        result.close();
+        stmt.close();
+
+        return restoredUser;
     }
 
     public void createTable() throws SQLException {

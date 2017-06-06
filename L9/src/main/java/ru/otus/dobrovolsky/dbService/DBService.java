@@ -3,6 +3,7 @@ package ru.otus.dobrovolsky.dbService;
 import ru.otus.dobrovolsky.dbService.executor.Executor;
 import ru.otus.dobrovolsky.users.User;
 
+import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -88,7 +89,8 @@ public class DBService {
         }
     }
 
-    public User loadUser(long id, Class<?> clazz) throws DBException {
+    public <T extends User> T loadUser(long id, Class<T> clazz) throws DBException, InvocationTargetException,
+            NoSuchMethodException, InstantiationException, IllegalAccessException {
         try {
             connection.setAutoCommit(false);
             return executor.load(id, clazz);
