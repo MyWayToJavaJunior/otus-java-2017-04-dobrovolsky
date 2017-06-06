@@ -39,6 +39,18 @@ public class Executor {
         return restoredUser;
     }
 
+    public <T extends User> T loadUserWHandler(long id, ResultHandler<T> handler)
+            throws SQLException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
+        Statement stmt = connection.createStatement();
+        stmt.execute("SELECT * FROM users WHERE id=" + id);
+        ResultSet result = stmt.getResultSet();
+        T value = handler.handle(result);
+        result.close();
+        stmt.close();
+
+        return value;
+    }
+
     public void createTable() throws SQLException {
         execUpdate("CREATE TABLE IF NOT EXISTS users (id bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
                 "name VARCHAR(255), age INT(3) NOT NULL)");

@@ -51,4 +51,22 @@ public class JDBCTest {
         dbService.cleanUp();
         dbService.closeConnection();
     }
+
+    @Test
+    public void cTest() throws DBException, NoSuchMethodException, InstantiationException, IllegalAccessException,
+            InvocationTargetException {
+        DBService dbService = null;
+        User userA = new User("Nicholas", 28);
+        User restoredUserA = null;
+        try {
+            dbService = new DBService();
+            dbService.saveUser(userA);
+            restoredUserA = dbService.loadUserWHandler(1, User.class);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        Assert.assertNotNull("Saved and restored user object is not null.", restoredUserA);
+        dbService.cleanUp();
+        dbService.closeConnection();
+    }
 }

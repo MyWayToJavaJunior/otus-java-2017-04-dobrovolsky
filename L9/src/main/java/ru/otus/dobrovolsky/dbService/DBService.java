@@ -99,4 +99,13 @@ public class DBService {
         }
         return null;
     }
+
+    public <T extends User> T loadUserWHandler(long id, Class<T> clazz) throws SQLException,
+            InvocationTargetException,
+            NoSuchMethodException, InstantiationException, IllegalAccessException {
+            return executor.loadUserWHandler(id, result -> {
+                result.next();
+                return clazz.getConstructor(Long.class, String.class, Integer.class).newInstance(result.getLong(1), result.getString(2), result.getInt(3));
+            });
+    }
 }

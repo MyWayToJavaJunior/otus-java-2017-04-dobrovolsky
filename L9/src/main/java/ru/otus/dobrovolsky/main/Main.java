@@ -12,10 +12,13 @@ public class Main {
         User user = new User("Nicholas", 28);
         dbService.saveUser(user);
         dbService.saveUser(new User("Katherine", 27));
+        dbService.saveUser(new User("TEST", 123));
         System.out.println("selecting users by id");
         User restoredUser = dbService.loadUser(1, User.class);
         System.out.println("restoredUser:   " + restoredUser.toString());
         restoredUser = dbService.loadUser(2, User.class);
+        System.out.println("restoredUser:   " + restoredUser.toString());
+        restoredUser = dbService.loadUserWHandler(3, User.class);
         System.out.println("restoredUser:   " + restoredUser.toString());
         dbService.cleanUp();
         dbService.closeConnection();
