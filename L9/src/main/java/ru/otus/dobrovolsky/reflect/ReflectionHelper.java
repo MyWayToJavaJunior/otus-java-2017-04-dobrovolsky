@@ -23,9 +23,7 @@ public class ReflectionHelper {
 
     public static <T extends DataSet> String getColumnsNamesString(T dataSet) {
         Class clazz = dataSet.getClass();
-
         StringBuilder ret = new StringBuilder("(");
-
         Field[] fields = clazz.getDeclaredFields();
 
         for (Field f : fields) {
