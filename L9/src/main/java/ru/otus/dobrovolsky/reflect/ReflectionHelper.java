@@ -21,7 +21,7 @@ public class ReflectionHelper {
         return object.toString();
     }
 
-    public static <T extends DataSet> String getStringForQuery(T dataSet, Class<?> clz) throws IllegalAccessException {
+    public static <T extends DataSet> String getStringForInsert(T dataSet, Class<?> clz) throws IllegalAccessException {
         Class clazz = dataSet.getClass();
         StringBuilder ret = new StringBuilder("(");
         Field[] fields = clazz.getDeclaredFields();

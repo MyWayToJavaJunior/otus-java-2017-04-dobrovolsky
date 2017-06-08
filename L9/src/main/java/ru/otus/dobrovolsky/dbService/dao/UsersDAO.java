@@ -43,8 +43,8 @@ public class UsersDAO {
             throw new PersistenceException("Not an entity.");
         }
         String tableName = getTableName(clazz);
-        String queryString = "INSERT INTO " + tableName + " " + getStringForQuery(dataSet, Column.class) +
-                " VALUES " + getStringForQuery(dataSet, Field.class);
+        String queryString = "INSERT INTO " + tableName + " " + getStringForInsert(dataSet, Column.class) +
+                " VALUES " + getStringForInsert(dataSet, Field.class);
         executor.execUpdate(queryString);
     }
 
