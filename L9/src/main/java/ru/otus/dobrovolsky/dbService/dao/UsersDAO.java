@@ -2,7 +2,6 @@ package ru.otus.dobrovolsky.dbService.dao;
 
 
 import ru.otus.dobrovolsky.dbService.dataSets.DataSet;
-import ru.otus.dobrovolsky.dbService.dataSets.User;
 import ru.otus.dobrovolsky.dbService.executor.Executor;
 
 import javax.persistence.PersistenceException;
@@ -32,7 +31,7 @@ public class UsersDAO {
         Field[] fields = clazz.getDeclaredFields();
         return executor.execQuery(queryString, result -> {
             result.next();
-            return makeCustomObject(object, fields, result);
+            return makeObject(object, fields, result);
         });
     }
 
@@ -54,36 +53,11 @@ public class UsersDAO {
         }
         String tableName = getTableName(clazz);
         String queryString = "CREATE TABLE IF NOT EXISTS " + tableName + "(id bigint(20) NOT NULL AUTO_INCREMENT " +
-                "PRIMARY KEY, " + getCreateTableString(clazz);
+                "PRIMARY KEY, " + getCreateTableQuery(clazz);
         executor.execUpdate(queryString);
     }
 
     public <T extends DataSet> void dropTable(Class<T> clazz) throws SQLException {
         executor.execUpdate("DROP TABLE IF EXISTS " + getTableName(clazz));
-    }
-
-    @Deprecated
-    public void createTableOld() throws SQLException {
-        executor.execUpdate("CREATE TABLE IF NOT EXISTS users (id bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
-                "name VARCHAR(255), age INT(3) NOT NULL)");
-    }
-
-    @Deprecated
-    public void saveUserOld(User user) throws SQLException {
-        executor.execUpdate("INSERT INTO users (name, age) VALUES ('" + user.getName() + "', '" + user.getAge() + "')");
-    }
-
-    @Deprecated
-    public User loadTmp(long id) throws SQLException, NoSuchMethodException, InstantiationException,
-            IllegalAccessException, InvocationTargetException {
-        return executor.execQuery("SELECT * FROM users WHERE id=" + id, result -> {
-            result.next();
-            return new User(result.getString(2), result.getInt(3));
-        });
-    }
-
-    @Deprecated
-    public void dropTableOld() throws SQLException {
-        executor.execUpdate("DROP TABLE IF EXISTS users");
     }
 }

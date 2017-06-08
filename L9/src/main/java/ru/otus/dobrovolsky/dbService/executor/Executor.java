@@ -29,15 +29,4 @@ public class Executor {
         stmt.close();
         return value;
     }
-
-    @Deprecated
-    public void createTable() throws SQLException {
-        execUpdate("CREATE TABLE IF NOT EXISTS users (id bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
-                "name VARCHAR(255), age INT(3) NOT NULL)");
-    }
-
-    @Deprecated
-    public void dropTable() throws SQLException {
-        execUpdate("DROP TABLE IF EXISTS users");
-    }
 }

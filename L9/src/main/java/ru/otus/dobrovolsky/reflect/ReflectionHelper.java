@@ -44,9 +44,7 @@ public class ReflectionHelper {
 
     public static <T extends DataSet> String getFieldsNamesString(T dataSet) throws IllegalAccessException {
         Class clazz = dataSet.getClass();
-
         StringBuilder ret = new StringBuilder("(");
-
         Field[] fields = clazz.getDeclaredFields();
 
         for (Field f : fields) {
@@ -56,7 +54,7 @@ public class ReflectionHelper {
                 continue;
             }
             Object val = f.get(dataSet);
-            ret.append(ReflectionHelper.prepFieldValue(val)).append(", ");
+            ret.append(prepFieldValue(val)).append(", ");
             f.setAccessible(accessible);
         }
         ret.delete(ret.length() - 2, ret.length()).append(")");
@@ -64,7 +62,7 @@ public class ReflectionHelper {
         return ret.toString();
     }
 
-    public static <T extends DataSet> String getCreateTableString(Class<T> clazz) throws IllegalAccessException {
+    public static <T extends DataSet> String getCreateTableQuery(Class<T> clazz) throws IllegalAccessException {
         StringBuilder ret = new StringBuilder();
         Field[] fields = clazz.getDeclaredFields();
 
@@ -151,7 +149,7 @@ public class ReflectionHelper {
         }
     }
 
-    public static <T extends DataSet> T makeCustomObject(T object, Field[] fields, ResultSet result) throws
+    public static <T extends DataSet> T makeObject(T object, Field[] fields, ResultSet result) throws
             SQLException {
         object.setId(result.getLong("id"));
         String fieldType;
