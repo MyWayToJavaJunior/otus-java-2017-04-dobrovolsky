@@ -4,6 +4,7 @@ package ru.otus.dobrovolsky.dbService.dao;
 import ru.otus.dobrovolsky.dbService.dataSets.DataSet;
 import ru.otus.dobrovolsky.dbService.executor.Executor;
 
+import javax.persistence.Column;
 import javax.persistence.PersistenceException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -42,8 +43,8 @@ public class UsersDAO {
             throw new PersistenceException("Not an entity.");
         }
         String tableName = getTableName(clazz);
-        String queryString = "INSERT INTO " + tableName + " " + getColumnsNamesString(dataSet) +
-                " VALUES " + getFieldsNamesString(dataSet);
+        String queryString = "INSERT INTO " + tableName + " " + getStringForQuery(dataSet, Column.class) +
+                " VALUES " + getStringForQuery(dataSet, Field.class);
         executor.execUpdate(queryString);
     }
 

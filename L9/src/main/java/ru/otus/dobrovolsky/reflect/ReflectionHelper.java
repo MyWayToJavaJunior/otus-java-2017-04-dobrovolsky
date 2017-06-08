@@ -21,7 +21,7 @@ public class ReflectionHelper {
         return object.toString();
     }
 
-    public static <T extends DataSet> String getColumnsNamesString(T dataSet) {
+    public static <T extends DataSet> String getStringForQuery(T dataSet, Class<?> clz) throws IllegalAccessException {
         Class clazz = dataSet.getClass();
         StringBuilder ret = new StringBuilder("(");
         Field[] fields = clazz.getDeclaredFields();
@@ -32,27 +32,14 @@ public class ReflectionHelper {
             if (!f.isAnnotationPresent(Column.class)) {
                 continue;
             }
-            ret.append(getColumnName(f)).append(", ");
-            f.setAccessible(accessible);
-        }
-        ret.delete(ret.length() - 2, ret.length()).append(")");
-
-        return ret.toString();
-    }
-
-    public static <T extends DataSet> String getFieldsNamesString(T dataSet) throws IllegalAccessException {
-        Class clazz = dataSet.getClass();
-        StringBuilder ret = new StringBuilder("(");
-        Field[] fields = clazz.getDeclaredFields();
-
-        for (Field f : fields) {
-            boolean accessible = f.isAccessible();
-            f.setAccessible(true);
-            if (!f.isAnnotationPresent(Column.class)) {
-                continue;
+            if (clz.getSimpleName().equals("Column")) {
+                ret.append(getColumnName(f)).append(", ");
+            } else if (clz.getSimpleName().equals("Field")) {
+                Object val = f.get(dataSet);
+                ret.append(prepFieldValue(val)).append(", ");
+            } else {
+                throw new RuntimeException("Not supported class");
             }
-            Object val = f.get(dataSet);
-            ret.append(prepFieldValue(val)).append(", ");
             f.setAccessible(accessible);
         }
         ret.delete(ret.length() - 2, ret.length()).append(")");
