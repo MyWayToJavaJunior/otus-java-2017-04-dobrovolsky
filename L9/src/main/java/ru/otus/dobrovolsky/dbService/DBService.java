@@ -1,7 +1,8 @@
 package ru.otus.dobrovolsky.dbService;
 
-import ru.otus.dobrovolsky.dbService.executor.Executor;
-import ru.otus.dobrovolsky.users.User;
+import ru.otus.dobrovolsky.dbService.dao.UsersDAO;
+import ru.otus.dobrovolsky.dbService.dataSets.DataSet;
+import ru.otus.dobrovolsky.dbService.dataSets.User;
 
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
@@ -10,14 +11,13 @@ import java.sql.SQLException;
 
 public class DBService {
     private final Connection connection;
-    private final Executor executor;
 
-    public DBService() throws SQLException {
+    public DBService() throws SQLException, IllegalAccessException {
         connection = getConnection();
-        executor = new Executor(connection);
+        UsersDAO dao = new UsersDAO(connection);
         try {
-            cleanUp();
-            createUsersTable();
+            dao.dropTable(User.class);
+            dao.createTable(User.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -42,8 +42,9 @@ public class DBService {
     }
 
     public void cleanUp() throws DBException {
+        UsersDAO dao = new UsersDAO(connection);
         try {
-            executor.dropTable();
+            dao.dropTable(User.class);
         } catch (SQLException e) {
             throw new DBException(e);
         }
@@ -60,16 +61,6 @@ public class DBService {
         }
     }
 
-    public void createUsersTable() throws SQLException {
-        System.out.println("Trying to create users table...");
-        try {
-            executor.createTable();
-            System.out.println("Users table was created successfully!");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
     public void closeConnection() throws DBException {
         try {
             connection.close();
@@ -78,34 +69,37 @@ public class DBService {
         }
     }
 
-    public void saveUser(User user) throws DBException {
-        try {
-            connection.setAutoCommit(false);
-            executor.save(user);
-            System.out.println("Saved user:     " + user.getName() + "  " + user.getAge());
-            connection.commit();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public <T extends User> T loadUser(long id, Class<T> clazz) throws DBException, InvocationTargetException,
+    public User loadUser(long id) throws DBException, InvocationTargetException,
             NoSuchMethodException, InstantiationException, IllegalAccessException {
         try {
             connection.setAutoCommit(false);
-            return executor.load(id, clazz);
+            UsersDAO dao = new UsersDAO(connection);
+            return dao.loadById(id, User.class);
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    public <T extends User> T loadUserWHandler(long id, Class<T> clazz) throws SQLException,
-            InvocationTargetException,
-            NoSuchMethodException, InstantiationException, IllegalAccessException {
-            return executor.loadUserWHandler(id, result -> {
-                result.next();
-                return clazz.getConstructor(Long.class, String.class, Integer.class).newInstance(result.getLong(1), result.getString(2), result.getInt(3));
-            });
+    public <T extends DataSet> void saveUser(T dataSet) throws Exception {
+        UsersDAO dao = new UsersDAO(connection);
+        try {
+            connection.setAutoCommit(false);
+            dao.saveUser(dataSet);
+            connection.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public <T extends DataSet> void createTable(Class<T> clazz) throws IllegalAccessException {
+        UsersDAO dao = new UsersDAO(connection);
+        try {
+            connection.setAutoCommit(false);
+            dao.createTable(clazz);
+            connection.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

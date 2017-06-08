@@ -1,7 +1,5 @@
 package ru.otus.dobrovolsky.dbService.executor;
 
-import ru.otus.dobrovolsky.users.User;
-
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -21,41 +19,24 @@ public class Executor {
         stmt.close();
     }
 
-    public void save(User user) throws SQLException {
-        execUpdate("INSERT INTO users (name, age) VALUES ('" + user.getName() + "', '" + user.getAge() + "')");
-    }
-
-    public <T extends User> T load(long id, Class<T> clazz) throws SQLException, NoSuchMethodException,
-            IllegalAccessException, InvocationTargetException, InstantiationException {
+    public <T> T execQuery(String query, ResultHandler<T> handler) throws SQLException, InvocationTargetException,
+            NoSuchMethodException, InstantiationException, IllegalAccessException {
         Statement stmt = connection.createStatement();
-        stmt.execute("SELECT * FROM users WHERE id=" + id);
-        ResultSet result = stmt.getResultSet();
-        result.next();
-
-        T restoredUser = clazz.getConstructor(Long.class, String.class, Integer.class).newInstance(result.getLong(1), result.getString(2), result.getInt(3));
-        result.close();
-        stmt.close();
-
-        return restoredUser;
-    }
-
-    public <T extends User> T loadUserWHandler(long id, ResultHandler<T> handler)
-            throws SQLException, InvocationTargetException, NoSuchMethodException, InstantiationException, IllegalAccessException {
-        Statement stmt = connection.createStatement();
-        stmt.execute("SELECT * FROM users WHERE id=" + id);
+        stmt.execute(query);
         ResultSet result = stmt.getResultSet();
         T value = handler.handle(result);
         result.close();
         stmt.close();
-
         return value;
     }
 
+    @Deprecated
     public void createTable() throws SQLException {
         execUpdate("CREATE TABLE IF NOT EXISTS users (id bigint(20) NOT NULL AUTO_INCREMENT PRIMARY KEY, " +
                 "name VARCHAR(255), age INT(3) NOT NULL)");
     }
 
+    @Deprecated
     public void dropTable() throws SQLException {
         execUpdate("DROP TABLE IF EXISTS users");
     }
