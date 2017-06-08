@@ -53,7 +53,7 @@ public class UsersDAO {
         }
         String tableName = getTableName(clazz);
         String queryString = "CREATE TABLE IF NOT EXISTS " + tableName + "(id bigint(20) NOT NULL AUTO_INCREMENT " +
-                "PRIMARY KEY, " + getCreateTableQuery(clazz);
+                "PRIMARY KEY, " + getColumnsAndValuesString(clazz);
         executor.execUpdate(queryString);
     }
 

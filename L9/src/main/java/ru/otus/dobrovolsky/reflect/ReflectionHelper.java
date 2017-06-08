@@ -62,7 +62,7 @@ public class ReflectionHelper {
         return ret.toString();
     }
 
-    public static <T extends DataSet> String getCreateTableQuery(Class<T> clazz) throws IllegalAccessException {
+    public static <T extends DataSet> String getColumnsAndValuesString(Class<T> clazz) throws IllegalAccessException {
         StringBuilder ret = new StringBuilder();
         Field[] fields = clazz.getDeclaredFields();
 
