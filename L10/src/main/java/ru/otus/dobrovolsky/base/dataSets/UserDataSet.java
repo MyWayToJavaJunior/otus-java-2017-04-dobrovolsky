@@ -11,7 +11,7 @@ public class UserDataSet extends DataSet {
     @Column(name = "name")
     private String name;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, targetEntity = AddressDataSet.class, mappedBy = "user", orphanRemoval = true)
     private AddressDataSet address;
 
     @OneToMany(cascade = CascadeType.ALL, targetEntity = PhoneDataSet.class, mappedBy = "user", orphanRemoval = true)
@@ -24,6 +24,7 @@ public class UserDataSet extends DataSet {
         this.setId(id);
         this.setName(name);
         this.setAddress(address);
+        address.setUser(this);
         this.setPhones(Arrays.asList(phones));
         Arrays.asList(phones).forEach((p) -> p.setUser(this));
     }
@@ -32,6 +33,7 @@ public class UserDataSet extends DataSet {
         this.setId(-1);
         this.setName(name);
         this.setAddress(address);
+        address.setUser(this);
         this.setPhones(Arrays.asList(phones));
         Arrays.asList(phones).forEach((p) -> p.setUser(this));
 
@@ -41,6 +43,7 @@ public class UserDataSet extends DataSet {
         this.setId(-1);
         this.setName(name);
         this.setAddress(address);
+        address.setUser(this);
         this.setPhones(phones);
         phones.forEach((p) -> p.setUser(this));
     }
