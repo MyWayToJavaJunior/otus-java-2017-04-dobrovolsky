@@ -8,7 +8,7 @@ import ru.otus.dobrovolsky.base.DBService;
 import ru.otus.dobrovolsky.base.dataSets.AddressDataSet;
 import ru.otus.dobrovolsky.base.dataSets.PhoneDataSet;
 import ru.otus.dobrovolsky.base.dataSets.UserDataSet;
-import ru.otus.dobrovolsky.dbService.DBServiceImpl;
+import ru.otus.dobrovolsky.dbService.DBServiceHibernateImpl;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -26,9 +26,9 @@ public class HibernateTest {
     }
 
     @Test
-    public void aInsertTestUser(){
+    public void aInsertTestUser() {
         UserDataSet testUser = createUser();
-        DBService dbService = new DBServiceImpl();
+        DBService dbService = new DBServiceHibernateImpl();
         dbService.save(testUser);
 
         UserDataSet retUser = dbService.read(UserDataSet.class, 1);
@@ -37,9 +37,9 @@ public class HibernateTest {
     }
 
     @Test
-    public void bInsertTestUser(){
+    public void bInsertTestUser() {
         UserDataSet testUser = createUser();
-        DBService dbService = new DBServiceImpl();
+        DBService dbService = new DBServiceHibernateImpl();
         dbService.save(testUser);
 
         UserDataSet retUser = dbService.read(UserDataSet.class, 1);
@@ -50,9 +50,9 @@ public class HibernateTest {
     }
 
     @Test
-    public void cInsertTestUser(){
+    public void cInsertTestUser() {
         UserDataSet testUser = createUser();
-        DBService dbService = new DBServiceImpl();
+        DBService dbService = new DBServiceHibernateImpl();
         dbService.save(testUser);
 
         UserDataSet retUser = dbService.read(UserDataSet.class, 1);

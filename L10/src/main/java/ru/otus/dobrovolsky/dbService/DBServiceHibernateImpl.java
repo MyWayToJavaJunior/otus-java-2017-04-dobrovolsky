@@ -16,10 +16,10 @@ import ru.otus.dobrovolsky.dbService.dao.DataSetDAO;
 import java.util.List;
 import java.util.function.Function;
 
-public class DBServiceImpl implements DBService {
+public class DBServiceHibernateImpl implements DBService {
     private final SessionFactory sessionFactory;
 
-    public DBServiceImpl() {
+    public DBServiceHibernateImpl() {
         Configuration configuration = new Configuration();
 
         configuration.addAnnotatedClass(UserDataSet.class);

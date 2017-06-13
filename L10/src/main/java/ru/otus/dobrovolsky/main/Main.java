@@ -4,14 +4,14 @@ import ru.otus.dobrovolsky.base.DBService;
 import ru.otus.dobrovolsky.base.dataSets.AddressDataSet;
 import ru.otus.dobrovolsky.base.dataSets.PhoneDataSet;
 import ru.otus.dobrovolsky.base.dataSets.UserDataSet;
-import ru.otus.dobrovolsky.dbService.DBServiceImpl;
+import ru.otus.dobrovolsky.dbService.DBServiceHibernateImpl;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
-        DBService dbService = new DBServiceImpl();
+        DBService dbService = new DBServiceHibernateImpl();
 
         String status = dbService.getLocalStatus();
         System.out.println("Status: " + status);

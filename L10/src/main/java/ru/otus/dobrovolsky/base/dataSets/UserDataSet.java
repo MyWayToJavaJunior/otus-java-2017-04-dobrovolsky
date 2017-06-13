@@ -49,20 +49,20 @@ public class UserDataSet extends DataSet {
         return name;
     }
 
-    public AddressDataSet getAddress() {
-        return address;
-    }
-
-    public List<PhoneDataSet> getPhones() {
-        return phones;
-    }
-
     private void setName(String name) {
         this.name = name;
     }
 
+    public AddressDataSet getAddress() {
+        return address;
+    }
+
     private void setAddress(AddressDataSet address) {
         this.address = address;
+    }
+
+    public List<PhoneDataSet> getPhones() {
+        return phones;
     }
 
     private void setPhones(List<PhoneDataSet> phones) {
