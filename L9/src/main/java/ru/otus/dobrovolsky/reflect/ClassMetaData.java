@@ -7,14 +7,14 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-/*public*/ class ClassMetaData {
+class ClassMetaData {
 
     private String tableName;
     private List<String> columns;
     private List<Field> annotatedFields;
     private Class<?> entity;
 
-    /*public*/ ClassMetaData(Class<?> clazz) throws Exception {
+    ClassMetaData(Class<?> clazz) throws Exception {
         if (ReflectionHelper.isEntity(clazz)) {
             entity = clazz;
         } else {
@@ -35,7 +35,7 @@ import java.util.List;
         System.out.println(columns.size() - 1);
     }
 
-    /*public*/ String getColumnsString() {
+    String getColumnsString() {
         StringBuilder ret = new StringBuilder();
         for (String s : columns) {
             ret.append(s).append(", ");
@@ -45,15 +45,15 @@ import java.util.List;
         return ret.toString();
     }
 
-    /*public*/ String getTableName() {
+    String getTableName() {
         return tableName;
     }
 
-    /*public*/ List<String> getColumns() {
+    List<String> getColumns() {
         return columns;
     }
 
-    /*public*/ List<Field> getAnnotatedFields() {
+    List<Field> getAnnotatedFields() {
         return annotatedFields;
     }
 }

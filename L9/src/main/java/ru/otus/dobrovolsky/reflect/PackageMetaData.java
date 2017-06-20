@@ -95,7 +95,7 @@ public class PackageMetaData {
         return null;
     }
 
-    /*public*/ List<Field> getAnnotatedFields(Class<? extends DataSet> clazz) {
+    List<Field> getAnnotatedFields(Class<? extends DataSet> clazz) {
         for (Map.Entry entry : annotatedClassesMap.entrySet()) {
             if (entry.getKey() == clazz) {
                 return ((ClassMetaData) entry.getValue()).getAnnotatedFields();
