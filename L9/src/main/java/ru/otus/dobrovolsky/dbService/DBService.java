@@ -3,6 +3,7 @@ package ru.otus.dobrovolsky.dbService;
 import ru.otus.dobrovolsky.dbService.dao.UsersDAO;
 import ru.otus.dobrovolsky.dbService.dataSets.DataSet;
 import ru.otus.dobrovolsky.dbService.dataSets.User;
+import ru.otus.dobrovolsky.reflect.PackageMetaData;
 
 import java.lang.reflect.InvocationTargetException;
 import java.sql.Connection;
@@ -11,12 +12,29 @@ import java.sql.SQLException;
 
 public class DBService {
     private final Connection connection;
+    private PackageMetaData pmd;
 
-    public DBService() throws SQLException, IllegalAccessException {
+    public DBService() throws Exception {
         connection = getConnection();
+        pmd = PackageMetaData.getInstance();
+        pmd.parsePackage("ru.otus");
         UsersDAO dao = new UsersDAO(connection);
         try {
             dao.dropTable(User.class);
+            dao.createTable(User.class);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public DBService(String packageName) throws Exception {
+        connection = getConnection();
+        pmd = PackageMetaData.getInstance();
+        pmd.parsePackage(packageName);
+        UsersDAO dao = new UsersDAO(connection);
+        try {
+            dao.dropTable(User.class);
+            System.out.println("droped!");
             dao.createTable(User.class);
         } catch (SQLException e) {
             e.printStackTrace();

@@ -8,6 +8,8 @@ import javax.persistence.Table;
 import java.lang.reflect.Field;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ReflectionHelper {
     private static boolean checkString(Object object) {
@@ -22,12 +24,11 @@ public class ReflectionHelper {
     }
 
     public static <T extends DataSet> String getStringForInsert(T dataSet, Class<?> clz) throws IllegalAccessException {
-        Class clazz = dataSet.getClass();
+        Class<? extends DataSet> clazz = dataSet.getClass();
         StringBuilder ret = new StringBuilder("(");
-        Field[] fields = clazz.getDeclaredFields();
+        PackageMetaData pmd = PackageMetaData.getInstance();
 
-        for (Field f : fields) {
-            boolean accessible = f.isAccessible();
+        for (Field f : pmd.getAnnotatedFields(clazz)) {
             f.setAccessible(true);
             if (!f.isAnnotationPresent(Column.class)) {
                 continue;
@@ -40,30 +41,30 @@ public class ReflectionHelper {
             } else {
                 throw new RuntimeException("Not supported class");
             }
-            f.setAccessible(accessible);
         }
         ret.delete(ret.length() - 2, ret.length()).append(")");
 
         return ret.toString();
     }
 
-    public static <T extends DataSet> String getColumnsAndValuesString(Class<T> clazz) throws IllegalAccessException {
+    /*public*/ static <T extends DataSet> List<String> getColumnsAndValuesString(Class<T> clazz) {
         StringBuilder ret = new StringBuilder();
         Field[] fields = clazz.getDeclaredFields();
+        List<String> annotatedFields = new ArrayList<>();
 
         for (Field f : fields) {
-            boolean accessible = f.isAccessible();
             f.setAccessible(true);
             if (!f.isAnnotationPresent(Column.class)) {
                 continue;
             }
-            ret.append(getColumnName(f)).append(" ");
-            ret.append(getColumnType(f)).append(", ");
-            f.setAccessible(accessible);
-        }
-        ret.delete(ret.length() - 2, ret.length()).append(")");
+            ret.append(getColumnName(f)).append(" ").append(getColumnType(f));
 
-        return ret.toString();
+            annotatedFields.add(ret.toString());
+
+            ret.setLength(0);
+        }
+
+        return annotatedFields;
     }
 
     private static String getColumnName(Field field) {
@@ -104,7 +105,7 @@ public class ReflectionHelper {
         return ret.toString();
     }
 
-    public static String getTableName(Class<?> clazz) {
+    /*public*/ static String getTableName(Class<?> clazz) {
         if (clazz.isAnnotationPresent(Table.class)) {
             Table table = clazz.getAnnotation(Table.class);
             return table.name();
@@ -118,28 +119,23 @@ public class ReflectionHelper {
     }
 
     private static void setFieldValue(Object object, String name, Object value) {
-        Field field = null;
-        boolean isAccessible = true;
+        Field field;
         try {
             field = object.getClass().getDeclaredField(name);
-            isAccessible = field.isAccessible();
             field.setAccessible(true);
             field.set(object, value);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             e.printStackTrace();
-        } finally {
-            if (field != null && !isAccessible) {
-                field.setAccessible(false);
-            }
         }
     }
 
-    public static <T extends DataSet> T makeObject(T object, Field[] fields, ResultSet result) throws
+    public static <T extends DataSet> T makeObject(T object, ResultSet result) throws
             SQLException {
         object.setId(result.getLong("id"));
         String fieldType;
         Column column;
-        for (Field f : fields) {
+        PackageMetaData pmd = PackageMetaData.getInstance();
+        for (Field f : pmd.getAnnotatedFields(object.getClass())) {
             if (!f.isAnnotationPresent(Column.class)) {
                 continue;
             }
