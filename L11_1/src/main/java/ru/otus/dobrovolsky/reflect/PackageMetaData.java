@@ -9,10 +9,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public class PackageMetaData {
-    private Map<Class<?>, ClassMetaData> annotatedClassesMap = new HashMap<>();
-
     private static PackageMetaData instance;
+    private Map<Class<?>, ClassMetaData> annotatedClassesMap = new HashMap<>();
 
     private PackageMetaData() {
     }
@@ -61,7 +61,6 @@ public class PackageMetaData {
     }
 
     public void parsePackage(String packageName) throws Exception {
-//        annotatedClassesMap = null;
         annotatedClassesMap = getAllClassesFromPackage(packageName);
         parseClasses();
     }
@@ -95,7 +94,7 @@ public class PackageMetaData {
         return null;
     }
 
-    public List<Field> getAnnotatedFields(Class<? extends DataSet> clazz) {
+    List<Field> getAnnotatedFields(Class<? extends DataSet> clazz) {
         for (Map.Entry entry : annotatedClassesMap.entrySet()) {
             if (entry.getKey() == clazz) {
                 return ((ClassMetaData) entry.getValue()).getAnnotatedFields();

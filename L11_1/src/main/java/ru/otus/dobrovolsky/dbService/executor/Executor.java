@@ -15,7 +15,7 @@ public class Executor {
 
     public void execUpdate(String update) throws SQLException {
         Statement stmt = connection.createStatement();
-        stmt.execute(update);
+        stmt.executeUpdate(update);
         stmt.close();
     }
 

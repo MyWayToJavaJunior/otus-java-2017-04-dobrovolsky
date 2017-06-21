@@ -47,7 +47,7 @@ public class ReflectionHelper {
         return ret.toString();
     }
 
-    public static <T extends DataSet> List<String> getColumnsAndValuesString(Class<T> clazz) {
+    static <T extends DataSet> List<String> getColumnsAndValuesString(Class<T> clazz) {
         StringBuilder ret = new StringBuilder();
         Field[] fields = clazz.getDeclaredFields();
         List<String> annotatedFields = new ArrayList<>();
@@ -105,7 +105,7 @@ public class ReflectionHelper {
         return ret.toString();
     }
 
-    public static String getTableName(Class<?> clazz) {
+    static String getTableName(Class<?> clazz) {
         if (clazz.isAnnotationPresent(Table.class)) {
             Table table = clazz.getAnnotation(Table.class);
             return table.name();

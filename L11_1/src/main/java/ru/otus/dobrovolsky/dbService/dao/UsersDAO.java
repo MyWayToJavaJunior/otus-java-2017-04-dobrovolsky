@@ -38,6 +38,7 @@ public class UsersDAO {
         });
     }
 
+    @SuppressWarnings("unchecked")
     public <T extends DataSet> void saveUser(T dataSet) throws SQLException, NoSuchFieldException,
             InstantiationException, IllegalAccessException {
         Class clazz = dataSet.getClass();

@@ -1,5 +1,7 @@
 package ru.otus.dobrovolsky.dbService;
 
+import ru.otus.dobrovolsky.cache.Element;
+import ru.otus.dobrovolsky.cache.MyCacheEngineImpl;
 import ru.otus.dobrovolsky.dbService.dao.UsersDAO;
 import ru.otus.dobrovolsky.dbService.dataSets.DataSet;
 import ru.otus.dobrovolsky.dbService.dataSets.User;
@@ -10,9 +12,11 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+@SuppressWarnings("unused")
 public class DBService {
     private final Connection connection;
     private PackageMetaData pmd;
+    private MyCacheEngineImpl<Long, ? extends DataSet> cache;
 
     public DBService() throws Exception {
         connection = getConnection();
@@ -21,6 +25,20 @@ public class DBService {
         UsersDAO dao = new UsersDAO(connection);
         try {
             dao.dropTable(User.class);
+            dao.createTable(User.class);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public DBService(String packageName) throws Exception {
+        connection = getConnection();
+        pmd = PackageMetaData.getInstance();
+        pmd.parsePackage(packageName);
+        UsersDAO dao = new UsersDAO(connection);
+        try {
+            dao.dropTable(User.class);
+            System.out.println("droped!");
             dao.createTable(User.class);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -73,16 +91,27 @@ public class DBService {
         }
     }
 
+    @SuppressWarnings("unchecked")
     public User loadUser(long id) throws DBException, InvocationTargetException,
             NoSuchMethodException, InstantiationException, IllegalAccessException {
+        User user = getFromCache(id);
+
+        if (user != null) {
+            return user;
+        }
         try {
             connection.setAutoCommit(false);
             UsersDAO dao = new UsersDAO(connection);
-            return dao.loadById(id, User.class);
+
+            user = dao.loadById(id, User.class);
+            if (cache != null) {
+                cache.put(id, new Element(user));
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+
+        return user;
     }
 
     public <T extends DataSet> void saveUser(T dataSet) throws Exception {
@@ -105,5 +134,21 @@ public class DBService {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public void registerCache(MyCacheEngineImpl<Long, ? extends DataSet> cache) {
+        this.cache = cache;
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T extends DataSet> T getFromCache(long id) {
+        T cachedDataSet = null;
+        if (cache != null) {
+            Element element = cache.get(id);
+            if (element != null) {
+                cachedDataSet = (T) element.getValue();
+            }
+        }
+        return cachedDataSet;
     }
 }

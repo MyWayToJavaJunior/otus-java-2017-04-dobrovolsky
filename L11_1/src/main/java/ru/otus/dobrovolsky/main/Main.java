@@ -1,5 +1,6 @@
 package ru.otus.dobrovolsky.main;
 
+import ru.otus.dobrovolsky.cache.MyCacheEngineImpl;
 import ru.otus.dobrovolsky.dbService.DBService;
 import ru.otus.dobrovolsky.dbService.dataSets.User;
 
@@ -8,6 +9,10 @@ import java.util.Random;
 public class Main {
     public static void main(String[] args) throws Exception {
         DBService dbService = new DBService();
+
+        MyCacheEngineImpl<Long, User> cache = new MyCacheEngineImpl<>(400);
+        dbService.registerCache(cache);
+
         dbService.printConnectInfo();
         Random random = new Random();
 
@@ -35,34 +40,57 @@ public class Main {
         restoredUser = dbService.loadUser(4);
         System.out.println("    restoredUser:   " + restoredUser.toString());
 
+        System.out.println("    Checking cache hits:    " + cache.getHitCount());
+        System.out.println("    Checking cache misses:    " + cache.getMissCount());
+
+        System.out.println("    Trying to get users info from cache after first queries:");
+        restoredUser = dbService.loadUser(1);
+        System.out.println("    restoredUser:   " + restoredUser.toString());
+        restoredUser = dbService.loadUser(2);
+        System.out.println("    restoredUser:   " + restoredUser.toString());
+        restoredUser = dbService.loadUser(3);
+        System.out.println("    restoredUser:   " + restoredUser.toString());
+        restoredUser = dbService.loadUser(4);
+        System.out.println("    restoredUser:   " + restoredUser.toString());
+
+        System.out.println("    Checking cache hits:    " + cache.getHitCount());
+        System.out.println("    Checking cache misses:    " + cache.getMissCount());
+
         System.out.println("1   Trying to drop table before next operations");
         dbService.cleanUp();
+        cache.clear();
         System.out.println("1   OK");
 
         System.out.println("2   Trying to create new table before next operations");
         dbService.createTable(User.class);
         System.out.println("2   OK");
         System.out.println("2   Trying to create some records in table");
-        for (int i = 1; i <= 50; i++) {
+        for (int i = 1; i <= 550; i++) {
             user = new User(Integer.toString(random.nextInt()), Math.abs(random.nextInt()));
             dbService.saveUser(user);
             System.out.println("    " + i + "    " + user.toString());
         }
 
         System.out.println("2   Selecting records by id");
-        for (int i = 1; i <= 50; i++) {
+        for (int i = 1; i <= 550; i++) {
             restoredUser = dbService.loadUser(i);
             System.out.println("    restoredUser:   " + restoredUser.toString());
         }
 
+        System.out.println("    Checking cache hits:    " + cache.getHitCount());
+        System.out.println("    Checking cache misses:    " + cache.getMissCount());
+
+        System.out.println("    Trying to get users info from cache after first queries:");
+
+        for (int i = 1; i <= 550; i++) {
+            restoredUser = dbService.loadUser(i);
+            System.out.println("    restoredUser:   " + restoredUser.toString());
+        }
+
+        System.out.println("    Checking cache hits:    " + cache.getHitCount());
+        System.out.println("    Checking cache misses:    " + cache.getMissCount());
+
         dbService.cleanUp();
         dbService.closeConnection();
-
-//        PackageMetaData pmd = PackageMetaData.getInstance();
-//        pmd.parsePackage("ru.otus");
-//        pmd.getAnnotatedClassesMap().forEach((aClass, classMetaData) -> System.out.println(aClass.getSimpleName() + "   " +
-//                classMetaData.getTableName()));
-//
-//        System.out.println("pmd tablename:  " + pmd.getTableName(User.class));
     }
 }

@@ -4,16 +4,17 @@ import ru.otus.dobrovolsky.dbService.dataSets.DataSet;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
-public class ClassMetaData {
+class ClassMetaData {
 
     private String tableName;
     private List<String> columns;
     private List<Field> annotatedFields;
     private Class<?> entity;
 
-    public ClassMetaData(Class<?> clazz) throws Exception {
+    ClassMetaData(Class<?> clazz) throws Exception {
         if (ReflectionHelper.isEntity(clazz)) {
             entity = clazz;
         } else {
@@ -22,20 +23,19 @@ public class ClassMetaData {
         parse();
     }
 
+    @SuppressWarnings("unchecked")
     private <T extends DataSet> void parse() {
         columns = new ArrayList<>();
         annotatedFields = new ArrayList<>();
 
-        for (Field f : entity.getDeclaredFields()) {
-            annotatedFields.add(f);
-        }
+        Collections.addAll(annotatedFields, entity.getDeclaredFields());
 
         tableName = ReflectionHelper.getTableName(entity);
         columns = ReflectionHelper.getColumnsAndValuesString((Class<T>) entity);
         System.out.println(columns.size() - 1);
     }
 
-    public String getColumnsString() {
+    String getColumnsString() {
         StringBuilder ret = new StringBuilder();
         for (String s : columns) {
             ret.append(s).append(", ");
@@ -45,19 +45,15 @@ public class ClassMetaData {
         return ret.toString();
     }
 
-    public void printColumns() {
-        columns.forEach(System.out::println);
-    }
-
-    public String getTableName() {
+    String getTableName() {
         return tableName;
     }
 
-    public List<String> getColumns() {
+    List<String> getColumns() {
         return columns;
     }
 
-    public List<Field> getAnnotatedFields() {
+    List<Field> getAnnotatedFields() {
         return annotatedFields;
     }
 }
