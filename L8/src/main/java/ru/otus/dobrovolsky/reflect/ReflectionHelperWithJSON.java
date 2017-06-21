@@ -51,10 +51,7 @@ public class ReflectionHelperWithJSON implements ReflectionHelper {
     }
 
     public static JSONAware parseFieldValue(Object object, Field field) {
-        String fieldType = field.getType().getName();
-        List<String> classList = new ArrayList<>(Arrays.asList("java.lang.Integer", "java.lang.Short", "java.lang.Byte", "java.lang.String",
-                "java.lang.Character", "java.lang.Long", "java.lang.Boolean", "java.lang.Float", "java.lang.Double"));
-        if (field.getType().isPrimitive() || classList.contains(fieldType)) {
+        if (ParserUtils.checkObjectSimplicity(field)) {
             return ParserFactory.getPrimitiveParser().parse(object, field);
         } else if (field.getType().isArray()) {
             return ParserFactory.getArrayParser().parse(object, field);

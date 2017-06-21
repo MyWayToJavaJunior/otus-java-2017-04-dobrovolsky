@@ -1,0 +1,6 @@
+Ассерты к домашнеме заданию
+Assert.fail()
+Assert.true(...)
+Assert.notNull(...)
+
+retentionpolicy Runtime

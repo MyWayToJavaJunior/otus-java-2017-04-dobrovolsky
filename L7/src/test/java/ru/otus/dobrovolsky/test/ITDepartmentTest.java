@@ -9,6 +9,8 @@ import ru.otus.dobrovolsky.atmFramework.atm.State;
 import ru.otus.dobrovolsky.atmFramework.atm.cashOutAlgorithm.CashOutAlgorithm;
 import ru.otus.dobrovolsky.atmFramework.atm.cashOutAlgorithm.MostlyEvenlyCashOutAlgorithm;
 import ru.otus.dobrovolsky.atmFramework.atm.cashOutAlgorithm.SimpleCashOutAlgorithm;
+import ru.otus.dobrovolsky.atmFramework.atm.cassette.CashForCashIn;
+import ru.otus.dobrovolsky.atmFramework.atm.cassette.CashFromCashDispenser;
 import ru.otus.dobrovolsky.atmFramework.exception.*;
 import ru.otus.dobrovolsky.atmFramework.itDepartment.ITDepartment;
 
@@ -90,7 +92,7 @@ public class ITDepartmentTest {
 
         itDepartment.setATMWork(atm1);
         double balanceBefore = atm1.getATMBalance();
-        atm1.processCash(59850);
+        atm1.processCash(new CashFromCashDispenser(59850));
         double balanceAfter = atm1.getATMBalance();
         double delta = balanceBefore - balanceAfter;
         Assert.assertTrue("ATM delta is RUB 59850", delta == 59850d);
@@ -105,7 +107,8 @@ public class ITDepartmentTest {
 
         itDepartment.setATMWork(atm1);
         double balanceBefore = atm1.getATMBalance();
-        atm1.processCash(55000, 1000);
+        atm1.processCash(new CashForCashIn(55000, 1000));
+        atm1.processCash(new );
         double balanceAfter = atm1.getATMBalance();
         double delta = balanceAfter - balanceBefore;
         Assert.assertTrue("ATM delta is RUB 55_000", delta == 55_000d);

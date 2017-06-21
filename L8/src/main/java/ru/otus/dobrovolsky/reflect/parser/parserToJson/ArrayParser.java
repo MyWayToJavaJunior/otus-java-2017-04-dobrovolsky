@@ -26,6 +26,9 @@ public class ArrayParser implements Parser {
         String componentsType = val.getClass().getComponentType().getName();
         for (int i = 0; i < Array.getLength(val); i++) {
             if (ParserUtils.checkObjectSimplicity(Array.get(val, i))) {
+                System.out.println(Array.get(val, i).getClass());
+                System.out.println(Array.get(val, i).getClass().getTypeName());
+                System.out.println(Array.get(val, i).getClass().isPrimitive());
                 if ((componentsType.contains("Character")) || (componentsType.contains("char"))
                         || (componentsType.contains("String")) || (componentsType.contains("[C"))) {
                     jsonArray.add(Array.get(val, i).toString());

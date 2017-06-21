@@ -1,9 +1,7 @@
 package ru.otus.dobrovolsky.atmFramework.atm;
 
 import ru.otus.dobrovolsky.atmFramework.atm.cashOutAlgorithm.CashOutAlgorithm;
-import ru.otus.dobrovolsky.atmFramework.atm.cassette.CashDispenserCassette;
-import ru.otus.dobrovolsky.atmFramework.atm.cassette.Cassette;
-import ru.otus.dobrovolsky.atmFramework.atm.cassette.Nominal;
+import ru.otus.dobrovolsky.atmFramework.atm.cassette.*;
 import ru.otus.dobrovolsky.atmFramework.atm.memento.Memento;
 import ru.otus.dobrovolsky.atmFramework.atm.statement.ATMStatement;
 import ru.otus.dobrovolsky.atmFramework.exception.*;
@@ -61,17 +59,41 @@ public class CashDispenserATM implements ATM {
         return leastNominal;
     }
 
+//    @Override
+//    public void processCash(int... cash) {
+//        if ((algorithm == null) || (algorithm.getClass().getCanonicalName().contains("SimpleCashOutAlgorithm"))) {
+//            try {
+//                cashOutSimple(cash[0]);
+//            } catch (NoCassettesFoundException | NotEnoughMoneyException | NotSuchNominalException e) {
+//                e.printStackTrace();
+//            }
+//        } else if (algorithm.getClass().getCanonicalName().contains("MostlyEvenlyCashOutAlgorithm")) {
+//            try {
+//                cashOutMostlyEvenly(cash[0]);
+//            } catch (NoCassettesFoundException | NotEnoughMoneyException | NotSuchNominalException e) {
+//                e.printStackTrace();
+//            }
+//        } else {
+//            try {
+//                throw new NotSuchAlgorithmException("No such algorithm for cashing out.");
+//            } catch (NotSuchAlgorithmException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//    }
+
     @Override
-    public void processCash(int... cash) {
+    public <T extends CashFromCashDispenser> void processCash(T cash) {
+//        CashFromCashDispenser c = (CashFromCashDispenser) cash;
         if ((algorithm == null) || (algorithm.getClass().getCanonicalName().contains("SimpleCashOutAlgorithm"))) {
             try {
-                cashOutSimple(cash[0]);
+                cashOutSimple(cash.getCash());
             } catch (NoCassettesFoundException | NotEnoughMoneyException | NotSuchNominalException e) {
                 e.printStackTrace();
             }
         } else if (algorithm.getClass().getCanonicalName().contains("MostlyEvenlyCashOutAlgorithm")) {
             try {
-                cashOutMostlyEvenly(cash[0]);
+                cashOutMostlyEvenly(cash.getCash());
             } catch (NoCassettesFoundException | NotEnoughMoneyException | NotSuchNominalException e) {
                 e.printStackTrace();
             }

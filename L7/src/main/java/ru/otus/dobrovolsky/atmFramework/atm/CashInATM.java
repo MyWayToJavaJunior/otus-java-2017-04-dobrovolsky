@@ -1,6 +1,7 @@
 package ru.otus.dobrovolsky.atmFramework.atm;
 
 import ru.otus.dobrovolsky.atmFramework.atm.cashOutAlgorithm.CashOutAlgorithm;
+import ru.otus.dobrovolsky.atmFramework.atm.cassette.Cash;
 import ru.otus.dobrovolsky.atmFramework.atm.cassette.CashInCassette;
 import ru.otus.dobrovolsky.atmFramework.atm.cassette.Cassette;
 import ru.otus.dobrovolsky.atmFramework.atm.memento.Memento;
@@ -50,8 +51,25 @@ public class CashInATM implements ATM {
      * cash[0] - cash
      * cash[1] - count
      */
+//    @Override
+//    public void processCash(int... cash) {
+//        if (cassette == null) {
+//            try {
+//                throw new NoCassettesFoundException("No cassettes were loaded into ATM.");
+//            } catch (NoCassettesFoundException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        checkState();
+//        if ((cassette.getCount() + cash[1]) <= cassette.getMaxCapacity()) {
+//            atmStatement.addStatement(this, prepareStatementRow(cash[0]) + "   " + "C");
+//            cassette.cashIn(cash[0], cash[1]);
+//        }
+//    }
+
     @Override
-    public void processCash(int... cash) {
+    public /*<T extends CashForCashIn>*/ void processCash(Cash cash) {
+//        CashForCashIn c = (CashForCashIn) cash;
         if (cassette == null) {
             try {
                 throw new NoCassettesFoundException("No cassettes were loaded into ATM.");
@@ -60,9 +78,9 @@ public class CashInATM implements ATM {
             }
         }
         checkState();
-        if ((cassette.getCount() + cash[1]) <= cassette.getMaxCapacity()) {
-            atmStatement.addStatement(this, prepareStatementRow(cash[0]) + "   " + "C");
-            cassette.cashIn(cash[0], cash[1]);
+        if ((cassette.getCount() + cash.getCount()) <= cassette.getMaxCapacity()) {
+            atmStatement.addStatement(this, prepareStatementRow(cash.getCash()) + "   " + "C");
+            cassette.cashIn(cash.getCash(), cash.getCount());
         }
     }
 

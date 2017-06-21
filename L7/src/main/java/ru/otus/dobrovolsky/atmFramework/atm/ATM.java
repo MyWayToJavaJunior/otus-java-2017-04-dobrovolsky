@@ -49,7 +49,8 @@ public interface ATM {
      * i[0] - cash
      * i[1] - count
      */
-    void processCash(int... i);
+//    void processCash(int... i);
+    <T> void processCash(T cash);
 
     void getCassettesLoadInfo();
 }
