@@ -10,7 +10,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         DBService dbService = new DBService();
 
-        MyCacheEngineImpl<Long, User> cache = new MyCacheEngineImpl<>(400);
+        MyCacheEngineImpl<Long, User> cache = new MyCacheEngineImpl<>(100, 0, 0, true);
         dbService.registerCache(cache);
 
         dbService.printConnectInfo();
@@ -65,14 +65,14 @@ public class Main {
         dbService.createTable(User.class);
         System.out.println("2   OK");
         System.out.println("2   Trying to create some records in table");
-        for (int i = 1; i <= 550; i++) {
+        for (int i = 1; i <= 128; i++) {
             user = new User(Integer.toString(random.nextInt()), Math.abs(random.nextInt()));
             dbService.saveUser(user);
             System.out.println("    " + i + "    " + user.toString());
         }
 
         System.out.println("2   Selecting records by id");
-        for (int i = 1; i <= 550; i++) {
+        for (int i = 1; i <= 128; i++) {
             restoredUser = dbService.loadUser(i);
             System.out.println("    restoredUser:   " + restoredUser.toString());
         }
@@ -82,7 +82,7 @@ public class Main {
 
         System.out.println("    Trying to get users info from cache after first queries:");
 
-        for (int i = 1; i <= 550; i++) {
+        for (int i = 1; i <= 128; i++) {
             restoredUser = dbService.loadUser(i);
             System.out.println("    restoredUser:   " + restoredUser.toString());
         }
@@ -92,5 +92,7 @@ public class Main {
 
         dbService.cleanUp();
         dbService.closeConnection();
+
+        cache.stopCleaningThread();
     }
 }

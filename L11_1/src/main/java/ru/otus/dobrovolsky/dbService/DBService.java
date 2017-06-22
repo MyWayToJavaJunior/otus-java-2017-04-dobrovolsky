@@ -105,7 +105,7 @@ public class DBService {
 
             user = dao.loadById(id, User.class);
             if (cache != null) {
-                cache.put(id, new Element(user));
+                cache.put(id, new Element(user, cache.getIdleTimeMs(), cache.getLifeTimeMs()));
             }
         } catch (SQLException e) {
             e.printStackTrace();

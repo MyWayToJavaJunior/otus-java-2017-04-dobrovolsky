@@ -9,4 +9,6 @@ public interface IMyCacheEngine<K, V> {
     int getHitCount();
 
     int getMissCount();
+
+    void dispose();
 }
