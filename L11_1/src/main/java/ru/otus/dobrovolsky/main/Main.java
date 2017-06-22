@@ -10,7 +10,7 @@ public class Main {
     public static void main(String[] args) throws Exception {
         DBService dbService = new DBService();
 
-        MyCacheEngineImpl<Long, User> cache = new MyCacheEngineImpl<>(100, 0, 0, true);
+        MyCacheEngineImpl<Long, User> cache = new MyCacheEngineImpl<>(0, 0, 0, true);
         dbService.registerCache(cache);
 
         dbService.printConnectInfo();
@@ -79,10 +79,16 @@ public class Main {
 
         System.out.println("    Checking cache hits:    " + cache.getHitCount());
         System.out.println("    Checking cache misses:    " + cache.getMissCount());
+        System.out.println("    Cache size after first round of querying dataSets from DB:    " + cache.getCacheSize());
+        System.out.println();
 
         System.out.println("    Trying to get users info from cache after first queries:");
 
         for (int i = 1; i <= 128; i++) {
+            if (i % 32 == 0) {
+                Thread.sleep(300);
+                System.out.println("    Trying to simulate pause in user queries to DB...");
+            }
             restoredUser = dbService.loadUser(i);
             System.out.println("    restoredUser:   " + restoredUser.toString());
         }

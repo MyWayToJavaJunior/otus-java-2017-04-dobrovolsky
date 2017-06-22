@@ -45,10 +45,6 @@ public class Element<V> {
     }
 
     boolean checkToRemove(long idleTime, long lifeTimeMs) {
-        boolean flag = checkIdleTime(idleTime, lifeTimeMs) || checkLifeTime(lifeTimeMs);
-        if (flag) {
-            System.out.println("!!!WILL BE REMOVED!!!");
-        }
-        return flag;
+        return checkIdleTime(idleTime, lifeTimeMs) || checkLifeTime(lifeTimeMs);
     }
 }

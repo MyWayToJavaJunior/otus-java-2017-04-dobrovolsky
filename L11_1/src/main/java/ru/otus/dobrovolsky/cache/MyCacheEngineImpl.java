@@ -13,7 +13,7 @@ public class MyCacheEngineImpl<K, V> implements IMyCacheEngine<K, V> {
     private static final int DEFAULT_CACHE_LIFE_TIME_MS = 2_000;
     private static final int DEFAULT_CACHE_IDLE_TIME_MS = 1_000;
     private static final int DEFAULT_CACHE_SIZE = 250;
-    private static final int DEFAULT_CACHE_TIMER_PERIOD = 5_000;
+    private static final int DEFAULT_CACHE_TIMER_PERIOD = 3_000;
 
     private final int maxElements;
     private final long lifeTimeMs;
@@ -144,5 +144,9 @@ public class MyCacheEngineImpl<K, V> implements IMyCacheEngine<K, V> {
     private void checkToRemove(long idleTimeMs, long lifeTimeMs) {
         cache.entrySet().removeIf(entry -> entry.getValue().get() != null
                 && entry.getValue().get().checkToRemove(idleTimeMs, lifeTimeMs));
+    }
+
+    public int getCacheSize() {
+        return cache.size();
     }
 }
