@@ -1,103 +1,42 @@
 package ru.otus.dobrovolsky.main;
 
+import org.eclipse.jetty.server.Server;
+import org.eclipse.jetty.server.handler.HandlerList;
+import org.eclipse.jetty.server.handler.ResourceHandler;
+import org.eclipse.jetty.servlet.ServletContextHandler;
+import org.eclipse.jetty.servlet.ServletHolder;
 import ru.otus.dobrovolsky.base.DBService;
-import ru.otus.dobrovolsky.base.dataSets.AddressDataSet;
-import ru.otus.dobrovolsky.base.dataSets.PhoneDataSet;
-import ru.otus.dobrovolsky.base.dataSets.UserDataSet;
 import ru.otus.dobrovolsky.dbService.DBServiceHibernateImpl;
-
-import java.util.ArrayList;
-import java.util.List;
+import ru.otus.dobrovolsky.servlet.AdminServlet;
+import ru.otus.dobrovolsky.servlet.ExitServlet;
+import ru.otus.dobrovolsky.servlet.LoginServlet;
 
 public class Main {
-    public static void main(String[] args) throws InterruptedException {
+    //49001—49150 free TCP-UDP ports
+    private final static int PORT = 49094;
+    private final static String PUBLIC_HTML = "public";
+
+    public static void main(String[] args) throws Exception {
         DBService dbService = new DBServiceHibernateImpl();
 
-        String status = dbService.getLocalStatus();
-        System.out.println("Status: " + status);
+        ResourceHandler resourceHandler = new ResourceHandler();
+        resourceHandler.setResourceBase(PUBLIC_HTML);
 
-        dbService.save(new UserDataSet("Nicholas", new AddressDataSet("Lenina 1", 460018), new PhoneDataSet(1234,
-                "111111"), new PhoneDataSet(2345, "222222")));
+        ServletContextHandler context = new ServletContextHandler(ServletContextHandler.SESSIONS);
 
-        dbService.save(new UserDataSet("Katherine", new AddressDataSet("Lenina 2", 460018), new PhoneDataSet
-                (3456, "333333"), new PhoneDataSet(4567, "444444")));
+        context.addServlet(LoginServlet.class, "/login");
+        context.addServlet(ExitServlet.class, "/exit");
+        context.addServlet(new ServletHolder(new AdminServlet(dbService)), "/admin");
 
-        List<PhoneDataSet> phones = new ArrayList<>();
-        phones.add(new PhoneDataSet(5678, "1234567890"));
-        phones.add(new PhoneDataSet(6789, "0987654321"));
-        AddressDataSet address = new AddressDataSet("Lenina 3", 460000);
-        UserDataSet testUser = new UserDataSet("Test", address, phones);
+        Server server = new Server(PORT);
+        server.setHandler(new HandlerList(resourceHandler, context));
 
-        dbService.save(testUser);
+        server.start();
 
-        UserDataSet dataSet = dbService.read(1);
-        System.out.println(dataSet);
+        Worker worker = new Worker(dbService);
+        worker.run();
 
-        dataSet = dbService.readByName("Katherine");
-        System.out.println(dataSet);
+        server.join();
 
-        System.out.println("======================readAll==============================");
-        List<UserDataSet> dataSets = dbService.readAll();
-        for (UserDataSet userDataSet : dataSets) {
-            System.out.println(userDataSet);
-        }
-
-        System.out.println("======================User activity simulation==============================");
-
-        dbService.save(new UserDataSet("test1", new AddressDataSet("1", 1111), new PhoneDataSet(00, "12345")));
-        dbService.save(new UserDataSet("test2", new AddressDataSet("2", 2222), new PhoneDataSet(01, "12346")));
-        dbService.save(new UserDataSet("test3", new AddressDataSet("3", 3333), new PhoneDataSet(02, "12347")));
-        dbService.save(new UserDataSet("test4", new AddressDataSet("4", 4444), new PhoneDataSet(03, "12348")));
-        dbService.save(new UserDataSet("test5", new AddressDataSet("5", 5555), new PhoneDataSet(04, "12349")));
-
-        while (true) {
-            System.out.println(dbService.read(1));
-            System.out.println(dbService.read(2));
-            System.out.println(dbService.read(3));
-            System.out.println(dbService.read(4));
-            System.out.println(dbService.read(5));
-            System.out.println(dbService.read(6));
-            System.out.println(dbService.read(7));
-            System.out.println(dbService.read(2));
-            System.out.println(dbService.read(1));
-
-            System.out.println(dbService.readByNamedQuery(1));
-            System.out.println(dbService.readByNamedQuery(2));
-            System.out.println(dbService.readByNamedQuery(3));
-            System.out.println(dbService.readByNamedQuery(4));
-            System.out.println(dbService.readByNamedQuery(5));
-            System.out.println(dbService.readByNamedQuery(6));
-            System.out.println(dbService.readByNamedQuery(7));
-            System.out.println(dbService.readByNamedQuery(2));
-            System.out.println(dbService.readByNamedQuery(1));
-
-            System.out.println(dbService.readAddressById(1));
-            System.out.println(dbService.readAddressById(2));
-            System.out.println(dbService.readAddressById(3));
-            System.out.println(dbService.readAddressById(4));
-            System.out.println(dbService.readAddressById(5));
-
-            System.out.println(dbService.readByName("Test"));
-
-            List<UserDataSet> dataSets1 = dbService.readAll();
-            for (UserDataSet userDataSet : dataSets1) {
-                System.out.println(userDataSet);
-            }
-
-            System.out.println("SOME Cache statistics:");
-            dbService.getQueryStatistics();
-            dbService.getQueries();
-
-            dbService.getQueryCacheHitCount();
-            dbService.getQueryCacheMissCount();
-            dbService.getSecondLevelCacheMissCount();
-            dbService.getSecondLevelCacheHitCount();
-
-            dbService.getSecondLevel();
-
-            Thread.sleep(1000);
-        }
-
-//        dbService.shutdown();
     }
 }

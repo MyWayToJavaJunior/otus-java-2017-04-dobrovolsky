@@ -29,6 +29,9 @@ public class DBServiceHibernateImpl implements DBService {
     private SessionFactory sessionFactory;
     private Statistics statistics;
     private Map<String, Object> config;
+    private SecondLevelCacheStatistics secondLevelCacheStatisticsUserDataSet;
+    private SecondLevelCacheStatistics secondLevelCacheStatisticsPhoneDataSet;
+    private SecondLevelCacheStatistics secondLevelCacheStatisticsAddressDataSet;
 
     public DBServiceHibernateImpl() {
         initializeConfiguration();
@@ -56,6 +59,10 @@ public class DBServiceHibernateImpl implements DBService {
         statistics = sessionFactory.getStatistics();
 
         statistics.setStatisticsEnabled(true);
+
+        secondLevelCacheStatisticsUserDataSet = statistics.getSecondLevelCacheStatistics("ru.otus.dobrovolsky.base.dataSets.UserDataSet");
+        secondLevelCacheStatisticsPhoneDataSet = statistics.getSecondLevelCacheStatistics("ru.otus.dobrovolsky.base.dataSets.PhoneDataSet");
+        secondLevelCacheStatisticsAddressDataSet = statistics.getSecondLevelCacheStatistics("ru.otus.dobrovolsky.base.dataSets.AddressDataSet");
 
         registerCacheMBean();
     }
@@ -154,48 +161,109 @@ public class DBServiceHibernateImpl implements DBService {
         }
     }
 
-    public void getQueryStatistics() {
-        System.out.println("QueryStatistics: " + statistics.getQueryStatistics("org.hibernate.cache.ehcache" +
-                ".EhCacheRegionFactory"));
-    }
-
-    public void getQueries() {
-        System.out.println("Queries: ");
+    public String getQueries() {
+        StringBuilder stringBuilder = new StringBuilder();
         String[] queries = statistics.getQueries();
         for (String q : queries) {
-            System.out.println("    " + q);
+            stringBuilder.append("{").append(q).append("}").append("\n");
         }
+
+        return stringBuilder.toString();
     }
 
-    public void getQueryCacheHitCount() {
-        System.out.println("QueryCacheHitCount: " + statistics.getQueryCacheHitCount());
+    public long getQueryCacheHitCount() {
+        return statistics.getQueryCacheHitCount();
     }
 
-    public void getQueryCacheMissCount() {
-        System.out.println("QueryCacheMissCount: " + statistics.getQueryCacheMissCount());
+    public long getQueryCacheMissCount() {
+        return statistics.getQueryCacheMissCount();
     }
 
-    public void getSecondLevelCacheMissCount() {
-        System.out.println("SecondLevelCacheMissCount:  " + statistics.getSecondLevelCacheMissCount());
+    public long getQueryCachePutCount() {
+        return statistics.getQueryCachePutCount();
     }
 
-    public void getSecondLevelCacheHitCount() {
-        System.out.println("SecondLevelCacheHitCount:   " + statistics.getSecondLevelCacheHitCount());
+    public long getSecondLevelCacheMissCount() {
+        return statistics.getSecondLevelCacheMissCount();
     }
 
-    public void getSecondLevel() {
-        SecondLevelCacheStatistics secondLevelCacheStatistics = statistics.getSecondLevelCacheStatistics("ru.otus.dobrovolsky.base.dataSets.UserDataSet");
-        System.out.println("SecondLevelHitU:   " + secondLevelCacheStatistics.getHitCount());
-        System.out.println("SecondLevelMissU:   " + secondLevelCacheStatistics.getMissCount());
+    public long getSecondLevelCacheHitCount() {
+        return statistics.getSecondLevelCacheHitCount();
+    }
 
-        secondLevelCacheStatistics = statistics.getSecondLevelCacheStatistics("ru.otus.dobrovolsky.base.dataSets" +
-                ".PhoneDataSet");
-        System.out.println("SecondLevelHitP:   " + secondLevelCacheStatistics.getHitCount());
-        System.out.println("SecondLevelMissP:   " + secondLevelCacheStatistics.getMissCount());
+    public long getSecondLevelCachePutCount() {
+        return statistics.getSecondLevelCachePutCount();
+    }
 
-        secondLevelCacheStatistics = statistics.getSecondLevelCacheStatistics("ru.otus.dobrovolsky.base.dataSets" +
-                ".AddressDataSet");
-        System.out.println("SecondLevelHitA:   " + secondLevelCacheStatistics.getHitCount());
-        System.out.println("SecondLevelMissA:   " + secondLevelCacheStatistics.getMissCount());
+    public long getSessionOpenCount() {
+        return statistics.getSessionOpenCount();
+    }
+
+    public long getSessionCloseCount() {
+        return statistics.getSessionCloseCount();
+    }
+
+    public String getSecondLevelCacheRegionNames() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (String s : statistics.getSecondLevelCacheRegionNames()) {
+            stringBuilder.append("{").append(s).append("}").append("\n");
+        }
+        return stringBuilder.toString();
+    }
+
+    public long getSecondLevelHitU() {
+        return secondLevelCacheStatisticsUserDataSet.getHitCount();
+    }
+
+    public long getSecondLevelMissU() {
+        return secondLevelCacheStatisticsUserDataSet.getMissCount();
+    }
+
+    public long getSecondLevelPutCountU() {
+        return secondLevelCacheStatisticsUserDataSet.getPutCount();
+    }
+
+    public long getSecondLevelSizeU() {
+        return secondLevelCacheStatisticsUserDataSet.getSizeInMemory();
+    }
+
+    public long getSecondLevelHitP() {
+        return secondLevelCacheStatisticsPhoneDataSet.getHitCount();
+    }
+
+    public long getSecondLevelMissP() {
+        return secondLevelCacheStatisticsPhoneDataSet.getMissCount();
+    }
+
+    public long getSecondLevelPutCountP() {
+        return secondLevelCacheStatisticsPhoneDataSet.getPutCount();
+    }
+
+    public long getSecondLevelSizeP() {
+        return secondLevelCacheStatisticsPhoneDataSet.getSizeInMemory();
+    }
+
+    public long getSecondLevelHitA() {
+        return secondLevelCacheStatisticsAddressDataSet.getHitCount();
+    }
+
+    public long getSecondLevelMissA() {
+        return secondLevelCacheStatisticsAddressDataSet.getMissCount();
+    }
+
+    public long getSecondLevelPutCountA() {
+        return secondLevelCacheStatisticsAddressDataSet.getPutCount();
+    }
+
+    public long getSecondLevelSizeA() {
+        return secondLevelCacheStatisticsAddressDataSet.getSizeInMemory();
+    }
+
+    public Statistics getStatistics() {
+        return statistics;
+    }
+
+    public SessionFactory getSessionFactory() {
+        return sessionFactory;
     }
 }

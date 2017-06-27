@@ -1,5 +1,7 @@
 package ru.otus.dobrovolsky.base;
 
+import org.hibernate.SessionFactory;
+import org.hibernate.stat.Statistics;
 import ru.otus.dobrovolsky.base.dataSets.AddressDataSet;
 import ru.otus.dobrovolsky.base.dataSets.UserDataSet;
 
@@ -22,17 +24,51 @@ public interface DBService {
 
     void shutdown();
 
-    void getQueryCacheHitCount();
+    long getQueryCacheHitCount();
 
-    void getSecondLevelCacheMissCount();
+    long getSecondLevelCacheMissCount();
 
-    void getQueryCacheMissCount();
+    long getQueryCacheMissCount();
 
-    void getSecondLevelCacheHitCount();
+    long getSecondLevelCacheHitCount();
 
-    void getQueryStatistics();
+    long getSecondLevelHitU();
 
-    void getQueries();
+    long getSecondLevelMissU();
 
-    void getSecondLevel();
+    long getSecondLevelHitP();
+
+    long getSecondLevelMissP();
+
+    long getSecondLevelHitA();
+
+    long getSecondLevelMissA();
+
+    long getQueryCachePutCount();
+
+    long getSecondLevelCachePutCount();
+
+    long getSessionOpenCount();
+
+    long getSessionCloseCount();
+
+    String getSecondLevelCacheRegionNames();
+
+    long getSecondLevelPutCountU();
+
+    long getSecondLevelPutCountP();
+
+    long getSecondLevelPutCountA();
+
+    long getSecondLevelSizeU();
+
+    long getSecondLevelSizeP();
+
+    long getSecondLevelSizeA();
+
+    String getQueries();
+
+    Statistics getStatistics();
+
+    SessionFactory getSessionFactory();
 }
