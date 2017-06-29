@@ -11,7 +11,7 @@ import java.util.Map;
 
 public class LoginServlet extends HttpServlet {
 
-    public static final String LOGIN_PARAMETER_NAME = "login";
+    static final String LOGIN_PARAMETER_NAME = "login";
     private static final String PASS_PARAMETER_NAME = "pass";
     private static final String LOGIN_PAGE_TEMPLATE = "login.html";
 

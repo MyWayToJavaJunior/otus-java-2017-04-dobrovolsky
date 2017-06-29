@@ -8,7 +8,7 @@ import javax.persistence.*;
 @Entity
 @Table(name = "address")
 @Cacheable
-@Cache(usage = CacheConcurrencyStrategy.READ_ONLY)
+@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class AddressDataSet extends DataSet {
 
     @Column(name = "street")

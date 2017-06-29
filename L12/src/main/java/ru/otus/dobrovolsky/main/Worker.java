@@ -1,5 +1,7 @@
 package ru.otus.dobrovolsky.main;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ru.otus.dobrovolsky.base.DBService;
 import ru.otus.dobrovolsky.base.dataSets.AddressDataSet;
 import ru.otus.dobrovolsky.base.dataSets.PhoneDataSet;
@@ -9,15 +11,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Worker implements Runnable {
+    private final Logger logger = LoggerFactory.getLogger(Worker.class);
     private final DBService dbService;
 
-    public Worker(DBService dbService) {
+    Worker(DBService dbService) {
         this.dbService = dbService;
     }
 
     public void run() {
         String status = dbService.getLocalStatus();
-        System.out.println("Status: " + status);
+        logger.info("Status:    " + status);
 
         dbService.save(new UserDataSet("Nicholas", new AddressDataSet("Lenina 1", 460018), new PhoneDataSet(1234,
                 "111111"), new PhoneDataSet(2345, "222222")));
@@ -34,57 +37,59 @@ public class Worker implements Runnable {
         dbService.save(testUser);
 
         UserDataSet dataSet = dbService.read(1);
-        System.out.println(dataSet);
+        logger.info(dataSet.toString());
 
         dataSet = dbService.readByName("Katherine");
-        System.out.println(dataSet);
+        logger.info(dataSet.toString());
 
-        System.out.println("======================readAll==============================");
+        logger.info("======================readAll==============================");
         List<UserDataSet> dataSets = dbService.readAll();
         for (UserDataSet userDataSet : dataSets) {
-            System.out.println(userDataSet);
+            logger.info(userDataSet.toString());
         }
 
-        System.out.println("======================User activity simulation==============================");
+        logger.info("======================User activity simulation==============================");
 
-        dbService.save(new UserDataSet("test1", new AddressDataSet("1", 1111), new PhoneDataSet(00, "12345")));
-        dbService.save(new UserDataSet("test2", new AddressDataSet("2", 2222), new PhoneDataSet(01, "12346")));
-        dbService.save(new UserDataSet("test3", new AddressDataSet("3", 3333), new PhoneDataSet(02, "12347")));
-        dbService.save(new UserDataSet("test4", new AddressDataSet("4", 4444), new PhoneDataSet(03, "12348")));
-        dbService.save(new UserDataSet("test5", new AddressDataSet("5", 5555), new PhoneDataSet(04, "12349")));
+        dbService.save(new UserDataSet("test1", new AddressDataSet("1", 1111), new PhoneDataSet(0, "12345")));
+        dbService.save(new UserDataSet("test2", new AddressDataSet("2", 2222), new PhoneDataSet(1, "12346")));
+        dbService.save(new UserDataSet("test3", new AddressDataSet("3", 3333), new PhoneDataSet(2, "12347")));
+        dbService.save(new UserDataSet("test4", new AddressDataSet("4", 4444), new PhoneDataSet(3, "12348")));
+        dbService.save(new UserDataSet("test5", new AddressDataSet("5", 5555), new PhoneDataSet(4, "12349")));
 
         while (true) {
-            System.out.println(dbService.read(1));
-            System.out.println(dbService.read(2));
-            System.out.println(dbService.read(3));
-            System.out.println(dbService.read(4));
-            System.out.println(dbService.read(5));
-            System.out.println(dbService.read(6));
-            System.out.println(dbService.read(7));
-            System.out.println(dbService.read(2));
-            System.out.println(dbService.read(1));
+            logger.info(dbService.read(1).toString());
+            logger.info(dbService.read(2).toString());
+            logger.info(dbService.read(3).toString());
+            logger.info(dbService.read(4).toString());
+            logger.info(dbService.read(5).toString());
+            logger.info(dbService.read(6).toString());
+            logger.info(dbService.read(7).toString());
+            logger.info(dbService.read(8).toString());
+            logger.info(dbService.read(2).toString());
+            logger.info(dbService.read(1).toString());
 
-            System.out.println(dbService.readByNamedQuery(1));
-            System.out.println(dbService.readByNamedQuery(2));
-            System.out.println(dbService.readByNamedQuery(3));
-            System.out.println(dbService.readByNamedQuery(4));
-            System.out.println(dbService.readByNamedQuery(5));
-            System.out.println(dbService.readByNamedQuery(6));
-            System.out.println(dbService.readByNamedQuery(7));
-            System.out.println(dbService.readByNamedQuery(2));
-            System.out.println(dbService.readByNamedQuery(1));
+            logger.info(dbService.read(1).toString());
+            logger.info(dbService.read(2).toString());
+            logger.info(dbService.read(3).toString());
+            logger.info(dbService.read(4).toString());
+            logger.info(dbService.read(5).toString());
+            logger.info(dbService.read(6).toString());
+            logger.info(dbService.read(7).toString());
+            logger.info(dbService.read(8).toString());
+            logger.info(dbService.read(2).toString());
+            logger.info(dbService.read(1).toString());
 
-            System.out.println(dbService.readAddressById(1));
-            System.out.println(dbService.readAddressById(2));
-            System.out.println(dbService.readAddressById(3));
-            System.out.println(dbService.readAddressById(4));
-            System.out.println(dbService.readAddressById(5));
+            logger.info(dbService.readAddressById(1).toString());
+            logger.info(dbService.readAddressById(2).toString());
+            logger.info(dbService.readAddressById(3).toString());
+            logger.info(dbService.readAddressById(4).toString());
+            logger.info(dbService.readAddressById(5).toString());
 
-            System.out.println(dbService.readByName("Test"));
+            logger.info(dbService.readByName("Test").toString());
 
             List<UserDataSet> dataSets1 = dbService.readAll();
             for (UserDataSet userDataSet : dataSets1) {
-                System.out.println(userDataSet);
+                logger.info(userDataSet.toString());
             }
 
             try {
