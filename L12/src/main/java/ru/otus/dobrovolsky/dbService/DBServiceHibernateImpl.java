@@ -60,7 +60,7 @@ public class DBServiceHibernateImpl implements DBService {
 
         getStatistics().setStatisticsEnabled(true);
 
-        cacheDescriptor = new CacheDescriptor(statistics);
+        cacheDescriptor = CacheDescriptor.getInstance(statistics);
 
         registerCacheMBean();
     }

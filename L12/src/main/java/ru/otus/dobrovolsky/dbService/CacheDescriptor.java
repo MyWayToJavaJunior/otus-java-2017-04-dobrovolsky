@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class CacheDescriptor {
+    private static CacheDescriptor instance;
+
     private Statistics statistics;
     private SecondLevelCacheStatistics secondLevelCacheStatisticsUserDataSet;
     private SecondLevelCacheStatistics secondLevelCacheStatisticsPhoneDataSet;
@@ -34,12 +36,19 @@ public class CacheDescriptor {
     private long secondLevelSizeA;
     private String queries;
 
-    CacheDescriptor(Statistics statistics) {
+    private CacheDescriptor(Statistics statistics) {
         this.statistics = statistics;
 
         secondLevelCacheStatisticsUserDataSet = statistics.getSecondLevelCacheStatistics("ru.otus.dobrovolsky.base.dataSets.UserDataSet");
         secondLevelCacheStatisticsPhoneDataSet = statistics.getSecondLevelCacheStatistics("ru.otus.dobrovolsky.base.dataSets.PhoneDataSet");
         secondLevelCacheStatisticsAddressDataSet = statistics.getSecondLevelCacheStatistics("ru.otus.dobrovolsky.base.dataSets.AddressDataSet");
+    }
+
+    public static CacheDescriptor getInstance(Statistics statistics) {
+        if (instance == null) {
+            instance = new CacheDescriptor(statistics);
+        }
+        return instance;
     }
 
     private long getQueryCacheHitCount() {
