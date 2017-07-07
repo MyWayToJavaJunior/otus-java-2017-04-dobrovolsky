@@ -19,6 +19,7 @@
             location.reload();
         }
 
+
     </script>
 </head>
 <body onload='setInterval(function(){refresh()}, ${refreshPeriod} ); setTime();'>
@@ -35,11 +36,6 @@
                     <button type="submit" name="exit" value="logout" class="btn-link">Exit</button>
                 </form>
             </td>
-            <!--<td>-->
-                <!--<form action="/admin" method="POST">-->
-                    <!--<button type="submit" name="clear" value="clear" class="btn-link">Clear Cache</button>-->
-                <!--</form>-->
-            <!--</td>-->
         </tr>
     </table>
     <br/>
@@ -117,11 +113,11 @@
     </tr>
     <tr>
         <td>Session Open Count:</td>
-        <td>${getSessionOpenCount}</td>
+        <td>${sessionOpenCount}</td>
     </tr>
     <tr>
         <td>Session Close Count:</td>
-        <td>${getSessionCloseCount}</td>
+        <td>${sessionCloseCount}</td>
     </tr>
     <tr>
         <td>Second Level Hit Count - UserDataSet entity:</td>
@@ -160,7 +156,7 @@
         <td>${secondLevelHitA}</td>
     </tr>
     <tr>
-        <td>Second Level Hit Count - AddressDataSet entity:</td>
+        <td>Second Level Miss Count - AddressDataSet entity:</td>
         <td>${secondLevelMissA}</td>
     </tr>
     <tr>

@@ -32,6 +32,7 @@ public class DBServiceHibernateImpl implements DBService {
     private SecondLevelCacheStatistics secondLevelCacheStatisticsUserDataSet;
     private SecondLevelCacheStatistics secondLevelCacheStatisticsPhoneDataSet;
     private SecondLevelCacheStatistics secondLevelCacheStatisticsAddressDataSet;
+    private CacheDescriptor cacheDescriptor;
 
     public DBServiceHibernateImpl() {
         initializeConfiguration();
@@ -46,7 +47,6 @@ public class DBServiceHibernateImpl implements DBService {
         prepareCache(config);
 
         registryBuilder.applySettings(config);
-
         ServiceRegistry registry = registryBuilder.build();
         MetadataSources sources = new MetadataSources(registry)
                 .addAnnotatedClass(PhoneDataSet.class)
@@ -56,15 +56,21 @@ public class DBServiceHibernateImpl implements DBService {
         Metadata metadata = sources.getMetadataBuilder().build();
         sessionFactory = metadata.getSessionFactoryBuilder().build();
 
-        statistics = sessionFactory.getStatistics();
+        configureStatistics();
 
-        statistics.setStatisticsEnabled(true);
+        getStatistics().setStatisticsEnabled(true);
+
+        cacheDescriptor = new CacheDescriptor(statistics);
+
+        registerCacheMBean();
+    }
+
+    private void configureStatistics() {
+        statistics = sessionFactory.getStatistics();
 
         secondLevelCacheStatisticsUserDataSet = statistics.getSecondLevelCacheStatistics("ru.otus.dobrovolsky.base.dataSets.UserDataSet");
         secondLevelCacheStatisticsPhoneDataSet = statistics.getSecondLevelCacheStatistics("ru.otus.dobrovolsky.base.dataSets.PhoneDataSet");
         secondLevelCacheStatisticsAddressDataSet = statistics.getSecondLevelCacheStatistics("ru.otus.dobrovolsky.base.dataSets.AddressDataSet");
-
-        registerCacheMBean();
     }
 
     private void registerCacheMBean() {
@@ -161,109 +167,21 @@ public class DBServiceHibernateImpl implements DBService {
         }
     }
 
-    public String getQueries() {
-        StringBuilder stringBuilder = new StringBuilder();
-        String[] queries = statistics.getQueries();
-        for (String q : queries) {
-            stringBuilder.append("{").append(q).append("}").append("\n");
-        }
-
-        return stringBuilder.toString();
+    public Map<String, Object> getCacheMap() {
+        return cacheDescriptor.getCacheMap();
     }
 
-    public long getQueryCacheHitCount() {
-        return statistics.getQueryCacheHitCount();
-    }
-
-    public long getQueryCacheMissCount() {
-        return statistics.getQueryCacheMissCount();
-    }
-
-    public long getQueryCachePutCount() {
-        return statistics.getQueryCachePutCount();
-    }
-
-    public long getSecondLevelCacheMissCount() {
-        return statistics.getSecondLevelCacheMissCount();
-    }
-
-    public long getSecondLevelCacheHitCount() {
-        return statistics.getSecondLevelCacheHitCount();
-    }
-
-    public long getSecondLevelCachePutCount() {
-        return statistics.getSecondLevelCachePutCount();
-    }
-
-    public long getSessionOpenCount() {
-        return statistics.getSessionOpenCount();
-    }
-
-    public long getSessionCloseCount() {
-        return statistics.getSessionCloseCount();
-    }
-
-    public String getSecondLevelCacheRegionNames() {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (String s : statistics.getSecondLevelCacheRegionNames()) {
-            stringBuilder.append("{").append(s).append("}").append("\n");
-        }
-        return stringBuilder.toString();
-    }
-
-    public long getSecondLevelHitU() {
-        return secondLevelCacheStatisticsUserDataSet.getHitCount();
-    }
-
-    public long getSecondLevelMissU() {
-        return secondLevelCacheStatisticsUserDataSet.getMissCount();
-    }
-
-    public long getSecondLevelPutCountU() {
-        return secondLevelCacheStatisticsUserDataSet.getPutCount();
-    }
-
-    public long getSecondLevelSizeU() {
-        return secondLevelCacheStatisticsUserDataSet.getSizeInMemory();
-    }
-
-    public long getSecondLevelHitP() {
-        return secondLevelCacheStatisticsPhoneDataSet.getHitCount();
-    }
-
-    public long getSecondLevelMissP() {
-        return secondLevelCacheStatisticsPhoneDataSet.getMissCount();
-    }
-
-    public long getSecondLevelPutCountP() {
-        return secondLevelCacheStatisticsPhoneDataSet.getPutCount();
-    }
-
-    public long getSecondLevelSizeP() {
-        return secondLevelCacheStatisticsPhoneDataSet.getSizeInMemory();
-    }
-
-    public long getSecondLevelHitA() {
-        return secondLevelCacheStatisticsAddressDataSet.getHitCount();
-    }
-
-    public long getSecondLevelMissA() {
-        return secondLevelCacheStatisticsAddressDataSet.getMissCount();
-    }
-
-    public long getSecondLevelPutCountA() {
-        return secondLevelCacheStatisticsAddressDataSet.getPutCount();
-    }
-
-    public long getSecondLevelSizeA() {
-        return secondLevelCacheStatisticsAddressDataSet.getSizeInMemory();
-    }
-
+    @Override
     public Statistics getStatistics() {
         return statistics;
     }
 
+    @Override
     public SessionFactory getSessionFactory() {
         return sessionFactory;
+    }
+
+    public CacheDescriptor getCacheDescriptor() {
+        return cacheDescriptor;
     }
 }

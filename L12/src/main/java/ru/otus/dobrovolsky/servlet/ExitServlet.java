@@ -23,8 +23,6 @@ public class ExitServlet extends HttpServlet {
             request.getSession().invalidate();
         }
 
-//        Map<String, Object> pageVariables = new ConcurrentHashMap<>();
-
         response.getWriter().println(TemplateProcessor.instance().getPage(EXIT_PAGE_TEMPLATE, null/*pageVariables*/));
 
         response.setContentType("text/html;charset=utf-8");

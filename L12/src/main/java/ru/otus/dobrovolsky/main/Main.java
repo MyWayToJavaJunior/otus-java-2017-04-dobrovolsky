@@ -7,7 +7,8 @@ import org.eclipse.jetty.servlet.ServletContextHandler;
 import org.eclipse.jetty.servlet.ServletHolder;
 import ru.otus.dobrovolsky.base.DBService;
 import ru.otus.dobrovolsky.dbService.DBServiceHibernateImpl;
-import ru.otus.dobrovolsky.servlet.AdminServlet;
+import ru.otus.dobrovolsky.servlet.AdminByTimerServlet;
+import ru.otus.dobrovolsky.servlet.AdminByWebSocketServlet;
 import ru.otus.dobrovolsky.servlet.ExitServlet;
 import ru.otus.dobrovolsky.servlet.LoginServlet;
 
@@ -26,7 +27,9 @@ public class Main {
 
         context.addServlet(LoginServlet.class, "/login");
         context.addServlet(ExitServlet.class, "/exit");
-        context.addServlet(new ServletHolder(new AdminServlet(dbService)), "/admin");
+        context.addServlet(new ServletHolder(new AdminByTimerServlet(dbService)), "/admin_by_timer");
+        context.addServlet(new ServletHolder(new AdminByWebSocketServlet(dbService.getCacheDescriptor())),
+                "/admin_by_ws");
 
         Server server = new Server(PORT);
         server.setHandler(new HandlerList(resourceHandler, context));

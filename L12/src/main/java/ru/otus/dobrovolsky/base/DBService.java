@@ -4,8 +4,10 @@ import org.hibernate.SessionFactory;
 import org.hibernate.stat.Statistics;
 import ru.otus.dobrovolsky.base.dataSets.AddressDataSet;
 import ru.otus.dobrovolsky.base.dataSets.UserDataSet;
+import ru.otus.dobrovolsky.dbService.CacheDescriptor;
 
 import java.util.List;
+import java.util.Map;
 
 public interface DBService {
     String getLocalStatus();
@@ -24,51 +26,11 @@ public interface DBService {
 
     void shutdown();
 
-    long getQueryCacheHitCount();
-
-    long getSecondLevelCacheMissCount();
-
-    long getQueryCacheMissCount();
-
-    long getSecondLevelCacheHitCount();
-
-    long getSecondLevelHitU();
-
-    long getSecondLevelMissU();
-
-    long getSecondLevelHitP();
-
-    long getSecondLevelMissP();
-
-    long getSecondLevelHitA();
-
-    long getSecondLevelMissA();
-
-    long getQueryCachePutCount();
-
-    long getSecondLevelCachePutCount();
-
-    long getSessionOpenCount();
-
-    long getSessionCloseCount();
-
-    String getSecondLevelCacheRegionNames();
-
-    long getSecondLevelPutCountU();
-
-    long getSecondLevelPutCountP();
-
-    long getSecondLevelPutCountA();
-
-    long getSecondLevelSizeU();
-
-    long getSecondLevelSizeP();
-
-    long getSecondLevelSizeA();
-
-    String getQueries();
+    Map<String, Object> getCacheMap();
 
     Statistics getStatistics();
 
     SessionFactory getSessionFactory();
+
+    CacheDescriptor getCacheDescriptor();
 }
