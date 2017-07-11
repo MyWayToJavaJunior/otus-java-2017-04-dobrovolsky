@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ehcache xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="ehcache.xsd"
+         updateCheck="false" monitoring="autodetect"
+         dynamicConfig="true">
+    <defaultCache maxEntriesLocalHeap="10" eternal="false" timeToIdleSeconds="90" timeToLiveSeconds="90">
+    </defaultCache>
+
+    <cache name="ru.otus.dobrovolsky.base.dataSets.UserDataSet"
+           maxEntriesLocalHeap="100"
+           eternal="false"
+           timeToLiveSeconds="90">
+    </cache>
+    <cache name="ru.otus.dobrovolsky.base.dataSets.PhoneDataSet"
+           maxEntriesLocalHeap="100"
+           eternal="false"
+           timeToLiveSeconds="90">
+    </cache>
+    <cache name="ru.otus.dobrovolsky.base.dataSets.AddressDataSet"
+           maxEntriesLocalHeap="100"
+           eternal="false"
+           timeToLiveSeconds="90">
+    </cache>
+    <cache name="userById"
+           maxEntriesLocalHeap="100"
+           eternal="false"
+           timeToIdleSeconds="90">
+    </cache>
+    <cache name="namedQuery"
+           maxEntriesLocalHeap="100"
+           eternal="false"
+           timeToIdleSeconds="90">
+    </cache>
+    <cache name="org.hibernate.cache.internal.StandardQueryCache"
+           maxElementsInMemory="10000"
+           eternal="false"
+           timeToLiveSeconds="90"
+           overflowToDisk="false"
+           memoryStoreEvictionPolicy="LRU">
+    </cache>
+</ehcache>

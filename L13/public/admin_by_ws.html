@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Admin</title>
+    <script src="js/ws.js" type="text/javascript"></script>
+</head>
+<body onload="init();">
+<table border="3">
+    <tr>
+        <td><a href="index.html">Index</a></td>
+        <td>
+            <form action="/exit" method="POST">
+                <button type="submit" name="exit" value="logout" class="btn-link">Exit</button>
+            </form>
+        </td>
+        <td id="status">Status...</td>
+    </tr>
+</table>
+
+<p>Welcome admin!</p>
+
+<p>Please be patient cause some of information will update after some time, something around 1 min (QueryCache Hit Count
+    for example)</p>
+<p>Here some information:</p>
+
+<p>Для вычисления кеша были размечены следующие сущности: UserDataSet, PhoneDataSet, AddressDataSet. Включен
+    QueryCache.</p>
+<p>Для корректного отображения состояния кеша были применены Cache Regions.</p>
+<p>В работе приложния используются NamedQuery с принудительным кешированием и явным указанием Cache Region'а.</p>
+<p>Для доступа к объектам используются запросы, сформированные из строки, содержащей SQL query - с принудительным
+    кешированием и указанием Cache Region'а.</p>
+<br/>
+<table border="1">
+    <tr>
+        <td>Queries:</td>
+        <td id="queries"></td>
+    </tr>
+    <tr>
+        <td>QueryCache Hit Count:</td>
+        <td id="queryCacheHitCount"></td>
+    </tr>
+    <tr>
+        <td>QueryCache Miss Count:</td>
+        <td id="queryCacheMissCount"></td>
+    </tr>
+    <tr>
+        <td>QueryCache Put Count:</td>
+        <td id="queryCachePutCount"></td>
+    </tr>
+    <tr>
+        <td>Second Level Cache Hit Count (Total value):</td>
+        <td id="secondLevelCacheHitCount"></td>
+    </tr>
+    <tr>
+        <td>Second Level Cache Miss Count (Total value):</td>
+        <td id="secondLevelCacheMissCount"></td>
+    </tr>
+    <tr>
+        <td>Second Level Cache Put Count:</td>
+        <td id="secondLevelCachePutCount"></td>
+    </tr>
+    <tr>
+        <td>Second Level Cache Region Names:</td>
+        <td id="secondLevelCacheRegionNames"></td>
+    </tr>
+    <tr>
+        <td>Session Open Count:</td>
+        <td id="sessionOpenCount"></td>
+    </tr>
+    <tr>
+        <td>Session Close Count:</td>
+        <td id="sessionCloseCount"></td>
+    </tr>
+    <tr>
+        <td>Second Level Hit Count - UserDataSet entity:</td>
+        <td id="secondLevelHitU"></td>
+    </tr>
+    <tr>
+        <td>Second Level Miss Count - UserDataSet entity:</td>
+        <td id="secondLevelMissU"></td>
+    </tr>
+    <tr>
+        <td>Second Level Put Count - UserDataSet entity:</td>
+        <td id="secondLevelPutCountU"></td>
+    </tr>
+    <tr>
+        <td>Second Level Size - UserDataSet entity:</td>
+        <td id="secondLevelSizeU"></td>
+    </tr>
+    <tr>
+        <td>Second Level Hit Count - PhoneDataSet entity:</td>
+        <td id="secondLevelHitP"></td>
+    </tr>
+    <tr>
+        <td>Second Level Miss Count - PhoneDataSet entity:</td>
+        <td id="secondLevelMissP"></td>
+    </tr>
+    <tr>
+        <td>Second Level Put Count - PhoneDataSet entity:</td>
+        <td id="secondLevelPutCountP"></td>
+    </tr>
+    <tr>
+        <td>Second Level Size - PhoneDataSet entity:</td>
+        <td id="secondLevelSizeP"></td>
+    </tr>
+    <tr>
+        <td>Second Level Hit Count - AddressDataSet entity:</td>
+        <td id="secondLevelHitA"></td>
+    </tr>
+    <tr>
+        <td>Second Level Miss Count - AddressDataSet entity:</td>
+        <td id="secondLevelMissA"></td>
+    </tr>
+    <tr>
+        <td>Second Level Put Count - AddressDataSet entity:</td>
+        <td id="secondLevelPutCountA"></td>
+    </tr>
+    <tr>
+        <td>Second Level Size - AddressDataSet entity:</td>
+        <td id="secondLevelSizeA"></td>
+    </tr>
+</table>
+</body>
+</html>
