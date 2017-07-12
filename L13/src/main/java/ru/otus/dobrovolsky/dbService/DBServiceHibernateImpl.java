@@ -1,7 +1,5 @@
 package ru.otus.dobrovolsky.dbService;
 
-import net.sf.ehcache.CacheManager;
-import net.sf.ehcache.management.ManagementService;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -18,8 +16,6 @@ import ru.otus.dobrovolsky.base.dataSets.PhoneDataSet;
 import ru.otus.dobrovolsky.base.dataSets.UserDataSet;
 import ru.otus.dobrovolsky.dbService.dao.DataSetDAO;
 
-import javax.management.MBeanServer;
-import java.lang.management.ManagementFactory;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,27 +58,27 @@ public class DBServiceHibernateImpl implements DBService {
 
         cacheDescriptor = CacheDescriptor.getInstance(statistics);
 
-        registerCacheMBean();
+//        registerCacheMBean();
     }
 
     private void configureStatistics() {
         statistics = sessionFactory.getStatistics();
 
-        secondLevelCacheStatisticsUserDataSet = statistics.getSecondLevelCacheStatistics("ru.otus.dobrovolsky.base.dataSets.UserDataSet");
-        secondLevelCacheStatisticsPhoneDataSet = statistics.getSecondLevelCacheStatistics("ru.otus.dobrovolsky.base.dataSets.PhoneDataSet");
-        secondLevelCacheStatisticsAddressDataSet = statistics.getSecondLevelCacheStatistics("ru.otus.dobrovolsky.base.dataSets.AddressDataSet");
+//        secondLevelCacheStatisticsUserDataSet = statistics.getSecondLevelCacheStatistics("ru.otus.dobrovolsky.base.dataSets.UserDataSet");
+//        secondLevelCacheStatisticsPhoneDataSet = statistics.getSecondLevelCacheStatistics("ru.otus.dobrovolsky.base.dataSets.PhoneDataSet");
+//        secondLevelCacheStatisticsAddressDataSet = statistics.getSecondLevelCacheStatistics("ru.otus.dobrovolsky.base.dataSets.AddressDataSet");
     }
 
-    private void registerCacheMBean() {
+//    private void registerCacheMBean() {
 //        CacheManager manager = CacheManager.getCacheManager(CacheManager.DEFAULT_NAME);
-        CacheManager manager = CacheManager.create();
-        MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
-        ManagementService.registerMBeans(manager, mBeanServer, false, false, true, true);
-    }
+//        MBeanServer mBeanServer = ManagementFactory.getPlatformMBeanServer();
+//        EhCacheManagerFactoryBean cmfb = new EhCacheManagerFactoryBean();
+//        ManagementService.registerMBeans(manager, mBeanServer, false, false, true, true);
+//    }
 
     private void prepareCache(Map<String, Object> config) {
         config.put(Environment.USE_SECOND_LEVEL_CACHE, true);
-        config.put(Environment.USE_QUERY_CACHE, true);
+//        config.put(Environment.USE_QUERY_CACHE, true);
 
         config.put("hibernate.cache.use_structured_entries", true);
 
@@ -104,8 +100,8 @@ public class DBServiceHibernateImpl implements DBService {
         config.put(Environment.USER, "test");
         config.put(Environment.PASS, "test");
         config.put(Environment.HBM2DDL_AUTO, "create");
-        config.put(Environment.SHOW_SQL, true);
-        config.put(Environment.FORMAT_SQL, true);
+//        config.put(Environment.SHOW_SQL, true);
+//        config.put(Environment.FORMAT_SQL, true);
         config.put(Environment.ENABLE_LAZY_LOAD_NO_TRANS, true);
     }
 
@@ -120,6 +116,7 @@ public class DBServiceHibernateImpl implements DBService {
         }
     }
 
+    @org.springframework.cache.annotation.Cacheable("userById")
     public UserDataSet read(long id) {
         return runInSession(session -> {
             DataSetDAO dao = new DataSetDAO(session);
@@ -127,6 +124,7 @@ public class DBServiceHibernateImpl implements DBService {
         });
     }
 
+    @org.springframework.cache.annotation.Cacheable("ru.otus.dobrovolsky.base.dataSets.UserDataSet")
     public UserDataSet readByName(String name) {
         return runInSession(session -> {
             DataSetDAO dao = new DataSetDAO(session);
@@ -134,6 +132,7 @@ public class DBServiceHibernateImpl implements DBService {
         });
     }
 
+    @org.springframework.cache.annotation.Cacheable("ru.otus.dobrovolsky.base.dataSets.AddressDataSet")
     public AddressDataSet readAddressById(long id) {
         return runInSession(session -> {
             DataSetDAO dao = new DataSetDAO(session);
@@ -141,6 +140,7 @@ public class DBServiceHibernateImpl implements DBService {
         });
     }
 
+    @org.springframework.cache.annotation.Cacheable("namedQuery")
     public UserDataSet readByNamedQuery(long id) {
         return runInSession(session -> {
             DataSetDAO dao = new DataSetDAO(session);
@@ -148,6 +148,7 @@ public class DBServiceHibernateImpl implements DBService {
         });
     }
 
+    @org.springframework.cache.annotation.Cacheable("ru.otus.dobrovolsky.base.dataSets.UserDataSet")
     public List<UserDataSet> readAll() {
         return runInSession(session -> {
             DataSetDAO dao = new DataSetDAO(session);

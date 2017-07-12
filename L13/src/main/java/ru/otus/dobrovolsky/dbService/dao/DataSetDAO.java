@@ -28,7 +28,7 @@ public class DataSetDAO {
                         "where u.id = :id ")
                 .setParameter("id", id)
                 .setCacheable(true)
-                .setCacheRegion("userById")
+//                .setCacheRegion("userById")
                 .getSingleResult();
     }
 

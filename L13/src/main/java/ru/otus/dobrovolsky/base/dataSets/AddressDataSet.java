@@ -1,14 +1,12 @@
 package ru.otus.dobrovolsky.base.dataSets;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import javax.persistence.*;
 
 @Entity
 @Table(name = "address")
-@Cacheable
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@org.springframework.cache.annotation.Cacheable("ru.otus.dobrovolsky.base.dataSets.AddressDataSet")
+//@Cacheable
+//@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
 public class AddressDataSet extends DataSet {
 
     @Column(name = "street")

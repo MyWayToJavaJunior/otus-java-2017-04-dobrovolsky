@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Worker implements Runnable {
-//    private static final Logger logger = LoggerFactory.getLogger(Worker.class);
+    //    private static final Logger logger = LoggerFactory.getLogger(Worker.class);
     private final DBService dbService;
 
     Worker(DBService dbService) {

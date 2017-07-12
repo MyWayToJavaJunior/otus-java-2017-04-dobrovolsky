@@ -140,6 +140,7 @@
                     <webResources>
                         <resource>
                             <directory>public</directory>
+                            <directory>templates</directory>
                         </resource>
                         <resource>
                             <directory>src/main/resources/</directory>

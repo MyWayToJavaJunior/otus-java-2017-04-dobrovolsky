@@ -1,6 +1,5 @@
 package ru.otus.dobrovolsky.dbService;
 
-import org.hibernate.stat.SecondLevelCacheStatistics;
 import org.hibernate.stat.Statistics;
 
 import java.util.HashMap;
@@ -10,12 +9,12 @@ public class CacheDescriptor {
     private static CacheDescriptor instance;
 
     private Statistics statistics;
-    private SecondLevelCacheStatistics secondLevelCacheStatisticsUserDataSet;
-    private SecondLevelCacheStatistics secondLevelCacheStatisticsPhoneDataSet;
-    private SecondLevelCacheStatistics secondLevelCacheStatisticsAddressDataSet;
-    private long queryCacheHitCount;
+//    private SecondLevelCacheStatistics secondLevelCacheStatisticsUserDataSet;
+//    private SecondLevelCacheStatistics secondLevelCacheStatisticsPhoneDataSet;
+//    private SecondLevelCacheStatistics secondLevelCacheStatisticsAddressDataSet;
+//    private long queryCacheHitCount;
     private long secondLevelCacheMissCount;
-    private long queryCacheMissCount;
+//    private long queryCacheMissCount;
     private long secondLevelCacheHitCount;
     private long secondLevelHitU;
     private long secondLevelMissU;
@@ -23,7 +22,7 @@ public class CacheDescriptor {
     private long secondLevelMissP;
     private long secondLevelHitA;
     private long secondLevelMissA;
-    private long queryCachePutCount;
+//    private long queryCachePutCount;
     private long secondLevelCachePutCount;
     private long sessionOpenCount;
     private long sessionCloseCount;
@@ -34,14 +33,14 @@ public class CacheDescriptor {
     private long secondLevelSizeU;
     private long secondLevelSizeP;
     private long secondLevelSizeA;
-    private String queries;
+//    private String queries;
 
     private CacheDescriptor(Statistics statistics) {
         this.statistics = statistics;
 
-        secondLevelCacheStatisticsUserDataSet = statistics.getSecondLevelCacheStatistics("ru.otus.dobrovolsky.base.dataSets.UserDataSet");
-        secondLevelCacheStatisticsPhoneDataSet = statistics.getSecondLevelCacheStatistics("ru.otus.dobrovolsky.base.dataSets.PhoneDataSet");
-        secondLevelCacheStatisticsAddressDataSet = statistics.getSecondLevelCacheStatistics("ru.otus.dobrovolsky.base.dataSets.AddressDataSet");
+//        secondLevelCacheStatisticsUserDataSet = statistics.getSecondLevelCacheStatistics("ru.otus.dobrovolsky.base.dataSets.UserDataSet");
+//        secondLevelCacheStatisticsPhoneDataSet = statistics.getSecondLevelCacheStatistics("ru.otus.dobrovolsky.base.dataSets.PhoneDataSet");
+//        secondLevelCacheStatisticsAddressDataSet = statistics.getSecondLevelCacheStatistics("ru.otus.dobrovolsky.base.dataSets.AddressDataSet");
     }
 
     public static CacheDescriptor getInstance(Statistics statistics) {
@@ -51,14 +50,14 @@ public class CacheDescriptor {
         return instance;
     }
 
-    private long getQueryCacheHitCount() {
+//    private long getQueryCacheHitCount() {
+//
+//        return queryCacheHitCount;
+//    }
 
-        return queryCacheHitCount;
-    }
-
-    private void setQueryCacheHitCount(long queryCacheHitCount) {
-        this.queryCacheHitCount = queryCacheHitCount;
-    }
+//    private void setQueryCacheHitCount(long queryCacheHitCount) {
+//        this.queryCacheHitCount = queryCacheHitCount;
+//    }
 
     private long getSecondLevelCacheMissCount() {
         return secondLevelCacheMissCount;
@@ -68,13 +67,13 @@ public class CacheDescriptor {
         this.secondLevelCacheMissCount = secondLevelCacheMissCount;
     }
 
-    private long getQueryCacheMissCount() {
-        return queryCacheMissCount;
-    }
+//    private long getQueryCacheMissCount() {
+//        return queryCacheMissCount;
+//    }
 
-    private void setQueryCacheMissCount(long queryCacheMissCount) {
-        this.queryCacheMissCount = queryCacheMissCount;
-    }
+//    private void setQueryCacheMissCount(long queryCacheMissCount) {
+//        this.queryCacheMissCount = queryCacheMissCount;
+//    }
 
     private long getSecondLevelCacheHitCount() {
         return secondLevelCacheHitCount;
@@ -132,13 +131,13 @@ public class CacheDescriptor {
         this.secondLevelMissA = secondLevelMissA;
     }
 
-    private long getQueryCachePutCount() {
-        return queryCachePutCount;
-    }
-
-    private void setQueryCachePutCount(long queryCachePutCount) {
-        this.queryCachePutCount = queryCachePutCount;
-    }
+//    private long getQueryCachePutCount() {
+//        return queryCachePutCount;
+//    }
+//
+//    private void setQueryCachePutCount(long queryCachePutCount) {
+//        this.queryCachePutCount = queryCachePutCount;
+//    }
 
     private long getSecondLevelCachePutCount() {
         return secondLevelCachePutCount;
@@ -224,42 +223,42 @@ public class CacheDescriptor {
         this.secondLevelSizeA = secondLevelSizeA;
     }
 
-    private String getQueries() {
-        return queries;
-    }
-
-    private void setQueries(Statistics statistics) {
-        StringBuilder stringBuilder = new StringBuilder();
-        for (String q : statistics.getQueries()) {
-            stringBuilder.append("{").append(q).append("}").append("\n");
-        }
-
-        this.queries = stringBuilder.toString();
-    }
+//    private String getQueries() {
+//        return queries;
+//    }
+//
+//    private void setQueries(Statistics statistics) {
+//        StringBuilder stringBuilder = new StringBuilder();
+//        for (String q : statistics.getQueries()) {
+//            stringBuilder.append("{").append(q).append("}").append("\n");
+//        }
+//
+//        this.queries = stringBuilder.toString();
+//    }
 
     public void updateFields() {
-        setQueryCacheHitCount(statistics.getQueryCacheHitCount());
+//        setQueryCacheHitCount(statistics.getQueryCacheHitCount());
         setSecondLevelCacheMissCount(statistics.getSecondLevelCacheMissCount());
-        setQueryCacheMissCount(statistics.getQueryCacheMissCount());
+//        setQueryCacheMissCount(statistics.getQueryCacheMissCount());
         setSecondLevelCacheHitCount(statistics.getSecondLevelCacheHitCount());
-        setSecondLevelHitU(secondLevelCacheStatisticsUserDataSet.getHitCount());
-        setSecondLevelMissU(secondLevelCacheStatisticsUserDataSet.getMissCount());
-        setSecondLevelHitP(secondLevelCacheStatisticsPhoneDataSet.getHitCount());
-        setSecondLevelMissP(secondLevelCacheStatisticsPhoneDataSet.getMissCount());
-        setSecondLevelHitA(secondLevelCacheStatisticsAddressDataSet.getHitCount());
-        setSecondLevelMissA(secondLevelCacheStatisticsAddressDataSet.getMissCount());
-        setQueryCachePutCount(statistics.getQueryCachePutCount());
+//        setSecondLevelHitU(secondLevelCacheStatisticsUserDataSet.getHitCount());
+//        setSecondLevelMissU(secondLevelCacheStatisticsUserDataSet.getMissCount());
+//        setSecondLevelHitP(secondLevelCacheStatisticsPhoneDataSet.getHitCount());
+//        setSecondLevelMissP(secondLevelCacheStatisticsPhoneDataSet.getMissCount());
+//        setSecondLevelHitA(secondLevelCacheStatisticsAddressDataSet.getHitCount());
+//        setSecondLevelMissA(secondLevelCacheStatisticsAddressDataSet.getMissCount());
+//        setQueryCachePutCount(statistics.getQueryCachePutCount());
         setSecondLevelCachePutCount(statistics.getSecondLevelCachePutCount());
         setSessionOpenCount(statistics.getSessionOpenCount());
         setSessionCloseCount(statistics.getSessionCloseCount());
         setSecondLevelCacheRegionNames(statistics);
-        setSecondLevelPutCountU(secondLevelCacheStatisticsUserDataSet.getPutCount());
-        setSecondLevelPutCountP(secondLevelCacheStatisticsPhoneDataSet.getPutCount());
-        setSecondLevelPutCountA(secondLevelCacheStatisticsAddressDataSet.getPutCount());
-        setSecondLevelSizeU(secondLevelCacheStatisticsUserDataSet.getSizeInMemory());
-        setSecondLevelSizeP(secondLevelCacheStatisticsPhoneDataSet.getSizeInMemory());
-        setSecondLevelSizeA(secondLevelCacheStatisticsAddressDataSet.getSizeInMemory());
-        setQueries(statistics);
+//        setSecondLevelPutCountU(secondLevelCacheStatisticsUserDataSet.getPutCount());
+//        setSecondLevelPutCountP(secondLevelCacheStatisticsPhoneDataSet.getPutCount());
+//        setSecondLevelPutCountA(secondLevelCacheStatisticsAddressDataSet.getPutCount());
+//        setSecondLevelSizeU(secondLevelCacheStatisticsUserDataSet.getSizeInMemory());
+//        setSecondLevelSizeP(secondLevelCacheStatisticsPhoneDataSet.getSizeInMemory());
+//        setSecondLevelSizeA(secondLevelCacheStatisticsAddressDataSet.getSizeInMemory());
+//        setQueries(statistics);
     }
 
     public Map<String, Object> getCacheMap() {
@@ -267,8 +266,8 @@ public class CacheDescriptor {
 
         Map<String, Object> cacheMap = new HashMap<>();
 
-        cacheMap.put("queryCacheHitCount", this.getQueryCacheHitCount());
-        cacheMap.put("queryCacheMissCount", this.getQueryCacheMissCount());
+//        cacheMap.put("queryCacheHitCount", this.getQueryCacheHitCount());
+//        cacheMap.put("queryCacheMissCount", this.getQueryCacheMissCount());
         cacheMap.put("secondLevelCacheHitCount", this.getSecondLevelCacheHitCount());
         cacheMap.put("secondLevelCacheMissCount", this.getSecondLevelCacheMissCount());
         cacheMap.put("secondLevelHitU", this.getSecondLevelHitU());
@@ -277,8 +276,8 @@ public class CacheDescriptor {
         cacheMap.put("secondLevelMissP", this.getSecondLevelMissP());
         cacheMap.put("secondLevelHitA", this.getSecondLevelHitA());
         cacheMap.put("secondLevelMissA", this.getSecondLevelMissA());
-        cacheMap.put("queries", this.getQueries());
-        cacheMap.put("queryCachePutCount", this.getQueryCachePutCount());
+//        cacheMap.put("queries", this.getQueries());
+//        cacheMap.put("queryCachePutCount", this.getQueryCachePutCount());
         cacheMap.put("secondLevelCachePutCount", this.getSecondLevelCachePutCount());
         cacheMap.put("sessionOpenCount", this.getSessionOpenCount());
         cacheMap.put("sessionCloseCount", this.getSessionCloseCount());

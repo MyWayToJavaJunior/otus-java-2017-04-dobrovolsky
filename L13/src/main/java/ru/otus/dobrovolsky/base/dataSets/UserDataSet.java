@@ -1,11 +1,9 @@
 package ru.otus.dobrovolsky.base.dataSets;
 
-import org.hibernate.annotations.Cache;
-import org.hibernate.annotations.CacheConcurrencyStrategy;
-
 import javax.persistence.*;
 import java.util.Arrays;
 import java.util.List;
+
 
 @NamedQueries({
         @NamedQuery(
@@ -20,19 +18,20 @@ import java.util.List;
 })
 @Entity
 @Table(name = "users")
-@Cacheable
-@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+//@Cacheable
+//@Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+@org.springframework.cache.annotation.Cacheable("ru.otus.dobrovolsky.base.dataSets.UserDataSet")
 public class UserDataSet extends DataSet {
 
     @Column(name = "name")
     private String name;
 
     @OneToOne(cascade = CascadeType.ALL, targetEntity = AddressDataSet.class, mappedBy = "user", orphanRemoval = true)
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+//    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private AddressDataSet address;
 
     @OneToMany(cascade = CascadeType.ALL, targetEntity = PhoneDataSet.class, mappedBy = "user", orphanRemoval = true)
-    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
+//    @Cache(usage = CacheConcurrencyStrategy.NONSTRICT_READ_WRITE)
     private List<PhoneDataSet> phones;
 
     public UserDataSet() {
@@ -74,6 +73,7 @@ public class UserDataSet extends DataSet {
         this.name = name;
     }
 
+    @org.springframework.cache.annotation.Cacheable("address")
     public AddressDataSet getAddress() {
         return address;
     }
@@ -82,6 +82,7 @@ public class UserDataSet extends DataSet {
         this.address = address;
     }
 
+    @org.springframework.cache.annotation.Cacheable("phones")
     public List<PhoneDataSet> getPhones() {
         return phones;
     }
