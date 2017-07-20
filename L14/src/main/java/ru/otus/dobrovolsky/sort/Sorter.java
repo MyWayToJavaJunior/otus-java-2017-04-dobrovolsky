@@ -2,48 +2,47 @@ package ru.otus.dobrovolsky.sort;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class QuicksortRunnable<T extends Comparable<T>> implements Runnable {
+public class Sorter<T extends Comparable<T>> implements Runnable {
     private final T[] values;
     private final int left;
     private final int right;
     private final AtomicInteger threadCount;
-    private MultithreadQuicksort multithreadQuicksort;
+    private MultithreadedSorter multithreadedSorter;
 
-    QuicksortRunnable(T[] values, int left, int right, AtomicInteger threadCount, MultithreadQuicksort
-            multithreadQuicksort) {
+    Sorter(T[] values, int left, int right, AtomicInteger threadCount, MultithreadedSorter
+            multithreadedSorter) {
         this.values = values;
         this.left = left;
         this.right = right;
         this.threadCount = threadCount;
-        this.multithreadQuicksort = multithreadQuicksort;
+        this.multithreadedSorter = multithreadedSorter;
     }
 
     @Override
     public void run() {
-        doSort(left, right);
+        sort(left, right);
         synchronized (threadCount) {
             if (threadCount.getAndDecrement() == 1)
                 threadCount.notify();
         }
     }
 
-    private void doSort(int start, int end) {
+    //quick sort
+    private void sort(int start, int end) {
         if (start < end) {
-            int storeIndex = doPartitionSort(start, end);
-            if (threadCount.get() >= multithreadQuicksort.getNumThreads()) {
-                doSort(start, storeIndex - 1);
-                doSort(storeIndex + 1, end);
+            int storeIndex = partitionSort(start, end);
+            if (threadCount.get() >= multithreadedSorter.getNumThreads()) {
+                sort(start, storeIndex - 1);
+                sort(storeIndex + 1, end);
             } else {
                 threadCount.getAndAdd(2);
-                multithreadQuicksort.getPool().execute(new QuicksortRunnable<>(values, start, storeIndex - 1,
-                        threadCount, multithreadQuicksort));
-                multithreadQuicksort.getPool().execute(new QuicksortRunnable<>(values, storeIndex + 1, end,
-                        threadCount, multithreadQuicksort));
+                multithreadedSorter.getPool().execute(new Sorter<>(values, start, storeIndex - 1, threadCount, multithreadedSorter));
+                multithreadedSorter.getPool().execute(new Sorter<>(values, storeIndex + 1, end,  threadCount, multithreadedSorter));
             }
         }
     }
 
-    private int doPartitionSort(int start, int end) {
+    private int partitionSort(int start, int end) {
         T pivotValue = values[end];
         int storeIndex = start;
         for (int i = start; i < end; i++) {

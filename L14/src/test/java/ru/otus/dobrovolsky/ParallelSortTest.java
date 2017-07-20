@@ -4,7 +4,7 @@ import org.junit.Assert;
 import org.junit.FixMethodOrder;
 import org.junit.Test;
 import org.junit.runners.MethodSorters;
-import ru.otus.dobrovolsky.sort.MultithreadQuicksort;
+import ru.otus.dobrovolsky.sort.MultithreadedSorter;
 import ru.otus.dobrovolsky.util.Util;
 
 import java.util.Arrays;
@@ -21,8 +21,8 @@ public class ParallelSortTest {
 
     @Test
     public void aIntegerArraySortTest() {
-        MultithreadQuicksort integerParallelSorter = new MultithreadQuicksort();
-        integerParallelSorter.quicksort(intArr1);
+        MultithreadedSorter integerParallelSorter = new MultithreadedSorter();
+        integerParallelSorter.sort(intArr1);
         integerParallelSorter.shutdown();
 
         Arrays.parallelSort(intArr2);
@@ -32,8 +32,8 @@ public class ParallelSortTest {
 
     @Test
     public void bStringArraySortTest() {
-        MultithreadQuicksort stringParallelSorter = new MultithreadQuicksort();
-        stringParallelSorter.quicksort(stringArr1);
+        MultithreadedSorter stringParallelSorter = new MultithreadedSorter();
+        stringParallelSorter.sort(stringArr1);
         stringParallelSorter.shutdown();
 
         Arrays.parallelSort(stringArr2);

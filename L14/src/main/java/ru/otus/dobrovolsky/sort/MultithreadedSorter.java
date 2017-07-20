@@ -4,13 +4,13 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
-public class MultithreadQuicksort {
+public class MultithreadedSorter {
     private final int NUM_THREADS = 4;
     private ExecutorService pool = Executors.newFixedThreadPool(NUM_THREADS);
 
-    public <T extends Comparable<T>> void quicksort(T[] input) {
+    public <T extends Comparable<T>> void sort(T[] input) {
         final AtomicInteger threadCount = new AtomicInteger(1);
-        pool.execute(new QuicksortRunnable<>(input, 0, input.length - 1, threadCount, this));
+        pool.execute(new Sorter<>(input, 0, input.length - 1, threadCount, this));
         try {
             synchronized (threadCount) {
                 threadCount.wait();

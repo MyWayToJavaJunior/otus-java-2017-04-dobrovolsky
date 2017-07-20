@@ -1,6 +1,6 @@
 package ru.otus.dobrovolsky.util;
 
-import ru.otus.dobrovolsky.sort.MultithreadQuicksort;
+import ru.otus.dobrovolsky.sort.MultithreadedSorter;
 
 import java.util.Arrays;
 
@@ -10,11 +10,11 @@ public class Worker {
         String seed = "ru.otus.dobrovolsky";
         int bound = 9_000;
 
-        System.out.println("Sorting array of Integer with ru.otus.dobrovolsky.sort.MultithreadQuicksort class");
+        System.out.println("Sorting array of Integer with ru.otus.dobrovolsky.sort.MultithreadedSorter class");
         Integer[] intArr = Util.createIntegerArray(size, seed, bound);
         Util.printArray(intArr);
-        MultithreadQuicksort integerParallelSorter = new MultithreadQuicksort();
-        integerParallelSorter.quicksort(intArr);
+        MultithreadedSorter integerParallelSorter = new MultithreadedSorter();
+        integerParallelSorter.sort(intArr);
         integerParallelSorter.shutdown();
         Util.printArray(intArr);
         System.out.println();
@@ -26,11 +26,11 @@ public class Worker {
         Util.printArray(intArr1);
         System.out.println();
 
-        System.out.println("Sorting array of String with ru.otus.dobrovolsky.sort.MultithreadQuicksort class");
+        System.out.println("Sorting array of String with ru.otus.dobrovolsky.sort.MultithreadedSorter class");
         String[] stringArr = Util.createStringArray(size, seed, bound);
         Util.printArray(stringArr);
-        MultithreadQuicksort stringParallelSorter = new MultithreadQuicksort();
-        stringParallelSorter.quicksort(stringArr);
+        MultithreadedSorter stringParallelSorter = new MultithreadedSorter();
+        stringParallelSorter.sort(stringArr);
         stringParallelSorter.shutdown();
         Util.printArray(stringArr);
         System.out.println();
