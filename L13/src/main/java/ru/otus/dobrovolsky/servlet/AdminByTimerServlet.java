@@ -76,6 +76,11 @@ public class AdminByTimerServlet extends HttpServlet {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
         }
 
+        if (!login.equals("admin") || !pass.equals("admin")) {
+            response.setContentType("text/html;charset=utf-8");
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        }
+
         doPost(request, response);
     }
 
@@ -89,6 +94,10 @@ public class AdminByTimerServlet extends HttpServlet {
             response.setContentType("text/html;charset=utf-8");
             response.getWriter().println("Login / password is empty");
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+
+            login = null;
+            pass = null;
+
             return;
         }
 
@@ -96,6 +105,10 @@ public class AdminByTimerServlet extends HttpServlet {
             response.setContentType("text/html;charset=utf-8");
             response.getWriter().println("Unauthorized");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+
+            login = null;
+            pass = null;
+
             return;
         }
 
