@@ -9,11 +9,13 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.stat.Statistics;
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.otus.dobrovolsky.base.DBService;
 import ru.otus.dobrovolsky.base.dataSets.AddressDataSet;
 import ru.otus.dobrovolsky.base.dataSets.PhoneDataSet;
 import ru.otus.dobrovolsky.base.dataSets.UserDataSet;
 import ru.otus.dobrovolsky.dbService.dao.DataSetDAO;
+import ru.otus.dobrovolsky.worker.Worker;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,9 +26,6 @@ public class DBServiceHibernateImpl implements DBService {
     private SessionFactory sessionFactory;
     private Statistics statistics;
     private Map<String, Object> config;
-//    private SecondLevelCacheStatistics secondLevelCacheStatisticsUserDataSet;
-//    private SecondLevelCacheStatistics secondLevelCacheStatisticsPhoneDataSet;
-//    private SecondLevelCacheStatistics secondLevelCacheStatisticsAddressDataSet;
 
     private CacheDescriptor cacheDescriptor;
 
@@ -62,10 +61,6 @@ public class DBServiceHibernateImpl implements DBService {
 
     private void configureStatistics() {
         statistics = sessionFactory.getStatistics();
-
-//        secondLevelCacheStatisticsUserDataSet = statistics.getSecondLevelCacheStatistics("ru.otus.dobrovolsky.base.dataSets.UserDataSet");
-//        secondLevelCacheStatisticsPhoneDataSet = statistics.getSecondLevelCacheStatistics("ru.otus.dobrovolsky.base.dataSets.PhoneDataSet");
-//        secondLevelCacheStatisticsAddressDataSet = statistics.getSecondLevelCacheStatistics("ru.otus.dobrovolsky.base.dataSets.AddressDataSet");
     }
 
     private void prepareCache(Map<String, Object> config) {

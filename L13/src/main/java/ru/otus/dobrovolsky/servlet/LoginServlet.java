@@ -1,10 +1,5 @@
 package ru.otus.dobrovolsky.servlet;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.context.support.SpringBeanAutowiringSupport;
-import ru.otus.dobrovolsky.worker.Worker;
-
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
@@ -19,8 +14,6 @@ public class LoginServlet extends HttpServlet {
     static final String LOGIN_PARAMETER_NAME = "login";
     private static final String PASS_PARAMETER_NAME = "pass";
     private static final String LOGIN_PAGE_TEMPLATE = "login.html";
-    @Autowired
-    private Worker worker;
 
     private static String getPage(String login) throws IOException {
         Map<String, Object> pageVariables = new HashMap<>();
@@ -61,14 +54,5 @@ public class LoginServlet extends HttpServlet {
     private void setOK(HttpServletResponse response) {
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);
-    }
-
-    @Override
-    public void init(ServletConfig config) throws ServletException {
-        super.init(config);
-
-        SpringBeanAutowiringSupport.processInjectionBasedOnCurrentContext(this);
-
-        worker.run();
     }
 }

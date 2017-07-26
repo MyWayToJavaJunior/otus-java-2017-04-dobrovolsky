@@ -5,7 +5,7 @@
 
     <bean id="dbService" class="ru.otus.dobrovolsky.dbService.DBServiceHibernateImpl"/>
 
-    <bean id="worker" class="ru.otus.dobrovolsky.worker.Worker">
+    <bean id="worker" class="ru.otus.dobrovolsky.worker.Worker" init-method="run">
         <constructor-arg ref="dbService"/>
     </bean>
 

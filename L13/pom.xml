@@ -126,11 +126,7 @@
                     <webResources>
                         <resource>
                             <directory>public</directory>
-                            <!--<targetPath>WEB-INF/public</targetPath>-->
                         </resource>
-                        <!--<resource>-->
-                        <!--<directory>templates</directory>-->
-                        <!--</resource>-->
                     </webResources>
                 </configuration>
             </plugin>
