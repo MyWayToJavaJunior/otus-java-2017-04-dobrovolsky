@@ -1,0 +1,19 @@
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <bean id="address" class="ru.otus.dobrovolsky.messageSystem.Address"/>
+
+    <bean id="messageContext" class="ru.otus.dobrovolsky.base.messages.MessageSystemContext"/>
+
+    <bean id="dbService" class="ru.otus.dobrovolsky.dbService.DBServiceHibernateImpl" init-method="init">
+        <constructor-arg ref="address"/>
+        <constructor-arg ref="messageContext"/>
+    </bean>
+
+    <bean id="worker" class="ru.otus.dobrovolsky.worker.Worker" init-method="run">
+        <constructor-arg ref="dbService"/>
+    </bean>
+
+</beans>
