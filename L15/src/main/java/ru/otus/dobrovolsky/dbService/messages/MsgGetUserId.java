@@ -1,4 +1,4 @@
-package ru.otus.dobrovolsky.dbService;
+package ru.otus.dobrovolsky.dbService.messages;
 
 import ru.otus.dobrovolsky.base.DBService;
 import ru.otus.dobrovolsky.base.messages.MsgToDB;

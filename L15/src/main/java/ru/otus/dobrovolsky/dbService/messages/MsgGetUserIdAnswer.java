@@ -1,4 +1,4 @@
-package ru.otus.dobrovolsky.dbService;
+package ru.otus.dobrovolsky.dbService.messages;
 
 import ru.otus.dobrovolsky.base.messages.FrontendService;
 import ru.otus.dobrovolsky.base.messages.MsgToFrontend;
@@ -16,6 +16,5 @@ public class MsgGetUserIdAnswer extends MsgToFrontend {
 
     @Override
     public void exec(FrontendService frontendService) {
-        frontendService.addUser(id, name);
     }
 }

@@ -1,14 +1,17 @@
-package ru.otus.dobrovolsky.base;
+package ru.otus.dobrovolsky.base.messages;
 
 import org.hibernate.stat.SecondLevelCacheStatistics;
 import org.hibernate.stat.Statistics;
+import ru.otus.dobrovolsky.base.DBService;
+import ru.otus.dobrovolsky.messageSystem.Address;
+import ru.otus.dobrovolsky.messageSystem.Addressee;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class CacheDescriptor {
-    private static CacheDescriptor instance;
-
+public class CacheDescriptor implements Addressee {
+    private final Address address;
+    private final MessageSystemContext context;
     private Statistics statistics;
     private SecondLevelCacheStatistics secondLevelCacheStatisticsUserDataSet;
     private SecondLevelCacheStatistics secondLevelCacheStatisticsPhoneDataSet;
@@ -36,19 +39,24 @@ public class CacheDescriptor {
     private long secondLevelSizeA;
     private String queries;
 
-    private CacheDescriptor(Statistics statistics) {
-        this.statistics = statistics;
+    public CacheDescriptor(MessageSystemContext context, Address address, DBService dbService) {
+        this.context = context;
+        this.address = address;
+
+        this.statistics = dbService.getStatistics();
 
         secondLevelCacheStatisticsUserDataSet = statistics.getSecondLevelCacheStatistics("ru.otus.dobrovolsky.dataSet.UserDataSet");
         secondLevelCacheStatisticsPhoneDataSet = statistics.getSecondLevelCacheStatistics("ru.otus.dobrovolsky.dataSet.PhoneDataSet");
         secondLevelCacheStatisticsAddressDataSet = statistics.getSecondLevelCacheStatistics("ru.otus.dobrovolsky.dataSet.AddressDataSet");
     }
 
-    public static CacheDescriptor getInstance(Statistics statistics) {
-        if (instance == null) {
-            instance = new CacheDescriptor(statistics);
-        }
-        return instance;
+    public void init() {
+        context.getMessageSystem().addAddressee(this);
+    }
+
+    @Override
+    public Address getAddress() {
+        return address;
     }
 
     private long getQueryCacheHitCount() {

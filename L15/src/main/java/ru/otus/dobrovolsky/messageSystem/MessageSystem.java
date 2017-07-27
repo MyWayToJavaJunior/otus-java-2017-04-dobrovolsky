@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public final class MessageSystem {
-    private static final int DEFAULT_STEP_TIME = 10;
+    private static final int DEFAULT_STEP_TIME = 20;
 
     private final Map<Address, ConcurrentLinkedQueue<Message>> messagesMap = new HashMap<>();
     private final Map<Address, Addressee> addresseeMap = new HashMap<>();
@@ -32,7 +32,7 @@ public final class MessageSystem {
                 while (true) {
                     ConcurrentLinkedQueue<Message> queue = messagesMap.get(entry.getKey());
                     while (!queue.isEmpty()) {
-                        LOGGER.info("Queue size:" + queue.size());
+                        LOGGER.info(LocalDateTime.now() + ":    Queue size:" + queue.size());
                         Message message = queue.poll();
                         message.exec(entry.getValue());
                         LOGGER.info(LocalDateTime.now() + ":    Message from:" + message.getFrom() + ", to:" + message

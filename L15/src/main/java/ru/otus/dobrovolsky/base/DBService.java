@@ -2,12 +2,15 @@ package ru.otus.dobrovolsky.base;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.stat.Statistics;
+import ru.otus.dobrovolsky.base.messages.CacheDescriptor;
+import ru.otus.dobrovolsky.base.messages.MessageSystemContext;
 import ru.otus.dobrovolsky.dataSet.AddressDataSet;
 import ru.otus.dobrovolsky.dataSet.UserDataSet;
 
 import java.util.List;
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public interface DBService {
     String getLocalStatus();
 
@@ -34,4 +37,6 @@ public interface DBService {
     CacheDescriptor getCacheDescriptor();
 
     void init();
+
+    MessageSystemContext getContext();
 }

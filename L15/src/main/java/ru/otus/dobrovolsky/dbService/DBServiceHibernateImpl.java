@@ -9,8 +9,8 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.stat.Statistics;
-import ru.otus.dobrovolsky.base.CacheDescriptor;
 import ru.otus.dobrovolsky.base.DBService;
+import ru.otus.dobrovolsky.base.messages.CacheDescriptor;
 import ru.otus.dobrovolsky.base.messages.MessageSystemContext;
 import ru.otus.dobrovolsky.dataSet.AddressDataSet;
 import ru.otus.dobrovolsky.dataSet.PhoneDataSet;
@@ -66,7 +66,11 @@ public class DBServiceHibernateImpl implements DBService, Addressee {
 
         getStatistics().setStatisticsEnabled(true);
 
-        cacheDescriptor = CacheDescriptor.getInstance(statistics);
+        cacheDescriptor = new CacheDescriptor(context, address, this);
+    }
+
+    public MessageSystemContext getContext() {
+        return context;
     }
 
     private void configureStatistics() {
@@ -107,8 +111,9 @@ public class DBServiceHibernateImpl implements DBService, Addressee {
     }
 
     public void save(UserDataSet dataSet) {
+        DataSetDAO dao;
         try (Session session = sessionFactory.openSession()) {
-            DataSetDAO dao = new DataSetDAO(session);
+            dao = new DataSetDAO(session);
             dao.save(dataSet);
         }
     }

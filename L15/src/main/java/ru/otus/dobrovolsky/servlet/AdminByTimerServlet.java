@@ -3,6 +3,7 @@ package ru.otus.dobrovolsky.servlet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.otus.dobrovolsky.base.DBService;
+import ru.otus.dobrovolsky.base.messages.FrontendService;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -13,6 +14,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+@SuppressWarnings("unused")
 public class AdminByTimerServlet extends HttpServlet {
 
     private static final String DEFAULT_USER_NAME = "UNKNOWN";
@@ -27,6 +29,7 @@ public class AdminByTimerServlet extends HttpServlet {
 
     private String login;
     private String pass;
+
 
     public AdminByTimerServlet() {
     }

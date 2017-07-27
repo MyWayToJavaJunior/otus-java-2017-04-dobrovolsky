@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.util.Arrays;
 import java.util.List;
 
+@SuppressWarnings("unused")
 @NamedQueries({
         @NamedQuery(
                 name = "namedQuery",

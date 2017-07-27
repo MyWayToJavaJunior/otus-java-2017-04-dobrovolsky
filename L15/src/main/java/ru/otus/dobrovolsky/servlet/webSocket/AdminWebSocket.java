@@ -6,7 +6,7 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
-import ru.otus.dobrovolsky.base.CacheDescriptor;
+import ru.otus.dobrovolsky.base.messages.FrontendService;
 
 import java.io.IOException;
 import java.util.Set;
@@ -16,12 +16,12 @@ import java.util.TimerTask;
 @WebSocket
 public class AdminWebSocket {
     private Set<AdminWebSocket> users;
-    private CacheDescriptor cacheDescriptor;
     private Session session;
+    private FrontendService frontendService;
 
-    public AdminWebSocket(Set<AdminWebSocket> users, CacheDescriptor cacheDescriptor) {
+    public AdminWebSocket(Set<AdminWebSocket> users, FrontendService frontendService) {
         this.users = users;
-        this.cacheDescriptor = cacheDescriptor;
+        this.frontendService = frontendService;
     }
 
     @OnWebSocketMessage
@@ -36,15 +36,15 @@ public class AdminWebSocket {
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
-                cacheDescriptor.updateFields();
+                frontendService.handleRequestCacheUpdate();
 
                 try {
-                    session.getRemote().sendString(new Gson().toJson(cacheDescriptor.getCacheMap()));
+                    session.getRemote().sendString(new Gson().toJson(frontendService.handleRequestCacheStats()));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
-        }, 2500, 2500);
+        }, 1000, 1000);
     }
 
     public Session getSession() {

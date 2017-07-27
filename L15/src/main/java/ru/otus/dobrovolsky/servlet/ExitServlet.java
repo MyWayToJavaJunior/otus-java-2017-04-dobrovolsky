@@ -26,7 +26,7 @@ public class ExitServlet extends HttpServlet {
             request.getSession().invalidate();
         }
 
-        response.getWriter().println(TemplateProcessor.instance().getPage(EXIT_PAGE_TEMPLATE, null/*pageVariables*/));
+        response.getWriter().println(TemplateProcessor.instance().getPage(EXIT_PAGE_TEMPLATE, null));
 
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);

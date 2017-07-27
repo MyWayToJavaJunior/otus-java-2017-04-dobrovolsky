@@ -4,11 +4,13 @@ package ru.otus.dobrovolsky.base.messages;
 import ru.otus.dobrovolsky.messageSystem.Address;
 import ru.otus.dobrovolsky.messageSystem.MessageSystem;
 
+@SuppressWarnings("unused")
 public class MessageSystemContext {
     private final MessageSystem messageSystem;
 
     private Address frontAddress;
     private Address dbAddress;
+    private Address cacheAddress;
 
     public MessageSystemContext(MessageSystem messageSystem) {
         this.messageSystem = messageSystem;
@@ -32,5 +34,13 @@ public class MessageSystemContext {
 
     public void setDbAddress(Address dbAddress) {
         this.dbAddress = dbAddress;
+    }
+
+    public Address getCacheAddress() {
+        return cacheAddress;
+    }
+
+    public void setCacheAddress(Address cacheAddress) {
+        this.cacheAddress = cacheAddress;
     }
 }

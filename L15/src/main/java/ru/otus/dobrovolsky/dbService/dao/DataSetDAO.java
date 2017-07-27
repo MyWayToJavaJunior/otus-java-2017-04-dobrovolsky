@@ -54,7 +54,7 @@ public class DataSetDAO {
         criteria.where(builder.equal(from.get("name"), name));
         Query<UserDataSet> query = session.createQuery(criteria).setCacheable(true).setCacheRegion("ru.otus" +
                 ".dobrovolsky.base.dataSet.UserDataSet");
-        return query.uniqueResult();
+        return query.getSingleResult();
     }
 
     public List<UserDataSet> readAll() {
