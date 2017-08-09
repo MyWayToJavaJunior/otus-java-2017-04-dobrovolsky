@@ -3,7 +3,6 @@ package ru.otus.dobrovolsky.servlet;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.support.SpringBeanAutowiringSupport;
 import ru.otus.dobrovolsky.base.DBService;
-import ru.otus.dobrovolsky.base.messages.FrontendService;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -13,12 +12,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 @SuppressWarnings("unused")
 public class AdminByTimerServlet extends HttpServlet {
 
     private static final String DEFAULT_USER_NAME = "UNKNOWN";
     private static final String ADMIN_PAGE_TEMPLATE = "admin_by_timer.html";
+    private static final String LOGIN_PAGE_TEMPLATE = "login";
 
     private static final String REFRESH_VARIABLE_NAME = "refreshPeriod";
     private static final int PERIOD_MS = 1000;
@@ -60,57 +61,45 @@ public class AdminByTimerServlet extends HttpServlet {
         pageVariables.putAll(dbService.getCacheMap());
 
         String login = (String) request.getSession().getAttribute(LoginServlet.LOGIN_PARAMETER_NAME);
-        pageVariables.put("login", login != null ? login : DEFAULT_USER_NAME);
+        pageVariables.put("login", !Objects.equals(login, "") ? login : DEFAULT_USER_NAME);
 
         String pass = (String) request.getSession().getAttribute("pass");
-        pageVariables.put("pass", pass != null ? pass : "null");
+        pageVariables.put("pass", Objects.equals(pass, "") ? pass : "null");
 
         return pageVariables;
     }
 
     public void doGet(HttpServletRequest request,
                       HttpServletResponse response) throws ServletException, IOException {
-        String login = request.getParameter("login");
-        String pass = request.getParameter("pass");
-
-
-        if ((login == null) || (pass == null)) {
-            response.setContentType("text/html;charset=utf-8");
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        }
-
-        if (!login.equals("admin") || !pass.equals("admin")) {
-            response.setContentType("text/html;charset=utf-8");
-            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-        }
 
         doPost(request, response);
+
     }
 
     public void doPost(HttpServletRequest request,
                        HttpServletResponse response) throws ServletException, IOException {
 
-        login = login == null ? request.getParameter("login") : login;
-        pass = pass == null ? request.getParameter("pass") : pass;
+        login = Objects.equals(login, "") ? request.getParameter("login") : login;
+        pass = Objects.equals(pass, "") ? request.getParameter("pass") : pass;
 
-        if ((login == null) || (pass == null)) {
+        if (Objects.equals(login, "") || Objects.equals(pass, "")) {
             response.setContentType("text/html;charset=utf-8");
             response.getWriter().println("Login / password is empty");
             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
 
-            login = null;
-            pass = null;
+            login = "";
+            pass = "";
 
             return;
         }
 
-        if (!login.equals("admin") || !pass.equals("admin")) {
+        if (!Objects.equals(login, "admin") || !Objects.equals(pass, "admin")) {
             response.setContentType("text/html;charset=utf-8");
             response.getWriter().println("Unauthorized");
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
 
-            login = null;
-            pass = null;
+            login = "";
+            pass = "";
 
             return;
         }

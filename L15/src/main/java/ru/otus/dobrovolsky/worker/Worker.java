@@ -86,12 +86,6 @@ public class Worker {
 
                 frontendService.handleRequestReadUserByNamedQuery(2);
 
-                dbService.readAddressById(1);
-                dbService.readAddressById(2);
-                dbService.readAddressById(3);
-                dbService.readAddressById(4);
-                dbService.readAddressById(5);
-
                 frontendService.handleRequestReadAddress(1);
                 frontendService.handleRequestReadAddress(2);
                 frontendService.handleRequestReadAddress(3);

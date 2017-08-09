@@ -7,7 +7,7 @@ init = function WS(){
         this.ws = null;
         this.interval = null;
         this.init = function () {
-            this.ws = new WebSocket("ws://localhost:49094/admin_by_ws");
+            this.ws = new WebSocket("ws://localhost:8080/admin_by_ws");
             this.ws.onopen = function (event) {
 
             };
