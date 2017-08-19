@@ -11,6 +11,7 @@ import ru.otus.dobrovolsky.frontend.servlet.AdminByWebSocketServlet;
 import ru.otus.dobrovolsky.frontend.servlet.ExitServlet;
 import ru.otus.dobrovolsky.frontend.servlet.LoginServlet;
 import ru.otus.dobrovolsky.message.channel.SocketClientChannel;
+import ru.otus.dobrovolsky.message.util.Utils;
 
 import java.net.Socket;
 import java.util.logging.Logger;
@@ -22,8 +23,8 @@ public class FrontendMain {
     private static final int PORT = 5050;
 
     public static void main(String[] args) throws Exception {
-        int port = getParameter(args, "-port");
-        int num = getParameter(args, "-num");
+        int port = Utils.getParameter(args, "-port");
+        int num = Utils.getParameter(args, "-num");
 
         SocketClientChannel client = new SocketClientChannel(new Socket(HOST, PORT));
         client.init();
@@ -46,14 +47,5 @@ public class FrontendMain {
         server.setHandler(new HandlerList(resourceHandler, context));
         server.start();
         server.join();
-    }
-
-    public static Integer getParameter(String[] args, String pattern) {
-        for (int i = 0; i < args.length - 1; i++) {
-            if (args[i].equals(pattern)) {
-                return Integer.valueOf(args[i + 1]);
-            }
-        }
-        throw new RuntimeException();
     }
 }

@@ -48,12 +48,6 @@ public class AdminWebSocket {
                 client.send(new MsgGetCache(frontendServer.getFrontendAddress(), frontendServer.getDBServerAddress()));
 
                 try {
-                    Thread.sleep(1500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                try {
                     session.getRemote().sendString(new Gson().toJson(frontendServer.getCacheMap()));
                 } catch (IOException e) {
                     e.printStackTrace();

@@ -16,7 +16,7 @@ public class Worker {
     private static final Logger LOGGER = Logger.getLogger(Worker.class.getName());
     private static final DBService dbService = DBServiceHibernateImpl.getInstance();
 
-    public void init() {
+    private void init() {
         dbService.save(new UserDataSet("Nicholas", new AddressDataSet("Lenina 1", 460018), new PhoneDataSet(1234,
                 "111111"), new PhoneDataSet(2345, "222222")));
 
@@ -31,11 +31,11 @@ public class Worker {
 
         dbService.save(testUser);
 
-        UserDataSet dataSet = dbService.read(1);
+        dbService.read(1);
 
-        dataSet = dbService.readByName("Katherine");
+        dbService.readByName("Katherine");
 
-        List<UserDataSet> dataSets = dbService.readAll();
+        dbService.readAll();
 
         dbService.save(new UserDataSet("test1", new AddressDataSet("1", 1111), new PhoneDataSet(0, "12345")));
         dbService.save(new UserDataSet("test2", new AddressDataSet("2", 2222), new PhoneDataSet(1, "12346")));
@@ -44,7 +44,8 @@ public class Worker {
         dbService.save(new UserDataSet("test5", new AddressDataSet("5", 5555), new PhoneDataSet(4, "12349")));
     }
 
-    public void startRequestingInfo() {
+    @SuppressWarnings("InfiniteLoopStatement")
+    private void startRequestingInfo() {
         while (true) {
             dbService.read(1);
             dbService.read(2);
@@ -76,7 +77,7 @@ public class Worker {
 
             dbService.readByName("Test");
 
-            List<UserDataSet> dataSets1 = dbService.readAll();
+            dbService.readAll();
 
             try {
                 Thread.sleep(1500);

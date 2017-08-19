@@ -31,9 +31,6 @@ public class FrontendServer {
     public void start() throws Exception {
         client.send(new MsgRegistration(address, addressMessageServer));
 
-//        client.send(new MsgUpdateCache(address, addressDBServer));
-//        client.send(new MsgGetCache(address, addressDBServer));
-
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         executorService.submit(this::getMessage);
     }

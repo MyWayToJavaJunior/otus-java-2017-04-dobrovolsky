@@ -6,44 +6,32 @@ import org.hibernate.stat.Statistics;
 import java.util.HashMap;
 import java.util.Map;
 
-public class CacheDescriptor/* implements Addressee*/ {
+public class CacheDescriptor {
     private Statistics statistics;
-
-    //
     private SecondLevelCacheStatistics secondLevelCacheStatisticsUserDataSet;
     private SecondLevelCacheStatistics secondLevelCacheStatisticsPhoneDataSet;
     private SecondLevelCacheStatistics secondLevelCacheStatisticsAddressDataSet;
-    //
-
     private long queryCacheHitCount;
     private long secondLevelCacheMissCount;
     private long queryCacheMissCount;
     private long secondLevelCacheHitCount;
-
-    //
     private long secondLevelHitU;
     private long secondLevelMissU;
     private long secondLevelHitP;
     private long secondLevelMissP;
     private long secondLevelHitA;
     private long secondLevelMissA;
-    //
-
     private long queryCachePutCount;
     private long secondLevelCachePutCount;
     private long sessionOpenCount;
     private long sessionCloseCount;
     private String secondLevelCacheRegionNames;
-
-    //
     private long secondLevelPutCountU;
     private long secondLevelPutCountP;
     private long secondLevelPutCountA;
     private long secondLevelSizeU;
     private long secondLevelSizeP;
     private long secondLevelSizeA;
-    //
-
     private String queries;
 
     public CacheDescriptor(DBService dbService) {
@@ -56,7 +44,6 @@ public class CacheDescriptor/* implements Addressee*/ {
     }
 
     private long getQueryCacheHitCount() {
-
         return queryCacheHitCount;
     }
 
@@ -88,7 +75,6 @@ public class CacheDescriptor/* implements Addressee*/ {
         this.secondLevelCacheHitCount = secondLevelCacheHitCount;
     }
 
-    //
     private long getSecondLevelHitU() {
         return secondLevelHitU;
     }
@@ -136,7 +122,6 @@ public class CacheDescriptor/* implements Addressee*/ {
     private void setSecondLevelMissA(long secondLevelMissA) {
         this.secondLevelMissA = secondLevelMissA;
     }
-    //
 
     private long getQueryCachePutCount() {
         return queryCachePutCount;
@@ -182,7 +167,6 @@ public class CacheDescriptor/* implements Addressee*/ {
         this.secondLevelCacheRegionNames = stringBuilder.toString();
     }
 
-    //
     private long getSecondLevelPutCountU() {
         return secondLevelPutCountU;
     }
@@ -230,7 +214,6 @@ public class CacheDescriptor/* implements Addressee*/ {
     private void setSecondLevelSizeA(long secondLevelSizeA) {
         this.secondLevelSizeA = secondLevelSizeA;
     }
-    //
 
     private String getQueries() {
         return queries;
@@ -250,31 +233,23 @@ public class CacheDescriptor/* implements Addressee*/ {
         setSecondLevelCacheMissCount(statistics.getSecondLevelCacheMissCount());
         setQueryCacheMissCount(statistics.getQueryCacheMissCount());
         setSecondLevelCacheHitCount(statistics.getSecondLevelCacheHitCount());
-
-        //
         setSecondLevelHitU(secondLevelCacheStatisticsUserDataSet.getHitCount());
         setSecondLevelMissU(secondLevelCacheStatisticsUserDataSet.getMissCount());
         setSecondLevelHitP(secondLevelCacheStatisticsPhoneDataSet.getHitCount());
         setSecondLevelMissP(secondLevelCacheStatisticsPhoneDataSet.getMissCount());
         setSecondLevelHitA(secondLevelCacheStatisticsAddressDataSet.getHitCount());
         setSecondLevelMissA(secondLevelCacheStatisticsAddressDataSet.getMissCount());
-        //
-
         setQueryCachePutCount(statistics.getQueryCachePutCount());
         setSecondLevelCachePutCount(statistics.getSecondLevelCachePutCount());
         setSessionOpenCount(statistics.getSessionOpenCount());
         setSessionCloseCount(statistics.getSessionCloseCount());
         setSecondLevelCacheRegionNames(statistics);
-
-        //
         setSecondLevelPutCountU(secondLevelCacheStatisticsUserDataSet.getPutCount());
         setSecondLevelPutCountP(secondLevelCacheStatisticsPhoneDataSet.getPutCount());
         setSecondLevelPutCountA(secondLevelCacheStatisticsAddressDataSet.getPutCount());
         setSecondLevelSizeU(secondLevelCacheStatisticsUserDataSet.getSizeInMemory());
         setSecondLevelSizeP(secondLevelCacheStatisticsPhoneDataSet.getSizeInMemory());
         setSecondLevelSizeA(secondLevelCacheStatisticsAddressDataSet.getSizeInMemory());
-        //
-
         setQueries(statistics);
     }
 
@@ -287,31 +262,23 @@ public class CacheDescriptor/* implements Addressee*/ {
         cacheMap.put("queryCacheMissCount", this.getQueryCacheMissCount());
         cacheMap.put("secondLevelCacheHitCount", this.getSecondLevelCacheHitCount());
         cacheMap.put("secondLevelCacheMissCount", this.getSecondLevelCacheMissCount());
-
-        //
         cacheMap.put("secondLevelHitU", this.getSecondLevelHitU());
         cacheMap.put("secondLevelMissU", this.getSecondLevelMissU());
         cacheMap.put("secondLevelHitP", this.getSecondLevelHitP());
         cacheMap.put("secondLevelMissP", this.getSecondLevelMissP());
         cacheMap.put("secondLevelHitA", this.getSecondLevelHitA());
         cacheMap.put("secondLevelMissA", this.getSecondLevelMissA());
-        //
-
         cacheMap.put("queries", this.getQueries());
         cacheMap.put("queryCachePutCount", this.getQueryCachePutCount());
         cacheMap.put("secondLevelCachePutCount", this.getSecondLevelCachePutCount());
         cacheMap.put("sessionOpenCount", this.getSessionOpenCount());
         cacheMap.put("sessionCloseCount", this.getSessionCloseCount());
-
-        //
         cacheMap.put("secondLevelPutCountU", this.getSecondLevelPutCountU());
         cacheMap.put("secondLevelSizeU", this.getSecondLevelSizeU());
         cacheMap.put("secondLevelPutCountP", this.getSecondLevelPutCountP());
         cacheMap.put("secondLevelSizeP", this.getSecondLevelSizeP());
         cacheMap.put("secondLevelPutCountA", this.getSecondLevelPutCountA());
         cacheMap.put("secondLevelSizeA", this.getSecondLevelSizeA());
-        //
-
         cacheMap.put("secondLevelCacheRegionNames", this.getSecondLevelCacheRegionNames());
 
         return cacheMap;

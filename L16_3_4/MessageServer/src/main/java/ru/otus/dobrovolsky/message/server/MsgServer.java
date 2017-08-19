@@ -10,7 +10,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 
@@ -23,7 +22,6 @@ public class MsgServer {
 
     private final ExecutorService executor;
     private final Map<MsgChannel, Address> registeredChannels;
-    private Address addressMessageServer = new Address("MsgServerService");
 
     public MsgServer() {
         executor = Executors.newFixedThreadPool(THREADS_NUMBER);
@@ -31,7 +29,6 @@ public class MsgServer {
     }
 
     public void start() throws Exception {
-//        executor.submit(this::registration);
         executor.submit(this::getMessage);
 
         try (ServerSocket serverSocket = new ServerSocket(PORT)) {
@@ -43,35 +40,6 @@ public class MsgServer {
                 channel.addShutdownRegistration(() -> registeredChannels.remove(channel));
                 registeredChannels.put(channel, null);
             }
-        }
-    }
-
-    private void registration() {
-        try {
-            while (true) {
-                for (Map.Entry<MsgChannel, Address> entry : registeredChannels.entrySet()) {
-                    MsgChannel channel = entry.getKey();
-                    Address addressToRegister = entry.getValue();
-
-                    if (addressToRegister == null) {
-                        Msg message = channel.poll();
-                        if (message != null) {
-                            LOGGER.info("Received the message from: " + message.getFrom() + " to:   " + message.getTo() + " message:   " + message);
-                            if (message.getClass().getName().equals(MsgRegistration.class.getName())) {
-                                Address from = message.getFrom();
-                                registeredChannels.put(channel, from);
-                                LOGGER.info("Registered address:    " + from.getId());
-                                Msg msgRegistrationAnswer = new MsgRegistrationAnswer(message.getTo(), message.getFrom());
-                                channel.send(msgRegistrationAnswer);
-                            }
-                        }
-                    }
-
-                }
-                Thread.sleep(DELAY);
-            }
-        } catch (InterruptedException e) {
-            LOGGER.log(Level.SEVERE, e.toString());
         }
     }
 

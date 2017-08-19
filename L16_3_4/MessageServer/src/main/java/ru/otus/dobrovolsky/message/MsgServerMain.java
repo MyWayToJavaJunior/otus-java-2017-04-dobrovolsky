@@ -10,14 +10,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-//import ru.otus.dobrovolsky.message.server.services.MsgServerService;
-
 public class MsgServerMain {
     private static final Logger LOGGER = Logger.getLogger(MsgServerMain.class.getName());
 
     private static final int CLIENT_START_DELAY_SEC = 2;
     private static MsgServer msgServer;
-//    private static MsgServerService serverService;
     private int initialFrontPort = 49094;
 
     public static void main(String[] args) throws Exception {
@@ -45,7 +42,6 @@ public class MsgServerMain {
         }
 
         msgServer = new MsgServer();
-//        serverService = MsgServerService.getInstance();
         msgServer.start();
     }
 
