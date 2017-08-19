@@ -22,11 +22,6 @@
             <artifactId>MessageServer</artifactId>
             <version>1.0</version>
         </dependency>
-        <!--<dependency>-->
-        <!--<groupId>ru.otus</groupId>-->
-        <!--<artifactId>DBServer</artifactId>-->
-        <!--<version>1.0</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>org.eclipse.jetty.websocket</groupId>
             <artifactId>websocket-servlet</artifactId>
