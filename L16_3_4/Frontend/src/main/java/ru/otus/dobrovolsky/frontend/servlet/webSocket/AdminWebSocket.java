@@ -6,9 +6,8 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketClose;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
-import ru.otus.dobrovolsky.FrontendMain;
+import ru.otus.dobrovolsky.frontend.server.FrontendServer;
 import ru.otus.dobrovolsky.message.channel.SocketClientChannel;
-import ru.otus.dobrovolsky.message.server.Address;
 import ru.otus.dobrovolsky.message.server.MsgGetCache;
 import ru.otus.dobrovolsky.message.server.MsgUpdateCache;
 
@@ -24,10 +23,12 @@ public class AdminWebSocket {
     private final SocketClientChannel client;
     private Set<AdminWebSocket> users;
     private Session session;
+    private FrontendServer frontendServer;
 
-    public AdminWebSocket(Set<AdminWebSocket> users, SocketClientChannel client) {
+    public AdminWebSocket(Set<AdminWebSocket> users, SocketClientChannel client, FrontendServer frontendServer) {
         this.users = users;
         this.client = client;
+        this.frontendServer = frontendServer;
     }
 
     @OnWebSocketMessage
@@ -39,32 +40,21 @@ public class AdminWebSocket {
         users.add(this);
         setSession(session);
 
-//        while (true) {
-//            client.send(new MsgUpdateCache(new Address("Frontend"), new Address("DBServer")));
-//            Thread.sleep(2500);
-//            client.send(new MsgGetCache(new Address("Frontend"), new Address("DBServer")));
-//            Thread.sleep(2500);
-//
-//            try {
-////                    session.getRemote().sendString(new Gson().toJson(port));
-//                session.getRemote().sendString(new Gson().toJson(FrontendMain.getCacheMap()));
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            Thread.sleep(2500);
-//        }
-
         new Timer().schedule(new TimerTask() {
             @Override
             public void run() {
 
-                client.send(new MsgUpdateCache(new Address("Frontend"), new Address("DBServer")));
-                client.send(new MsgGetCache(new Address("Frontend"), new Address("DBServer")));
+                client.send(new MsgUpdateCache(frontendServer.getFrontendAddress(), frontendServer.getDBServerAddress()));
+                client.send(new MsgGetCache(frontendServer.getFrontendAddress(), frontendServer.getDBServerAddress()));
 
                 try {
-//                    session.getRemote().sendString(new Gson().toJson(port));
-                    session.getRemote().sendString(new Gson().toJson(FrontendMain.getCacheMap()));
-                    LOGGER.info("       FrontendMain.getCacheMap()" + FrontendMain.getCacheMap());
+                    Thread.sleep(1500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+
+                try {
+                    session.getRemote().sendString(new Gson().toJson(frontendServer.getCacheMap()));
                 } catch (IOException e) {
                     e.printStackTrace();
                 }

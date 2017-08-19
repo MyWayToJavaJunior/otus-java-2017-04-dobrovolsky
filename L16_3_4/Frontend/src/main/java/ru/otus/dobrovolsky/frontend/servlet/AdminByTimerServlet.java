@@ -1,8 +1,10 @@
 package ru.otus.dobrovolsky.frontend.servlet;
 
 
-import ru.otus.dobrovolsky.FrontendMain;
+import ru.otus.dobrovolsky.frontend.server.FrontendServer;
 import ru.otus.dobrovolsky.message.channel.SocketClientChannel;
+import ru.otus.dobrovolsky.message.server.MsgGetCache;
+import ru.otus.dobrovolsky.message.server.MsgUpdateCache;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -17,19 +19,21 @@ public class AdminByTimerServlet extends HttpServlet {
 
     private static final String DEFAULT_USER_NAME = "UNKNOWN";
     private static final String ADMIN_PAGE_TEMPLATE = "admin_by_timer.html";
-
     private static final String REFRESH_VARIABLE_NAME = "refreshPeriod";
-    private static final int PERIOD_MS = 5000;
+    private static final int PERIOD_MS = 2500;
     private static final Logger LOGGER = Logger.getLogger(AdminByTimerServlet.class.getName());
     private static Map<String, Object> pageVariables = null;
     private String login;
     private String pass;
     private SocketClientChannel client;
     private Map<String, Object> cacheMap = new HashMap<>();
+    private FrontendServer frontendServer;
 
-    public AdminByTimerServlet(SocketClientChannel client) {
+    public AdminByTimerServlet(SocketClientChannel client, FrontendServer frontendServer) {
         this.client = client;
-        client.init();
+        this.frontendServer = frontendServer;
+
+        client.send(new MsgUpdateCache(frontendServer.getFrontendAddress(), frontendServer.getDBServerAddress()));
     }
 
     private Map<String, Object> createPageVariablesMap(HttpServletRequest request) {
@@ -44,8 +48,12 @@ public class AdminByTimerServlet extends HttpServlet {
         pageVariables.put("parameters", request.getParameterMap().toString());
 
         //cache data
-        cacheMap = FrontendMain.getCacheMap();
-        pageVariables.putAll(cacheMap);
+        client.send(new MsgUpdateCache(frontendServer.getFrontendAddress(), frontendServer.getDBServerAddress()));
+        client.send(new MsgGetCache(frontendServer.getFrontendAddress(), frontendServer.getDBServerAddress()));
+        cacheMap = frontendServer.getCacheMap();
+        if (cacheMap != null) {
+            pageVariables.putAll(cacheMap);
+        }
 
         String login = (String) request.getSession().getAttribute(LoginServlet.LOGIN_PARAMETER_NAME);
         pageVariables.put("login", login != null ? login : DEFAULT_USER_NAME);
@@ -70,8 +78,7 @@ public class AdminByTimerServlet extends HttpServlet {
         doPost(request, response);
     }
 
-    public void doPost(HttpServletRequest request,
-                       HttpServletResponse response) throws ServletException, IOException {
+    public void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         login = login == null ? request.getParameter("login") : login;
         pass = pass == null ? request.getParameter("pass") : pass;
@@ -92,13 +99,9 @@ public class AdminByTimerServlet extends HttpServlet {
 
         pageVariables = createPageVariablesMap(request);
 
-        for (Map.Entry<String, Object> entry : pageVariables.entrySet()) {
-            LOGGER.info(entry.getKey() + "  " + entry.getValue());
-        }
-
         response.setContentType("text/html;charset=utf-8");
 
-        response.getWriter().println(TemplateProcessor.instance().getPage(ADMIN_PAGE_TEMPLATE, pageVariables));
+        response.getWriter().println(TemplateProcessor.getInstance().getPage(ADMIN_PAGE_TEMPLATE, pageVariables));
 
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);

@@ -1,6 +1,8 @@
-package ru.otus.dobrovolsky.backend;
+package ru.otus.dobrovolsky.backend.server;
 
 import ru.otus.dobrovolsky.backend.cache.CacheDescriptor;
+import ru.otus.dobrovolsky.backend.service.DBServiceHibernateImpl;
+import ru.otus.dobrovolsky.backend.worker.Worker;
 import ru.otus.dobrovolsky.message.Msg;
 import ru.otus.dobrovolsky.message.channel.SocketClientChannel;
 import ru.otus.dobrovolsky.message.server.*;
@@ -14,13 +16,15 @@ import java.util.logging.Logger;
 
 public class DBServer {
     private static final Logger LOGGER = Logger.getLogger(DBServer.class.getName());
-    private static final int PAUSE_MS = 2500;
+    private static final int DELAY = 500;
     private static final String HOST = "localhost";
     private static final int SOCKET_PORT = 5050;
     private Address address;
+    private int num;
 
-    public DBServer() {
-        address = new Address("DBServer");
+    public DBServer(int num) {
+        this.num = num;
+        this.address = new Address("DBServer" + this.num);
     }
 
     @SuppressWarnings("InfiniteLoopStatement")
@@ -29,7 +33,7 @@ public class DBServer {
 
         SocketClientChannel client = new SocketClientChannel(new Socket(HOST, SOCKET_PORT));
         client.init();
-        client.send(new MsgRegistration(address, new Address("MessageServerService")));
+        client.send(new MsgRegistration(address, new Address("MsgServerService")));
 
         ExecutorService executorService = Executors.newFixedThreadPool(2);
         executorService.submit(() -> {
@@ -38,7 +42,7 @@ public class DBServer {
                     Msg receivedMsg = client.take();
                     LOGGER.info("RECEIVED MESSAGE:  " + receivedMsg.getClass() + "   from:   " + receivedMsg.getFrom() + " to:   " + receivedMsg.getTo());
                     if (receivedMsg.getClass().getName().equals(MsgRegistrationAnswer.class.getName())) {
-                        LOGGER.info("Registered on MessageServer successfully");
+                        LOGGER.info("Registered on MsgServer successfully");
                     }
                     if (receivedMsg.getClass().getName().equals(MsgUpdateCache.class.getName())) {
                         cacheDescriptor.updateFields();
@@ -51,7 +55,7 @@ public class DBServer {
                         MsgGetCacheAnswer msg = new MsgGetCacheAnswer(receivedMsg.getTo(), receivedMsg.getFrom(), cacheMap);
                         client.send(msg);
                     }
-                    Thread.sleep(PAUSE_MS);
+                    Thread.sleep(DELAY);
                 }
             } catch (InterruptedException e) {
                 LOGGER.log(Level.SEVERE, e.getMessage());

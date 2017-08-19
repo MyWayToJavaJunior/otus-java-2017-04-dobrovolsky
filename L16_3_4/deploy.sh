@@ -1,6 +1,4 @@
 #!/usr/bin/env bash
 
-mvn clean
-mvn package
-cp -r Frontend/templates MessageServer/target/
-java -jar MessageServer/target/MessageServer.jar
+mvn clean package
+java -jar MessageServer/target/MessageServer.jar -count 2

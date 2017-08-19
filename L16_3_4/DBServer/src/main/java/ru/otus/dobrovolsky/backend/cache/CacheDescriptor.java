@@ -50,9 +50,9 @@ public class CacheDescriptor/* implements Addressee*/ {
 
         this.statistics = dbService.getStatistics();
 
-        secondLevelCacheStatisticsUserDataSet = statistics.getSecondLevelCacheStatistics("ru.otus.dobrovolsky.dataSet.UserDataSet");
-        secondLevelCacheStatisticsPhoneDataSet = statistics.getSecondLevelCacheStatistics("ru.otus.dobrovolsky.dataSet.PhoneDataSet");
-        secondLevelCacheStatisticsAddressDataSet = statistics.getSecondLevelCacheStatistics("ru.otus.dobrovolsky.dataSet.AddressDataSet");
+        secondLevelCacheStatisticsUserDataSet = statistics.getSecondLevelCacheStatistics("ru.otus.dobrovolsky.backend.dataSet.UserDataSet");
+        secondLevelCacheStatisticsPhoneDataSet = statistics.getSecondLevelCacheStatistics("ru.otus.dobrovolsky.backend.dataSet.PhoneDataSet");
+        secondLevelCacheStatisticsAddressDataSet = statistics.getSecondLevelCacheStatistics("ru.otus.dobrovolsky.backend.dataSet.AddressDataSet");
     }
 
     private long getQueryCacheHitCount() {

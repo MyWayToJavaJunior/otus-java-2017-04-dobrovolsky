@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Admin</title>
+    <script>
+        init = function WS(){
+            function CacheStatistics() {
+
+                document.getElementById('status').innerHTML = 'Status OK';
+
+                this.ws = null;
+                this.interval = null;
+                this.init = function () {
+                    this.ws = new WebSocket("ws://localhost:${port}/admin_by_ws");
+                    this.ws.onopen = function (event) {
+                        console.log('WebSocket onOpen');
+
+                        document.getElementById('queries').innerHTML                        = 0;
+                        document.getElementById('queryCacheHitCount').innerHTML             = 0;
+                        document.getElementById('queryCacheMissCount').innerHTML            = 0;
+                        document.getElementById('queryCachePutCount').innerHTML             = 0;
+                        document.getElementById('secondLevelCacheHitCount').innerHTML       = 0;
+                        document.getElementById('secondLevelCacheMissCount').innerHTML      = 0;
+                        document.getElementById('secondLevelCachePutCount').innerHTML       = 0;
+                        document.getElementById('secondLevelCacheRegionNames').innerHTML    = 0;
+                        document.getElementById('sessionOpenCount').innerHTML               = 0;
+                        document.getElementById('sessionCloseCount').innerHTML              = 0;
+
+                        document.getElementById('secondLevelHitU').innerHTML                = 0;
+                        document.getElementById('secondLevelMissU').innerHTML               = 0;
+                        document.getElementById('secondLevelPutCountU').innerHTML           = 0;
+                        document.getElementById('secondLevelSizeU').innerHTML               = 0;
+                        document.getElementById('secondLevelHitP').innerHTML                = 0;
+                        document.getElementById('secondLevelMissP').innerHTML               = 0;
+                        document.getElementById('secondLevelPutCountP').innerHTML           = 0;
+                        document.getElementById('secondLevelSizeP').innerHTML               = 0;
+                        document.getElementById('secondLevelHitA').innerHTML                = 0;
+                        document.getElementById('secondLevelMissA').innerHTML               = 0;
+                        document.getElementById('secondLevelPutCountA').innerHTML           = 0;
+                        document.getElementById('secondLevelSizeP').innerHTML               = 0;
+                        document.getElementById('secondLevelSizeA').innerHTML               = 0;
+
+                    };
+
+                    this.ws.onmessage = function (event) {
+                        console.log('WebSocket onMessage');
+
+                        var data = JSON.parse(event.data);
+
+                        document.getElementById('queries').innerHTML                        = (data.queries == null) ? 0 : data.queries;
+                        document.getElementById('queryCacheHitCount').innerHTML             = (data.queryCacheHitCount == null) ? 0 : data.queryCacheHitCount;
+                        document.getElementById('queryCacheMissCount').innerHTML            = (data.queryCacheMissCount == null) ? 0 : data.queryCacheMissCount;
+                        document.getElementById('queryCachePutCount').innerHTML             = (data.queryCachePutCount == null) ? 0 : data.queryCachePutCount;
+                        document.getElementById('secondLevelCacheHitCount').innerHTML       = (data.secondLevelCacheHitCount == null) ? 0 : data.secondLevelCacheHitCount;
+                        document.getElementById('secondLevelCacheMissCount').innerHTML      = (data.secondLevelCacheMissCount == null) ? 0 : data.secondLevelCacheMissCount;
+                        document.getElementById('secondLevelCachePutCount').innerHTML       = (data.secondLevelCachePutCount == null) ? 0 : data.secondLevelCachePutCount;
+                        document.getElementById('secondLevelCacheRegionNames').innerHTML    = (data.secondLevelCacheRegionNames == null) ? 0 : data.secondLevelCacheRegionNames;
+                        document.getElementById('sessionOpenCount').innerHTML               = (data.sessionOpenCount == null) ? 0 : data.sessionOpenCount;
+                        document.getElementById('sessionCloseCount').innerHTML              = (data.sessionCloseCount == null) ? 0 : data.sessionCloseCount;
+
+                        document.getElementById('secondLevelHitU').innerHTML                = (data.secondLevelHitU == null) ? 0 : data.secondLevelHitU;
+                        document.getElementById('secondLevelMissU').innerHTML               = (data.secondLevelMissU == null) ? 0 : data.secondLevelMissU;
+                        document.getElementById('secondLevelPutCountU').innerHTML           = (data.secondLevelPutCountU == null) ? 0 : data.secondLevelPutCountU;
+                        document.getElementById('secondLevelSizeU').innerHTML               = (data.secondLevelSizeU == null) ? 0 : data.secondLevelSizeU;
+                        document.getElementById('secondLevelHitP').innerHTML                = (data.secondLevelHitP == null) ? 0 : data.secondLevelHitP;
+                        document.getElementById('secondLevelMissP').innerHTML               = (data.secondLevelMissP == null) ? 0 : data.secondLevelMissP;
+                        document.getElementById('secondLevelPutCountP').innerHTML           = (data.secondLevelPutCountP == null) ? 0 : data.secondLevelPutCountP;
+                        document.getElementById('secondLevelSizeP').innerHTML               = (data.secondLevelSizeP == null) ? 0 : data.secondLevelSizeP;
+                        document.getElementById('secondLevelHitA').innerHTML                = (data.secondLevelHitA == null) ? 0 : data.secondLevelHitA;
+                        document.getElementById('secondLevelMissA').innerHTML               = (data.secondLevelMissA == null) ? 0 : data.secondLevelMissA;
+                        document.getElementById('secondLevelPutCountA').innerHTML           = (data.secondLevelPutCountA == null) ? 0 : data.secondLevelPutCountA;
+                        document.getElementById('secondLevelSizeP').innerHTML               = (data.secondLevelSizeP == null) ? 0 : data.secondLevelSizeP;
+                        document.getElementById('secondLevelSizeA').innerHTML               = (data.secondLevelSizeA == null) ? 0 : data.secondLevelSizeA;
+
+                    };
+
+                    // Log errors
+                    this.onerror = function (error) {
+                    console.log('WebSocket Error ' + error);
+                    };
+
+                    this.ws.onclose = function (event) {
+                        document.getElementById('status').innerHTML = 'Status websocket CLOSED';
+
+                        console.log('WebSoceket onClose');
+                    };
+                };
+            }
+            var cache = new CacheStatistics();
+            cache.init();
+        };
+
+
+
+    </script>
+</head>
+<body onload="init();">
+<table border="3">
+    <tr>
+        <td><a href="../index.html">Index</a></td>
+        <td>
+            <form action="/exit" method="POST">
+                <button type="submit" name="exit" value="logout" class="btn-link">Exit</button>
+            </form>
+        </td>
+        <td id="status">Status...</td>
+    </tr>
+</table>
+
+<p>Welcome admin!</p>
+
+<p>Please be patient cause some of information will update after some time, something around 1 min (QueryCache Hit Count
+    for example)</p>
+<p>Here some information:</p>
+
+<p>Для вычисления кеша были размечены следующие сущности: UserDataSet, PhoneDataSet, AddressDataSet. Включен
+    QueryCache.</p>
+<p>Для корректного отображения состояния кеша были применены Cache Regions.</p>
+<p>В работе приложния используются NamedQuery с принудительным кешированием и явным указанием Cache Region'а.</p>
+<p>Для доступа к объектам используются запросы, сформированные из строки, содержащей SQL query - с принудительным
+    кешированием и указанием Cache Region'а.</p>
+<br/>
+<table border="1">
+    <tr>
+        <td>Queries:</td>
+        <td id="queries"></td>
+    </tr>
+    <tr>
+        <td>QueryCache Hit Count:</td>
+        <td id="queryCacheHitCount"></td>
+    </tr>
+    <tr>
+        <td>QueryCache Miss Count:</td>
+        <td id="queryCacheMissCount"></td>
+    </tr>
+    <tr>
+        <td>QueryCache Put Count:</td>
+        <td id="queryCachePutCount"></td>
+    </tr>
+    <tr>
+        <td>Second Level Cache Hit Count (Total value):</td>
+        <td id="secondLevelCacheHitCount"></td>
+    </tr>
+    <tr>
+        <td>Second Level Cache Miss Count (Total value):</td>
+        <td id="secondLevelCacheMissCount"></td>
+    </tr>
+    <tr>
+        <td>Second Level Cache Put Count:</td>
+        <td id="secondLevelCachePutCount"></td>
+    </tr>
+    <tr>
+        <td>Second Level Cache Region Names:</td>
+        <td id="secondLevelCacheRegionNames"></td>
+    </tr>
+    <tr>
+        <td>Session Open Count:</td>
+        <td id="sessionOpenCount"></td>
+    </tr>
+    <tr>
+        <td>Session Close Count:</td>
+        <td id="sessionCloseCount"></td>
+    </tr>
+
+    <tr>
+        <td>Second Level Hit Count - UserDataSet entity:</td>
+        <td id="secondLevelHitU"></td>
+    </tr>
+    <tr>
+        <td>Second Level Miss Count - UserDataSet entity:</td>
+        <td id="secondLevelMissU"></td>
+    </tr>
+    <tr>
+        <td>Second Level Put Count - UserDataSet entity:</td>
+        <td id="secondLevelPutCountU"></td>
+    </tr>
+    <tr>
+        <td>Second Level Size - UserDataSet entity:</td>
+        <td id="secondLevelSizeU"></td>
+    </tr>
+    <tr>
+        <td>Second Level Hit Count - PhoneDataSet entity:</td>
+        <td id="secondLevelHitP"></td>
+    </tr>
+    <tr>
+        <td>Second Level Miss Count - PhoneDataSet entity:</td>
+        <td id="secondLevelMissP"></td>
+    </tr>
+    <tr>
+        <td>Second Level Put Count - PhoneDataSet entity:</td>
+        <td id="secondLevelPutCountP"></td>
+    </tr>
+    <tr>
+        <td>Second Level Size - PhoneDataSet entity:</td>
+        <td id="secondLevelSizeP"></td>
+    </tr>
+    <tr>
+        <td>Second Level Hit Count - AddressDataSet entity:</td>
+        <td id="secondLevelHitA"></td>
+    </tr>
+    <tr>
+        <td>Second Level Miss Count - AddressDataSet entity:</td>
+        <td id="secondLevelMissA"></td>
+    </tr>
+    <tr>
+        <td>Second Level Put Count - AddressDataSet entity:</td>
+        <td id="secondLevelPutCountA"></td>
+    </tr>
+    <tr>
+        <td>Second Level Size - AddressDataSet entity:</td>
+        <td id="secondLevelSizeA"></td>
+    </tr>
+</table>
+</body>
+</html>

@@ -2,6 +2,7 @@ package ru.otus.dobrovolsky.frontend.servlet;
 
 import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
+import ru.otus.dobrovolsky.frontend.server.FrontendServer;
 import ru.otus.dobrovolsky.frontend.servlet.webSocket.AdminWebSocketCreator;
 import ru.otus.dobrovolsky.message.channel.SocketClientChannel;
 
@@ -20,16 +21,18 @@ public class AdminByWebSocketServlet extends WebSocketServlet {
     private final SocketClientChannel client;
     private final int port;
     private Map<String, Object> pageVariables = new HashMap<>();
+    private FrontendServer frontendServer;
 
-    public AdminByWebSocketServlet(int port, SocketClientChannel client) {
+    public AdminByWebSocketServlet(int port, SocketClientChannel client, FrontendServer frontendServer) {
         this.port = port;
         this.client = client;
+        this.frontendServer = frontendServer;
     }
 
     @Override
     public void configure(WebSocketServletFactory factory) {
         factory.getPolicy().setIdleTimeout(LOGOUT_TIME);
-        factory.setCreator(new AdminWebSocketCreator(client));
+        factory.setCreator(new AdminWebSocketCreator(client, frontendServer));
     }
 
     @Override
@@ -45,7 +48,7 @@ public class AdminByWebSocketServlet extends WebSocketServlet {
 
         response.setContentType("text/html;charset=utf-8");
 
-        response.getWriter().println(TemplateProcessor.instance().getPage(ADMIN_PAGE_TEMPLATE, pageVariables));
+        response.getWriter().println(TemplateProcessor.getInstance().getPage(ADMIN_PAGE_TEMPLATE, pageVariables));
 
         response.setContentType("text/html;charset=utf-8");
         response.setStatus(HttpServletResponse.SC_OK);

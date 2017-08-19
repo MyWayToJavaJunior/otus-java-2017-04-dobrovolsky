@@ -55,8 +55,7 @@
             <resource>
                 <directory>.</directory>
                 <includes>
-                    <include>public/</include>
-                    <include>templates/</include>
+                    <include>html/</include>
                 </includes>
             </resource>
         </resources>

@@ -15,10 +15,10 @@ public class LoginServlet extends HttpServlet {
     private static final String PASS_PARAMETER_NAME = "pass";
     private static final String LOGIN_PAGE_TEMPLATE = "login.html";
 
-    private static String getPage(String login) throws IOException {
+    private String getPage(String login) throws IOException {
         Map<String, Object> pageVariables = new HashMap<>();
         pageVariables.put(LOGIN_PARAMETER_NAME, login == null ? "" : login);
-        return TemplateProcessor.instance().getPage(LOGIN_PAGE_TEMPLATE, pageVariables);
+        return TemplateProcessor.getInstance().getPage(LOGIN_PAGE_TEMPLATE, pageVariables);
     }
 
     public void doGet(HttpServletRequest request,

@@ -2,7 +2,6 @@ package ru.otus.dobrovolsky.backend.cache;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.stat.Statistics;
-import ru.otus.dobrovolsky.backend.cache.CacheDescriptor;
 import ru.otus.dobrovolsky.backend.dataSet.AddressDataSet;
 import ru.otus.dobrovolsky.backend.dataSet.UserDataSet;
 

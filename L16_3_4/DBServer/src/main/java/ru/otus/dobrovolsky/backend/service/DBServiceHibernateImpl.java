@@ -1,4 +1,4 @@
-package ru.otus.dobrovolsky.backend;
+package ru.otus.dobrovolsky.backend.service;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -10,11 +10,11 @@ import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.stat.Statistics;
 import ru.otus.dobrovolsky.backend.cache.CacheDescriptor;
+import ru.otus.dobrovolsky.backend.cache.DBService;
 import ru.otus.dobrovolsky.backend.dao.DataSetDAO;
 import ru.otus.dobrovolsky.backend.dataSet.AddressDataSet;
 import ru.otus.dobrovolsky.backend.dataSet.PhoneDataSet;
 import ru.otus.dobrovolsky.backend.dataSet.UserDataSet;
-import ru.otus.dobrovolsky.backend.cache.DBService;
 import ru.otus.dobrovolsky.message.server.Address;
 import ru.otus.dobrovolsky.message.server.Addressee;
 

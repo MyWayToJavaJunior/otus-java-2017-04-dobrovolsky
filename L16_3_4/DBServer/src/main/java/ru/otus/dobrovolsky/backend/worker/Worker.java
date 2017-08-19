@@ -1,9 +1,10 @@
-package ru.otus.dobrovolsky.backend;
+package ru.otus.dobrovolsky.backend.worker;
 
+import ru.otus.dobrovolsky.backend.cache.DBService;
 import ru.otus.dobrovolsky.backend.dataSet.AddressDataSet;
 import ru.otus.dobrovolsky.backend.dataSet.PhoneDataSet;
 import ru.otus.dobrovolsky.backend.dataSet.UserDataSet;
-import ru.otus.dobrovolsky.backend.cache.DBService;
+import ru.otus.dobrovolsky.backend.service.DBServiceHibernateImpl;
 
 import java.util.ArrayList;
 import java.util.List;

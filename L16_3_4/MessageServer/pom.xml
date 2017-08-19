@@ -42,7 +42,7 @@
                     <archive>
                         <index>true</index>
                         <manifest>
-                            <mainClass>ru.otus.dobrovolsky.message.MessageServerMain</mainClass>
+                            <mainClass>ru.otus.dobrovolsky.message.MsgServerMain</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
