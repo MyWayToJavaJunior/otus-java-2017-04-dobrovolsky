@@ -66,6 +66,8 @@ public class MsgServer {
                             }
                         } else {
                             LOGGER.info("Receiver for message:  " + message + " wasn't registered yet");
+                            LOGGER.info("Need to register:  " + message.getTo().getId() + " first");
+                            LOGGER.info("Try to send MsgRegistration to:  MsgServerService");
                         }
                         LOGGER.info("Address FROM:  " + getChannel(message.getFrom()));
                         LOGGER.info("Address TO:  " + getChannel(message.getTo()));

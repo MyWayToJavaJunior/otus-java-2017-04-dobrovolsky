@@ -21,6 +21,7 @@ public class DBServer {
     private static final int SOCKET_PORT = 5050;
     private Address address;
     private int num;
+    private volatile boolean isRegistered = false;
 
     public DBServer(int num) {
         this.num = num;
@@ -33,16 +34,30 @@ public class DBServer {
 
         SocketClientChannel client = new SocketClientChannel(new Socket(HOST, SOCKET_PORT));
         client.init();
-        client.send(new MsgRegistration(address, new Address("MsgServerService")));
 
         ExecutorService executorService = Executors.newFixedThreadPool(2);
+
+        executorService.submit(() -> {
+            try {
+                while (!isRegistered) {
+                    LOGGER.info("Sending registration message:  not registered yet");
+                    client.send(new MsgRegistration(address, new Address("MsgServerService")));
+                    Thread.sleep(DELAY);
+                }
+            } catch (InterruptedException e) {
+                LOGGER.log(Level.SEVERE, e.getMessage());
+            }
+        });
+
         executorService.submit(() -> {
             try {
                 while (true) {
                     Msg receivedMsg = client.take();
                     LOGGER.info("RECEIVED MESSAGE:  " + receivedMsg.getClass() + "   from:   " + receivedMsg.getFrom() + " to:   " + receivedMsg.getTo());
-                    if (receivedMsg.getClass().getName().equals(MsgRegistrationAnswer.class.getName())) {
+                    if ((!isRegistered) && (receivedMsg.getClass().getName().equals(MsgRegistrationAnswer.class.getName()))) {
+                        LOGGER.info("Receiving registration message answer:  not registered yet");
                         LOGGER.info("Registered on MsgServer successfully");
+                        isRegistered = true;
                     }
                     if (receivedMsg.getClass().getName().equals(MsgUpdateCache.class.getName())) {
                         cacheDescriptor.updateFields();

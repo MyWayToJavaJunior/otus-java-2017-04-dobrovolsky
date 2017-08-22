@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class FrontendServer {
@@ -19,6 +20,7 @@ public class FrontendServer {
     private int num;
     private final Address addressDBServer;
     private static final int DELAY = 500;
+    private volatile boolean isRegistered = false;
 
     public FrontendServer(int num, SocketClientChannel client) {
         this.num = num;
@@ -29,9 +31,20 @@ public class FrontendServer {
     }
 
     public void start() throws Exception {
-        client.send(new MsgRegistration(address, addressMessageServer));
+        ExecutorService executorService = Executors.newFixedThreadPool(2);
 
-        ExecutorService executorService = Executors.newSingleThreadExecutor();
+        executorService.submit(() -> {
+            try {
+                while (!isRegistered) {
+                    LOGGER.info("Sending registration message:  not registered yet");
+                    client.send(new MsgRegistration(address, addressMessageServer));
+                    Thread.sleep(DELAY);
+                }
+            } catch (InterruptedException e) {
+                LOGGER.log(Level.SEVERE, e.getMessage());
+            }
+        });
+
         executorService.submit(this::getMessage);
     }
 
@@ -41,8 +54,10 @@ public class FrontendServer {
             while (true) {
                 Msg receivedMsg = client.take();
                 LOGGER.info("RECEIVED MESSAGE:  " + receivedMsg.getClass() + "   from:   " + receivedMsg.getFrom() + " to:   " + receivedMsg.getTo());
-                if (receivedMsg.getClass().getName().equals(MsgRegistrationAnswer.class.getName())) {
+                if ((!isRegistered) && (receivedMsg.getClass().getName().equals(MsgRegistrationAnswer.class.getName()))) {
+                    LOGGER.info("Receiving registration message answer:  not registered yet");
                     LOGGER.info("Registered on MsgServer successfully");
+                    isRegistered = true;
                 }
                 if (receivedMsg.getClass().getName().equals(MsgGetCacheAnswer.class.getName())) {
                     LOGGER.info("Getting cache information");
