@@ -1,4 +1,4 @@
-package ru.otus.dobrovolsky.frontend.servlet;
+package ru.otus.dobrovolsky.frontend.servlet.template;
 
 import freemarker.template.Configuration;
 import freemarker.template.Template;

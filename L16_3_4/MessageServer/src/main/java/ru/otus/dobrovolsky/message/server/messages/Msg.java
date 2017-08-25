@@ -1,4 +1,4 @@
-package ru.otus.dobrovolsky.message;
+package ru.otus.dobrovolsky.message.server.messages;
 
 import ru.otus.dobrovolsky.message.server.Address;
 
@@ -10,12 +10,14 @@ public abstract class Msg {
     private final String className;
     private Address to;
     private Map<String, Object> value;
+    private MsgType type;
 
-    protected Msg(Class<?> clazz, Address from, Address to, Map<String, Object> value) {
+    protected Msg(MsgType type, Class<?> clazz, Address from, Address to, Map<String, Object> value) {
         this.className = clazz.getName();
         this.to = to;
         this.from = from;
         this.value = value;
+        this.type = type;
     }
 
     public Address getTo() {
@@ -28,5 +30,13 @@ public abstract class Msg {
 
     public Map<String, Object> getValue() {
         return value;
+    }
+
+    public void setValue(Map<String, Object> value) {
+        this.value = value;
+    }
+
+    public MsgType getType() {
+        return type;
     }
 }

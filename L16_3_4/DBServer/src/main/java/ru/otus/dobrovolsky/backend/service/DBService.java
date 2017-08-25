@@ -1,9 +1,10 @@
-package ru.otus.dobrovolsky.backend.cache;
+package ru.otus.dobrovolsky.backend.service;
 
 import org.hibernate.SessionFactory;
 import org.hibernate.stat.Statistics;
 import ru.otus.dobrovolsky.backend.dataSet.AddressDataSet;
 import ru.otus.dobrovolsky.backend.dataSet.UserDataSet;
+import ru.otus.dobrovolsky.backend.service.cache.CacheDescriptor;
 
 import java.util.List;
 import java.util.Map;

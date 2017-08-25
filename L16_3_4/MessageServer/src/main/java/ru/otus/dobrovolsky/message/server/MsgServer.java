@@ -1,13 +1,16 @@
 package ru.otus.dobrovolsky.message.server;
 
-import ru.otus.dobrovolsky.message.Msg;
-import ru.otus.dobrovolsky.message.channel.MsgChannel;
-import ru.otus.dobrovolsky.message.channel.SocketClientChannel;
+import ru.otus.dobrovolsky.message.server.channel.MsgChannel;
+import ru.otus.dobrovolsky.message.server.channel.SocketClientChannel;
+import ru.otus.dobrovolsky.message.server.messages.Msg;
+import ru.otus.dobrovolsky.message.server.messages.MsgType;
 
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
@@ -21,11 +24,11 @@ public class MsgServer {
     private static final int DELAY = 100;
 
     private final ExecutorService executor;
-    private final Map<MsgChannel, Address> registeredChannels;
+    private final ConcurrentMap<MsgChannel, Address> registeredChannels;
 
     public MsgServer() {
         executor = Executors.newFixedThreadPool(THREADS_NUMBER);
-        this.registeredChannels = new HashMap<>();
+        this.registeredChannels = new ConcurrentHashMap<>();
     }
 
     public void start() throws Exception {
@@ -37,8 +40,9 @@ public class MsgServer {
                 Socket client = serverSocket.accept();
                 SocketClientChannel channel = new SocketClientChannel(client);
                 channel.init();
+                LOGGER.info("New channel:   " + channel);
                 channel.addShutdownRegistration(() -> registeredChannels.remove(channel));
-                registeredChannels.put(channel, null);
+                registeredChannels.put(channel, new Address("EMPTY"));
             }
         }
     }
@@ -48,41 +52,33 @@ public class MsgServer {
         while (true) {
             for (Map.Entry<MsgChannel, Address> entry : registeredChannels.entrySet()) {
                 MsgChannel channel = entry.getKey();
-                Address addressFrom = entry.getValue();
 
-                if (addressFrom != null) {
-                    Msg message = channel.poll();
-                    if (message != null) {
-                        MsgChannel toChannel = getChannel(message.getTo());
-                        LOGGER.info("Received the message from: " + message.getFrom() + " to:   " + message.getTo() + " message:   " + message);
-                        if (registeredChannels.containsKey(toChannel)) {
-                            if (message.getClass().getName().equals(MsgGetCacheAnswer.class.getName())) {
-                                LOGGER.info("Sending cache answer message: " + message.getFrom() + " to:   " + message.getTo() + " message:   " + message);
+                Msg message = channel.poll();
+                if (message != null) {
+                    MsgChannel toChannel = getChannel(message.getTo());
+                    Address to = message.getTo();
+                    Address from = message.getFrom();
+                    LOGGER.info("Received the message from: " + from + " to:   " + to + " message:   " + message);
+
+                    if (message.getType() == MsgType.REGISTER) {
+                        registeredChannels.put(channel, from);
+                        LOGGER.info("Registered address:    " + from.getId());
+                        channel.send(message);
+                    } else if (message.getType() == MsgType.REQUEST) {
+                        if (toChannel != null) {
+                            if (registeredChannels.containsKey(toChannel)) {
+
+                                LOGGER.info("Sending cache answer message: " + from + " to:   " + to + " message:   " + message);
                                 LOGGER.info("MsgServer :    Current CACHE status: " + message.getValue());
-                                getChannel(message.getTo()).send(message);
-                            } else {
-                                LOGGER.info("Sending message:    " + message.getClass().getName() + " from:   " + message.getFrom() + "   to:    " + message.getTo());
-                                getChannel(message.getTo()).send(message);
+                                getChannel(to).send(message);
                             }
                         } else {
                             LOGGER.info("Receiver for message:  " + message + " wasn't registered yet");
-                            LOGGER.info("Need to register:  " + message.getTo().getId() + " first");
-                            LOGGER.info("Try to send MsgRegistration to:  MsgServerService");
+                            LOGGER.info("Need to register:  " + to.getId() + " first");
+                            LOGGER.info("Try to send MsgRegister to:  MsgServerService");
                         }
-                        LOGGER.info("Address FROM:  " + getChannel(message.getFrom()));
-                        LOGGER.info("Address TO:  " + getChannel(message.getTo()));
-                    }
-                } else {
-                    Msg message = channel.poll();
-                    if (message != null) {
-                        LOGGER.info("Received the message from: " + message.getFrom() + " to:   " + message.getTo() + " message:   " + message);
-                        if (message.getClass().getName().equals(MsgRegistration.class.getName())) {
-                            Address from = message.getFrom();
-                            registeredChannels.put(channel, from);
-                            LOGGER.info("Registered address:    " + from.getId());
-                            Msg msgRegistrationAnswer = new MsgRegistrationAnswer(message.getTo(), message.getFrom());
-                            channel.send(msgRegistrationAnswer);
-                        }
+                        LOGGER.info("Address FROM:  " + getChannel(from));
+                        LOGGER.info("Address TO:  " + getChannel(to));
                     }
                 }
             }
@@ -95,9 +91,12 @@ public class MsgServer {
     }
 
     private MsgChannel getChannel(Address address) {
-        for (Map.Entry<MsgChannel, Address> entry : registeredChannels.entrySet()) {
-            if (entry.getValue().equals(address)) {
-                return entry.getKey();
+        if (Objects.isNull(address)) {
+            throw new NullPointerException();
+        }
+        for (Map.Entry<MsgChannel, Address> msgChannelAddressEntry : registeredChannels.entrySet()) {
+            if (msgChannelAddressEntry.getValue().equals(address)) {
+                return msgChannelAddressEntry.getKey();
             }
         }
         return null;

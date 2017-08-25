@@ -4,7 +4,7 @@ import org.eclipse.jetty.websocket.servlet.ServletUpgradeRequest;
 import org.eclipse.jetty.websocket.servlet.ServletUpgradeResponse;
 import org.eclipse.jetty.websocket.servlet.WebSocketCreator;
 import ru.otus.dobrovolsky.frontend.server.FrontendServer;
-import ru.otus.dobrovolsky.message.channel.SocketClientChannel;
+import ru.otus.dobrovolsky.message.server.channel.SocketClientChannel;
 
 import java.util.Collections;
 import java.util.Set;

@@ -3,8 +3,9 @@ package ru.otus.dobrovolsky.frontend.servlet;
 import org.eclipse.jetty.websocket.servlet.WebSocketServlet;
 import org.eclipse.jetty.websocket.servlet.WebSocketServletFactory;
 import ru.otus.dobrovolsky.frontend.server.FrontendServer;
+import ru.otus.dobrovolsky.frontend.servlet.template.TemplateProcessor;
 import ru.otus.dobrovolsky.frontend.servlet.webSocket.AdminWebSocketCreator;
-import ru.otus.dobrovolsky.message.channel.SocketClientChannel;
+import ru.otus.dobrovolsky.message.server.channel.SocketClientChannel;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;

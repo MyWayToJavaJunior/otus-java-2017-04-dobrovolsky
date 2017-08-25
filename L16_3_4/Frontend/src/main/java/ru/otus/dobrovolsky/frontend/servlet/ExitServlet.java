@@ -1,5 +1,7 @@
 package ru.otus.dobrovolsky.frontend.servlet;
 
+import ru.otus.dobrovolsky.frontend.servlet.template.TemplateProcessor;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;

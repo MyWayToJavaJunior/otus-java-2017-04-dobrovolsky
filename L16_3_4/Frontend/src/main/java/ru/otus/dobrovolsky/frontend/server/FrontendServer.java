@@ -1,8 +1,11 @@
 package ru.otus.dobrovolsky.frontend.server;
 
-import ru.otus.dobrovolsky.message.Msg;
-import ru.otus.dobrovolsky.message.channel.SocketClientChannel;
-import ru.otus.dobrovolsky.message.server.*;
+import ru.otus.dobrovolsky.message.server.Address;
+import ru.otus.dobrovolsky.message.server.Addressee;
+import ru.otus.dobrovolsky.message.server.channel.SocketClientChannel;
+import ru.otus.dobrovolsky.message.server.messages.Msg;
+import ru.otus.dobrovolsky.message.server.messages.MsgRegister;
+import ru.otus.dobrovolsky.message.server.messages.MsgType;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -11,15 +14,15 @@ import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class FrontendServer {
+public class FrontendServer implements Addressee {
     private static final Logger LOGGER = Logger.getLogger(FrontendServer.class.getName());
+    private static final int DELAY = 500;
     private final Address address;
     private final SocketClientChannel client;
     private final Address addressMessageServer = new Address("MsgServerService");
+    private final Address addressDBServer;
     private Map<String, Object> cacheMap = new HashMap<>();
     private int num;
-    private final Address addressDBServer;
-    private static final int DELAY = 500;
     private volatile boolean isRegistered = false;
 
     public FrontendServer(int num, SocketClientChannel client) {
@@ -37,7 +40,7 @@ public class FrontendServer {
             try {
                 while (!isRegistered) {
                     LOGGER.info("Sending registration message:  not registered yet");
-                    client.send(new MsgRegistration(address, addressMessageServer));
+                    client.send(new MsgRegister(address, addressMessageServer));
                     Thread.sleep(DELAY);
                 }
             } catch (InterruptedException e) {
@@ -53,18 +56,15 @@ public class FrontendServer {
         try {
             while (true) {
                 Msg receivedMsg = client.take();
-                LOGGER.info("RECEIVED MESSAGE:  " + receivedMsg.getClass() + "   from:   " + receivedMsg.getFrom() + " to:   " + receivedMsg.getTo());
-                if ((!isRegistered) && (receivedMsg.getClass().getName().equals(MsgRegistrationAnswer.class.getName()))) {
+                LOGGER.info("Received message:  " + receivedMsg.getType() + "   from:   " + receivedMsg.getFrom() + " to:   " + receivedMsg.getTo());
+                if ((!isRegistered) && (receivedMsg.getType() == MsgType.REGISTER)) {
                     LOGGER.info("Receiving registration message answer:  not registered yet");
                     LOGGER.info("Registered on MsgServer successfully");
                     isRegistered = true;
                 }
-                if (receivedMsg.getClass().getName().equals(MsgGetCacheAnswer.class.getName())) {
+                if (receivedMsg.getType() == MsgType.REQUEST) {
                     LOGGER.info("Getting cache information");
                     cacheMap = receivedMsg.getValue();
-                }
-                if (receivedMsg.getClass().getName().equals(MsgUpdateCacheAnswer.class.getName())) {
-                    LOGGER.info("Cache info updated successfully");
                 }
                 Thread.sleep(DELAY);
             }
@@ -83,5 +83,10 @@ public class FrontendServer {
 
     public Address getDBServerAddress() {
         return addressDBServer;
+    }
+
+    @Override
+    public Address getAddress() {
+        return address;
     }
 }

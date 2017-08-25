@@ -9,12 +9,11 @@ import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
 import org.hibernate.cfg.Environment;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.stat.Statistics;
-import ru.otus.dobrovolsky.backend.cache.CacheDescriptor;
-import ru.otus.dobrovolsky.backend.cache.DBService;
 import ru.otus.dobrovolsky.backend.dao.DataSetDAO;
 import ru.otus.dobrovolsky.backend.dataSet.AddressDataSet;
 import ru.otus.dobrovolsky.backend.dataSet.PhoneDataSet;
 import ru.otus.dobrovolsky.backend.dataSet.UserDataSet;
+import ru.otus.dobrovolsky.backend.service.cache.CacheDescriptor;
 import ru.otus.dobrovolsky.message.server.Address;
 import ru.otus.dobrovolsky.message.server.Addressee;
 
@@ -23,16 +22,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-public class DBServiceHibernateImpl implements DBService, Addressee {
+public class DBServiceHibernateImpl implements DBService {
     private static DBServiceHibernateImpl instance;
-    private final Address address;
     private SessionFactory sessionFactory;
     private Statistics statistics;
     private Map<String, Object> config;
     private CacheDescriptor cacheDescriptor;
 
     private DBServiceHibernateImpl() {
-        address = new Address(DBServiceHibernateImpl.class.getName());
         init();
     }
 
@@ -201,10 +198,5 @@ public class DBServiceHibernateImpl implements DBService, Addressee {
 
     public CacheDescriptor getCacheDescriptor() {
         return cacheDescriptor;
-    }
-
-    @Override
-    public Address getAddress() {
-        return address;
     }
 }

@@ -1,11 +1,15 @@
 package ru.otus.dobrovolsky.backend.server;
 
-import ru.otus.dobrovolsky.backend.cache.CacheDescriptor;
 import ru.otus.dobrovolsky.backend.service.DBServiceHibernateImpl;
+import ru.otus.dobrovolsky.backend.service.cache.CacheDescriptor;
 import ru.otus.dobrovolsky.backend.worker.Worker;
-import ru.otus.dobrovolsky.message.Msg;
-import ru.otus.dobrovolsky.message.channel.SocketClientChannel;
-import ru.otus.dobrovolsky.message.server.*;
+import ru.otus.dobrovolsky.message.server.Address;
+import ru.otus.dobrovolsky.message.server.Addressee;
+import ru.otus.dobrovolsky.message.server.channel.SocketClientChannel;
+import ru.otus.dobrovolsky.message.server.messages.Msg;
+import ru.otus.dobrovolsky.message.server.messages.MsgCache;
+import ru.otus.dobrovolsky.message.server.messages.MsgRegister;
+import ru.otus.dobrovolsky.message.server.messages.MsgType;
 
 import java.net.Socket;
 import java.util.Map;
@@ -14,7 +18,7 @@ import java.util.concurrent.Executors;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class DBServer {
+public class DBServer implements Addressee {
     private static final Logger LOGGER = Logger.getLogger(DBServer.class.getName());
     private static final int DELAY = 500;
     private static final String HOST = "localhost";
@@ -41,7 +45,7 @@ public class DBServer {
             try {
                 while (!isRegistered) {
                     LOGGER.info("Sending registration message:  not registered yet");
-                    client.send(new MsgRegistration(address, new Address("MsgServerService")));
+                    client.send(new MsgRegister(address, new Address("MsgServerService")));
                     Thread.sleep(DELAY);
                 }
             } catch (InterruptedException e) {
@@ -53,21 +57,16 @@ public class DBServer {
             try {
                 while (true) {
                     Msg receivedMsg = client.take();
-                    LOGGER.info("RECEIVED MESSAGE:  " + receivedMsg.getClass() + "   from:   " + receivedMsg.getFrom() + " to:   " + receivedMsg.getTo());
-                    if ((!isRegistered) && (receivedMsg.getClass().getName().equals(MsgRegistrationAnswer.class.getName()))) {
+                    LOGGER.info("Received message:  " + receivedMsg.getType() + "   from:   " + receivedMsg.getFrom() + " to:   " + receivedMsg.getTo());
+                    if ((!isRegistered) && (receivedMsg.getType() == MsgType.REGISTER)) {
                         LOGGER.info("Receiving registration message answer:  not registered yet");
                         LOGGER.info("Registered on MsgServer successfully");
                         isRegistered = true;
                     }
-                    if (receivedMsg.getClass().getName().equals(MsgUpdateCache.class.getName())) {
-                        cacheDescriptor.updateFields();
-                        Msg msg = new MsgUpdateCacheAnswer(receivedMsg.getTo(), receivedMsg.getFrom());
-                        client.send(msg);
-                    }
-                    if (receivedMsg.getClass().getName().equals(MsgGetCache.class.getName())) {
+                    if (receivedMsg.getType() == MsgType.REQUEST) {
                         LOGGER.info("RECEIVED Cache message");
                         Map<String, Object> cacheMap = cacheDescriptor.getCacheMap();
-                        MsgGetCacheAnswer msg = new MsgGetCacheAnswer(receivedMsg.getTo(), receivedMsg.getFrom(), cacheMap);
+                        Msg msg = new MsgCache(receivedMsg.getTo(), receivedMsg.getFrom(), cacheMap);
                         client.send(msg);
                     }
                     Thread.sleep(DELAY);
@@ -80,5 +79,10 @@ public class DBServer {
         Worker worker = new Worker();
 
         executorService.submit(worker::run);
+    }
+
+    @Override
+    public Address getAddress() {
+        return address;
     }
 }

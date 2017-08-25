@@ -10,7 +10,7 @@ import ru.otus.dobrovolsky.frontend.servlet.AdminByTimerServlet;
 import ru.otus.dobrovolsky.frontend.servlet.AdminByWebSocketServlet;
 import ru.otus.dobrovolsky.frontend.servlet.ExitServlet;
 import ru.otus.dobrovolsky.frontend.servlet.LoginServlet;
-import ru.otus.dobrovolsky.message.channel.SocketClientChannel;
+import ru.otus.dobrovolsky.message.server.channel.SocketClientChannel;
 import ru.otus.dobrovolsky.message.util.Utils;
 
 import java.net.Socket;

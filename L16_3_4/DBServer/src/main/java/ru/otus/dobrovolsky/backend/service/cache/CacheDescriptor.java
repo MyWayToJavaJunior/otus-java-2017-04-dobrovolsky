@@ -1,7 +1,8 @@
-package ru.otus.dobrovolsky.backend.cache;
+package ru.otus.dobrovolsky.backend.service.cache;
 
 import org.hibernate.stat.SecondLevelCacheStatistics;
 import org.hibernate.stat.Statistics;
+import ru.otus.dobrovolsky.backend.service.DBService;
 
 import java.util.HashMap;
 import java.util.Map;

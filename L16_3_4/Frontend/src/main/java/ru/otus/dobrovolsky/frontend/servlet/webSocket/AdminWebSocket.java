@@ -7,9 +7,8 @@ import org.eclipse.jetty.websocket.api.annotations.OnWebSocketConnect;
 import org.eclipse.jetty.websocket.api.annotations.OnWebSocketMessage;
 import org.eclipse.jetty.websocket.api.annotations.WebSocket;
 import ru.otus.dobrovolsky.frontend.server.FrontendServer;
-import ru.otus.dobrovolsky.message.channel.SocketClientChannel;
-import ru.otus.dobrovolsky.message.server.MsgGetCache;
-import ru.otus.dobrovolsky.message.server.MsgUpdateCache;
+import ru.otus.dobrovolsky.message.server.channel.SocketClientChannel;
+import ru.otus.dobrovolsky.message.server.messages.MsgCache;
 
 import java.io.IOException;
 import java.util.Set;
@@ -44,8 +43,7 @@ public class AdminWebSocket {
             @Override
             public void run() {
 
-                client.send(new MsgUpdateCache(frontendServer.getFrontendAddress(), frontendServer.getDBServerAddress()));
-                client.send(new MsgGetCache(frontendServer.getFrontendAddress(), frontendServer.getDBServerAddress()));
+                client.send(new MsgCache(frontendServer.getFrontendAddress(), frontendServer.getDBServerAddress(), null));
 
                 try {
                     session.getRemote().sendString(new Gson().toJson(frontendServer.getCacheMap()));

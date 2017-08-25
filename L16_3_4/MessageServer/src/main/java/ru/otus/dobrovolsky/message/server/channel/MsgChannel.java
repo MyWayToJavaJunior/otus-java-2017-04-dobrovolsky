@@ -1,6 +1,6 @@
-package ru.otus.dobrovolsky.message.channel;
+package ru.otus.dobrovolsky.message.server.channel;
 
-import ru.otus.dobrovolsky.message.Msg;
+import ru.otus.dobrovolsky.message.server.messages.Msg;
 
 import java.io.IOException;
 

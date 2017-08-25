@@ -1,10 +1,10 @@
-package ru.otus.dobrovolsky.message.channel;
+package ru.otus.dobrovolsky.message.server.channel;
 
 import com.google.gson.Gson;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import ru.otus.dobrovolsky.message.Msg;
+import ru.otus.dobrovolsky.message.server.messages.Msg;
 
 import java.io.BufferedReader;
 import java.io.IOException;

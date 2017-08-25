@@ -2,9 +2,9 @@ package ru.otus.dobrovolsky.frontend.servlet;
 
 
 import ru.otus.dobrovolsky.frontend.server.FrontendServer;
-import ru.otus.dobrovolsky.message.channel.SocketClientChannel;
-import ru.otus.dobrovolsky.message.server.MsgGetCache;
-import ru.otus.dobrovolsky.message.server.MsgUpdateCache;
+import ru.otus.dobrovolsky.frontend.servlet.template.TemplateProcessor;
+import ru.otus.dobrovolsky.message.server.channel.SocketClientChannel;
+import ru.otus.dobrovolsky.message.server.messages.MsgCache;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -32,8 +32,6 @@ public class AdminByTimerServlet extends HttpServlet {
     public AdminByTimerServlet(SocketClientChannel client, FrontendServer frontendServer) {
         this.client = client;
         this.frontendServer = frontendServer;
-
-        client.send(new MsgUpdateCache(frontendServer.getFrontendAddress(), frontendServer.getDBServerAddress()));
     }
 
     private Map<String, Object> createPageVariablesMap(HttpServletRequest request) {
@@ -48,8 +46,7 @@ public class AdminByTimerServlet extends HttpServlet {
         pageVariables.put("parameters", request.getParameterMap().toString());
 
         //cache data
-        client.send(new MsgUpdateCache(frontendServer.getFrontendAddress(), frontendServer.getDBServerAddress()));
-        client.send(new MsgGetCache(frontendServer.getFrontendAddress(), frontendServer.getDBServerAddress()));
+        client.send(new MsgCache(frontendServer.getFrontendAddress(), frontendServer.getDBServerAddress(), null));
         cacheMap = frontendServer.getCacheMap();
         if (cacheMap != null) {
             pageVariables.putAll(cacheMap);
